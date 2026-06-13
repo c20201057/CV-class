@@ -1,17 +1,17 @@
 # config.py
 import yaml
 from pathlib import Path
-from typing import List, Dict, Optional
+from typing import List, Optional
 
-from pydantic import BaseModel, Field, FilePath, DirectoryPath
+from pydantic import BaseModel, DirectoryPath, Field, FilePath, model_validator
 
 # --- Nested Models for better structure ---
 
 class WeightsPaths(BaseModel):
     """Defines and validates paths to backbone weights."""
-    pvt_v2_b2: FilePath
-    pvt_v2_b4: FilePath
-    pvt_v2_b5: FilePath
+    pvt_v2_b2: Optional[FilePath] = None
+    pvt_v2_b4: Optional[FilePath] = None
+    pvt_v2_b5: Optional[FilePath] = None
 
 # --- Main Configuration Class ---
 
@@ -55,6 +55,14 @@ class Config(BaseModel):
 
     # --- System ---
     num_workers: int = Field(..., ge=0)
+
+    @model_validator(mode="after")
+    def validate_selected_backbone_weight(self) -> "Config":
+        if not hasattr(self.weights, self.backbone):
+            raise ValueError(f"No weight path configured for backbone '{self.backbone}'")
+        if getattr(self.weights, self.backbone) is None:
+            raise ValueError(f"Weight path for backbone '{self.backbone}' is required")
+        return self
     
     # --- Helper Properties (for cleaner code in train.py) ---
     @property

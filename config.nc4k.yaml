@@ -1,4 +1,4 @@
-# config.yaml
+# config.nc4k.yaml
 
 # Training Parameters
 batch_size: 4
@@ -11,7 +11,7 @@ precisionHigh: true
 
 # Dataset Configuration
 train_dir: /root/data-tmp/COD/Train
-test_dir: /root/data-tmp/COD/Test/COD10K
+test_dir: /root/data-tmp/COD/Test/NC4K
 load_all: false
 
 # Model Configuration
@@ -40,11 +40,6 @@ preproc_methods:
 
 # Path Settings
 weights:
-  # pvt_v2_b0: /data/studnet/ys/weights/pvt_v2_b0.pth
-  # pvt_v2_b1: /data/studnet/ys/weights/pvt_v2_b1.pth
-  # pvt_v2_b2: /data/studnet/ys/weights/pvt_v2_b2.pth
-  # pvt_v2_b3: /data/studnet/ys/weights/pvt_v2_b3.pth
-  # pvt_v2_b4: /data/studnet/ys/weights/pvt_v2_b4.pth
   pvt_v2_b5: /root/data-tmp/weights/pvt_v2_b5_22k.pth
 
 # System

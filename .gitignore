@@ -1,0 +1,38 @@
+# Python cache and local tooling
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.ipynb_checkpoints/
+.vscode/
+
+# Environments and dependency caches
+.env
+.venv/
+venv/
+env/
+miniconda3/
+anaconda3/
+
+# Training data, logs, and generated outputs
+data/
+datasets/
+logs/
+runs/
+wandb/
+lightning_logs/
+outputs/
+results*/
+preds*/
+
+# Model weights and checkpoints
+checkpoints/
+*.ckpt
+*.pth
+*.pt
+*.onnx
+
+# OS/editor noise
+.DS_Store
+Thumbs.db

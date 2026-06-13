@@ -11,7 +11,7 @@ fi
 # 训练部分
 if [ "$TRAIN" = true ]; then
     echo "开始训练..."
-    torchrun --nproc_per_node=4 train.py --config config.yaml
+    python train.py --config config.yaml
 fi
 
 # 测试部分

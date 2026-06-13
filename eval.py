@@ -42,11 +42,20 @@ def parse_arguments():
 
     args.metrics = "+".join(["S", "MAE", "E", "F", "WF", "MSE"])
     args.model_folder = args.pred_root
-    args.model_lst = [
+    available_models = [
         d
         for d in os.listdir(args.model_folder)
         if os.path.isdir(os.path.join(args.model_folder, d))
     ]
+    if args.model_lst:
+        args.model_lst = [m.strip() for m in args.model_lst.split(",") if m.strip()]
+        missing_models = sorted(set(args.model_lst) - set(available_models))
+        if missing_models:
+            raise FileNotFoundError(
+                f"Missing prediction folders under {args.model_folder}: {missing_models}"
+            )
+    else:
+        args.model_lst = available_models
     os.makedirs(args.save_dir, exist_ok=True)
     return args
 
