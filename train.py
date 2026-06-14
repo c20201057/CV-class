@@ -17,7 +17,7 @@ import cv2
 
 from config import Config, load_config
 from dataset import MyData
-from loss import EdgeDiceLoss, StructureLoss
+from loss import BackboneFeatureDistillationLoss, EdgeDiceLoss, StructureLoss
 from metrics import evaluator
 from models.ESCNet import ESCNet
 from utils import Logger, AverageMeter, check_state_dict, save_tensor_img, set_seed
@@ -77,6 +77,7 @@ class Trainer:
             if self.config.distillation.enabled
             else None
         )
+        self.feature_distill_loss = self._prepare_feature_distillation_loss()
 
     def log(self, message: str):
         if self.rank == 0:
@@ -212,6 +213,7 @@ class Trainer:
             teacher_config.backbone = distill_config.teacher_backbone
         if distill_config.teacher_lateral_channels:
             teacher_config.lateral_channels = distill_config.teacher_lateral_channels
+        teacher_config.distillation.feature_loss_weight = 0.0
 
         self.log(
             "Loading teacher checkpoint from "
@@ -234,6 +236,36 @@ class Trainer:
             f"with backbone={teacher_config.backbone}."
         )
         return teacher
+
+    def _prepare_feature_distillation_loss(self):
+        distill_config = self.config.distillation
+        if (
+            self.teacher_model is None
+            or distill_config.feature_loss_weight <= 0
+        ):
+            return None
+
+        teacher_channels = (
+            distill_config.teacher_lateral_channels
+            if distill_config.teacher_lateral_channels
+            else self.config.lateral_channels
+        )
+        student_channels = list(reversed(self.config.lateral_channels))
+        teacher_channels = list(reversed(teacher_channels))
+
+        feature_loss = BackboneFeatureDistillationLoss(
+            feature_weight=distill_config.feature_mse_weight,
+            attention_weight=distill_config.feature_attention_weight,
+        ).to(self.device)
+        self.log(
+            "Backbone feature distillation enabled: "
+            f"student_channels={student_channels}, "
+            f"teacher_channels={teacher_channels}, "
+            f"feature_loss_weight={distill_config.feature_loss_weight}, "
+            f"feature_mse_weight={distill_config.feature_mse_weight}, "
+            f"feature_attention_weight={distill_config.feature_attention_weight}."
+        )
+        return feature_loss
 
     @staticmethod
     def _extract_state_dict(checkpoint):
@@ -365,6 +397,18 @@ class Trainer:
             + distill_config.edge_loss_weight * edge_loss
         )
         return total_loss, mask_loss, edge_loss
+
+    def _compute_feature_distillation_loss(self, student_features, teacher_features):
+        if self.feature_distill_loss is None:
+            loss = student_features[0].new_tensor(0.0)
+            return loss, loss, loss
+
+        feature_loss, feature_mse_loss, feature_attention_loss = self.feature_distill_loss(
+            student_features,
+            teacher_features,
+        )
+        total_loss = self.config.distillation.feature_loss_weight * feature_loss
+        return total_loss, feature_mse_loss, feature_attention_loss
 
     def _save_checkpoint(self, epoch: int):
         if self.rank != 0:
@@ -530,8 +574,15 @@ class Trainer:
             )
 
             with autocast(device_type="cuda", dtype=torch.float32):
-                student_outputs = self.model(inputs)
-                out_edge, out_pred_masks = student_outputs
+                return_features = self.feature_distill_loss is not None
+                student_forward = self.model(inputs, return_features=return_features)
+                if return_features:
+                    out_edge, out_pred_masks, student_features = student_forward
+                    student_outputs = (out_edge, out_pred_masks)
+                else:
+                    student_outputs = student_forward
+                    out_edge, out_pred_masks = student_outputs
+                    student_features = None
 
                 hard_loss, loss_structure, loss_dice = self._compute_supervised_loss(
                     out_edge, out_pred_masks, gts, edges
@@ -540,14 +591,36 @@ class Trainer:
                 distill_loss = out_edge.new_tensor(0.0)
                 distill_mask_loss = out_edge.new_tensor(0.0)
                 distill_edge_loss = out_edge.new_tensor(0.0)
+                feature_distill_loss = out_edge.new_tensor(0.0)
+                feature_mse_loss = out_edge.new_tensor(0.0)
+                feature_attention_loss = out_edge.new_tensor(0.0)
                 hard_loss_weight = 1.0
 
                 if self.teacher_model is not None:
                     with torch.no_grad():
-                        teacher_outputs = self.teacher_model(inputs)
+                        teacher_forward = self.teacher_model(
+                            inputs,
+                            return_features=return_features,
+                        )
+                    if return_features:
+                        teacher_edge, teacher_masks, teacher_features = teacher_forward
+                        teacher_outputs = (teacher_edge, teacher_masks)
+                    else:
+                        teacher_outputs = teacher_forward
+                        teacher_features = None
                     distill_loss, distill_mask_loss, distill_edge_loss = (
                         self._compute_distillation_loss(student_outputs, teacher_outputs)
                     )
+                    if return_features:
+                        (
+                            feature_distill_loss,
+                            feature_mse_loss,
+                            feature_attention_loss,
+                        ) = self._compute_feature_distillation_loss(
+                            student_features,
+                            teacher_features,
+                        )
+                        distill_loss = distill_loss + feature_distill_loss
                     hard_loss_weight = self.config.distillation.hard_loss_weight
 
                 total_loss = hard_loss_weight * hard_loss + distill_loss
@@ -575,6 +648,12 @@ class Trainer:
                         f" | KD Mask: {distill_mask_loss.item():.3f}"
                         f" | KD Edge: {distill_edge_loss.item():.3f}"
                     )
+                    if self.feature_distill_loss is not None:
+                        log_msg += (
+                            f" | KD Feature: {feature_distill_loss.item():.3f}"
+                            f" | Feat MSE: {feature_mse_loss.item():.3f}"
+                            f" | Feat AT: {feature_attention_loss.item():.3f}"
+                        )
                 self.log(log_msg)
 
         self.log(

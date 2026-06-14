@@ -21,6 +21,7 @@ class WeightsPaths(BaseModel):
     mobilemamba_b1: Optional[FilePath] = None
     mobilemamba_b2: Optional[FilePath] = None
     mobilemamba_b4: Optional[FilePath] = None
+    poolformer_s12: Optional[FilePath] = None
 
 
 class DistillationConfig(BaseModel):
@@ -34,6 +35,9 @@ class DistillationConfig(BaseModel):
     hard_loss_weight: float = Field(1.0, ge=0)
     mask_loss_weight: float = Field(1.0, ge=0)
     edge_loss_weight: float = Field(0.2, ge=0)
+    feature_loss_weight: float = Field(0.0, ge=0)
+    feature_mse_weight: float = Field(1.0, ge=0)
+    feature_attention_weight: float = Field(0.5, ge=0)
 
 
 class EvalDuringTrainingConfig(BaseModel):

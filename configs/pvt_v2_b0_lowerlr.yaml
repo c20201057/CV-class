@@ -40,6 +40,9 @@ distillation:
   hard_loss_weight: 1.0
   mask_loss_weight: 0.3
   edge_loss_weight: 0.1
+  feature_loss_weight: 0.05
+  feature_mse_weight: 1.0
+  feature_attention_weight: 0.5
 
 # Periodic evaluation during training
 eval_during_training:

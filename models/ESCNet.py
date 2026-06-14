@@ -35,10 +35,43 @@ class ESCNet(nn.Module):
             nn.BatchNorm2d(inter_channel),
             nn.ReLU(inplace=True),
         )
+        self.feature_adapters = self._build_feature_adapters(config)
 
-    def forward(self, x):
+    def _build_feature_adapters(self, config):
+        distill_config = getattr(config, "distillation", None)
+        if (
+            distill_config is None
+            or not distill_config.enabled
+            or distill_config.feature_loss_weight <= 0
+        ):
+            return None
+
+        teacher_channels = (
+            distill_config.teacher_lateral_channels
+            if distill_config.teacher_lateral_channels
+            else config.lateral_channels
+        )
+        student_channels = list(reversed(config.lateral_channels))
+        teacher_channels = list(reversed(teacher_channels))
+
+        return nn.ModuleList(
+            [
+                nn.Conv2d(student_ch, teacher_ch, kernel_size=1, bias=False)
+                if student_ch != teacher_ch
+                else nn.Identity()
+                for student_ch, teacher_ch in zip(student_channels, teacher_channels)
+            ]
+        )
+
+    def _adapt_features(self, features):
+        if self.feature_adapters is None:
+            return features
+        return tuple(adapter(feature) for adapter, feature in zip(self.feature_adapters, features))
+
+    def forward(self, x, return_features=False):
         ########## Encoder ##########
-        (x1, x2, x3, x4) = self.encoder(x)  # x1,x2,x3,x1+x2+x3+x4
+        raw_features = self.encoder(x)  # x1,x2,x3,x4
+        (x1, x2, x3, x4) = raw_features
         x4 = self.asa4(x4)
         x3 = self.asa3(x3)
         x2 = self.asa2(x2)
@@ -49,4 +82,6 @@ class ESCNet(nn.Module):
         out_edge = self.enhanced(features)  # logits
 
         out_mask = self.decoder(features, out_edge.sigmoid())
+        if return_features:
+            return out_edge, out_mask, self._adapt_features(raw_features)
         return out_edge, out_mask

@@ -1,13 +1,8 @@
 import torch
-import torch.nn as nn
-from collections import OrderedDict
 from torchvision.models import (
     vgg16,
     vgg16_bn,
-    VGG16_Weights,
-    VGG16_BN_Weights,
     resnet50,
-    ResNet50_Weights,
 )
 from models.backbones.pvt_v2 import (
     pvt_v2_b0,
@@ -17,18 +12,57 @@ from models.backbones.pvt_v2 import (
     pvt_v2_b4,
     pvt_v2_b5,
 )
-from models.backbones.mobilemamba import (
-    mobilemamba_t2,
-    mobilemamba_t4,
-    mobilemamba_s6,
-    mobilemamba_b1,
-    mobilemamba_b2,
-    mobilemamba_b4,
-)
+from models.backbones.poolformer import poolformer_s12
+BACKBONE_REGISTRY = {
+    "vgg16": vgg16,
+    "vgg16_bn": vgg16_bn,
+    "resnet50": resnet50,
+    "pvt_v2_b0": pvt_v2_b0,
+    "pvt_v2_b1": pvt_v2_b1,
+    "pvt_v2_b2": pvt_v2_b2,
+    "pvt_v2_b3": pvt_v2_b3,
+    "pvt_v2_b4": pvt_v2_b4,
+    "pvt_v2_b5": pvt_v2_b5,
+    "poolformer_s12": poolformer_s12,
+}
+
+
+def _get_backbone_builder(bb_name):
+    if bb_name in BACKBONE_REGISTRY:
+        return BACKBONE_REGISTRY[bb_name]
+
+    if bb_name.startswith("mobilemamba_"):
+        from models.backbones.mobilemamba import (
+            mobilemamba_t2,
+            mobilemamba_t4,
+            mobilemamba_s6,
+            mobilemamba_b1,
+            mobilemamba_b2,
+            mobilemamba_b4,
+        )
+
+        mobilemamba_registry = {
+            "mobilemamba_t2": mobilemamba_t2,
+            "mobilemamba_t4": mobilemamba_t4,
+            "mobilemamba_s6": mobilemamba_s6,
+            "mobilemamba_b1": mobilemamba_b1,
+            "mobilemamba_b2": mobilemamba_b2,
+            "mobilemamba_b4": mobilemamba_b4,
+        }
+        if bb_name in mobilemamba_registry:
+            return mobilemamba_registry[bb_name]
+
+    raise ValueError(f"Unsupported backbone: {bb_name}")
 
 
 def build_backbone(config, bb_name, pretrained=True, params_settings=""):
-    bb = eval("{}({})".format(bb_name, params_settings))
+    builder = _get_backbone_builder(bb_name)
+    if params_settings:
+        if not isinstance(params_settings, dict):
+            raise TypeError("params_settings must be a dict when provided")
+        bb = builder(**params_settings)
+    else:
+        bb = builder()
     if pretrained:
         bb = load_weights(config, bb, bb_name)
     return bb

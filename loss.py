@@ -113,3 +113,55 @@ class StructureLoss(torch.nn.Module):
         iou = 1 - (inter + self.epision) / (union - inter + self.epision)
 
         return (bce + iou).mean()
+
+
+class BackboneFeatureDistillationLoss(nn.Module):
+    def __init__(
+        self,
+        feature_weight=1.0,
+        attention_weight=0.5,
+    ):
+        super().__init__()
+        self.feature_weight = feature_weight
+        self.attention_weight = attention_weight
+
+    @staticmethod
+    def _attention_map(feature):
+        attention = feature.pow(2).mean(dim=1, keepdim=True)
+        return F.normalize(attention.flatten(1), p=2, dim=1)
+
+    def forward(self, student_features, teacher_features):
+        feature_loss = student_features[0].new_tensor(0.0)
+        attention_loss = student_features[0].new_tensor(0.0)
+        num_levels = min(len(student_features), len(teacher_features))
+
+        for idx in range(num_levels):
+            student_feature = student_features[idx]
+            teacher_feature = teacher_features[idx].detach()
+
+            if student_feature.shape[2:] != teacher_feature.shape[2:]:
+                teacher_feature = F.interpolate(
+                    teacher_feature,
+                    size=student_feature.shape[2:],
+                    mode="bilinear",
+                    align_corners=False,
+                )
+
+            feature_loss = feature_loss + F.mse_loss(
+                F.normalize(student_feature, p=2, dim=1),
+                F.normalize(teacher_feature, p=2, dim=1),
+            )
+            attention_loss = attention_loss + F.mse_loss(
+                self._attention_map(student_feature),
+                self._attention_map(teacher_feature),
+            )
+
+        if num_levels > 0:
+            feature_loss = feature_loss / num_levels
+            attention_loss = attention_loss / num_levels
+
+        total_loss = (
+            self.feature_weight * feature_loss
+            + self.attention_weight * attention_loss
+        )
+        return total_loss, feature_loss, attention_loss
