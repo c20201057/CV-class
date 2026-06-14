@@ -21,6 +21,15 @@ lateral_channels: [256, 160, 64, 32]
 resume: ""
 compile: false
 
+# Learning-rate schedule
+lr_scheduler:
+  type: cosine
+  step_unit: iter
+  warmup_epochs: 5
+  warmup_start_factor: 0.1
+  min_lr_factor: 0.1
+  power: 0.9
+
 # Teacher-Student Distillation
 distillation:
   enabled: true

@@ -1,7 +1,7 @@
 # config.py
 import yaml
 from pathlib import Path
-from typing import List, Optional
+from typing import List, Literal, Optional
 
 from pydantic import BaseModel, DirectoryPath, Field, FilePath, model_validator
 
@@ -46,6 +46,18 @@ class EvalDuringTrainingConfig(BaseModel):
     keep_predictions: bool = False
     run_at_end: bool = True
 
+
+class LRSchedulerConfig(BaseModel):
+    """Learning-rate schedule settings."""
+
+    type: Literal["constant", "cosine", "linear", "poly"] = "cosine"
+    step_unit: Literal["epoch", "iter"] = "epoch"
+    warmup_epochs: int = Field(0, ge=0)
+    warmup_start_factor: float = Field(0.1, ge=0, le=1)
+    min_lr: Optional[float] = Field(None, ge=0)
+    min_lr_factor: float = Field(0.1, ge=0, le=1)
+    power: float = Field(0.9, gt=0)
+
 # --- Main Configuration Class ---
 
 class Config(BaseModel):
@@ -71,6 +83,7 @@ class Config(BaseModel):
     compile: bool = True
     distillation: DistillationConfig = Field(default_factory=DistillationConfig)
     eval_during_training: EvalDuringTrainingConfig = Field(default_factory=EvalDuringTrainingConfig)
+    lr_scheduler: LRSchedulerConfig = Field(default_factory=LRSchedulerConfig)
 
     # --- Multi-GPU Settings ---
     device_ids: List[int]

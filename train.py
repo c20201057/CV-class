@@ -1,6 +1,7 @@
 # train.py
 import os
 import argparse
+import math
 import shutil
 from datetime import timedelta
 import torch
@@ -59,21 +60,23 @@ class Trainer:
         self.log(f"Trainer initialized on rank {self.rank} with device {self.device}.")
         self.log(f"Full config:\n{self.config.model_dump_json(indent=2)}")
 
+        self.start_epoch = 1
         self.train_loader = self._prepare_dataloader()
         self.eval_loader = self._prepare_eval_dataloader()
         self.model, self.optimizer, self.lr_scheduler = (
             self._prepare_model_and_optimizer()
         )
+        self.scaler = GradScaler()
+        self.structure_loss = StructureLoss().to(self.device)
+        self.dice_loss = EdgeDiceLoss().to(self.device)
+        self.loss_log = AverageMeter()
+        self._load_resume_checkpoint()
+
         self.teacher_model = (
             self._prepare_teacher_model()
             if self.config.distillation.enabled
             else None
         )
-
-        self.scaler = GradScaler()
-        self.structure_loss = StructureLoss().to(self.device)
-        self.dice_loss = EdgeDiceLoss().to(self.device)
-        self.loss_log = AverageMeter()
 
     def log(self, message: str):
         if self.rank == 0:
@@ -138,12 +141,68 @@ class Trainer:
             lr=self.config.lr,
             weight_decay=self.config.weight_decay,
         )
-        lr_scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(
-            optimizer, T_max=self.config.epochs, eta_min=self.config.lr / 10
-        )
+        lr_scheduler = self._build_lr_scheduler(optimizer)
 
         self.log("Model, optimizer, and scheduler have been initialized.")
         return model, optimizer, lr_scheduler
+
+    def _build_lr_scheduler(self, optimizer):
+        scheduler_config = self.config.lr_scheduler
+        steps_per_epoch = max(len(self.train_loader), 1)
+        total_steps = (
+            self.config.epochs
+            if scheduler_config.step_unit == "epoch"
+            else self.config.epochs * steps_per_epoch
+        )
+        warmup_steps = (
+            scheduler_config.warmup_epochs
+            if scheduler_config.step_unit == "epoch"
+            else scheduler_config.warmup_epochs * steps_per_epoch
+        )
+        min_lr = (
+            scheduler_config.min_lr
+            if scheduler_config.min_lr is not None
+            else self.config.lr * scheduler_config.min_lr_factor
+        )
+        min_lr_factor = min_lr / self.config.lr
+
+        def lr_lambda(current_step):
+            if total_steps <= 0:
+                return 1.0
+            if warmup_steps > 0 and current_step < warmup_steps:
+                progress = current_step / max(warmup_steps, 1)
+                return scheduler_config.warmup_start_factor + (
+                    1.0 - scheduler_config.warmup_start_factor
+                ) * progress
+
+            decay_steps = max(total_steps - warmup_steps, 1)
+            decay_step = min(max(current_step - warmup_steps, 0), decay_steps)
+            progress = decay_step / decay_steps
+
+            if scheduler_config.type == "constant":
+                factor = 1.0
+            elif scheduler_config.type == "linear":
+                factor = 1.0 - progress
+            elif scheduler_config.type == "poly":
+                factor = (1.0 - progress) ** scheduler_config.power
+            else:
+                factor = 0.5 * (1.0 + math.cos(math.pi * progress))
+
+            return min_lr_factor + (1.0 - min_lr_factor) * factor
+
+        self.log(
+            "LR scheduler initialized: "
+            f"type={scheduler_config.type}, step_unit={scheduler_config.step_unit}, "
+            f"total_steps={total_steps}, warmup_steps={warmup_steps}, min_lr={min_lr:.8f}."
+        )
+        return torch.optim.lr_scheduler.LambdaLR(optimizer, lr_lambda=lr_lambda)
+
+    def _step_lr_scheduler(self, unit: str):
+        if self.config.lr_scheduler.step_unit == unit:
+            self.lr_scheduler.step()
+
+    def _current_lr(self):
+        return self.optimizer.param_groups[0]["lr"]
 
     def _prepare_teacher_model(self):
         distill_config = self.config.distillation
@@ -154,13 +213,18 @@ class Trainer:
         if distill_config.teacher_lateral_channels:
             teacher_config.lateral_channels = distill_config.teacher_lateral_channels
 
-        teacher = ESCNet(teacher_config, pretrained=False).to(self.device)
+        self.log(
+            "Loading teacher checkpoint from "
+            f"{distill_config.teacher_checkpoint} ..."
+        )
+        teacher = ESCNet(teacher_config, pretrained=False)
         checkpoint = torch.load(
             distill_config.teacher_checkpoint,
-            map_location=self.device,
+            map_location="cpu",
             weights_only=True,
         )
         teacher.load_state_dict(self._extract_state_dict(checkpoint))
+        teacher = teacher.to(self.device)
         teacher.eval()
         teacher.requires_grad_(False)
 
@@ -202,6 +266,43 @@ class Trainer:
                         changed = True
             cleaned_state_dict[clean_key] = value
         return cleaned_state_dict
+
+    def _load_resume_checkpoint(self):
+        resume_path = self.config.resume
+        if not resume_path:
+            return
+        if not os.path.isfile(resume_path):
+            raise FileNotFoundError(f"Resume checkpoint not found: {resume_path}")
+
+        self.log(f"Loading resume checkpoint from {resume_path} ...")
+        checkpoint = torch.load(
+            resume_path,
+            map_location=self.device,
+            weights_only=False,
+        )
+        self._unwrap_model().load_state_dict(self._extract_state_dict(checkpoint))
+
+        if isinstance(checkpoint, dict) and "optimizer" in checkpoint:
+            try:
+                self.optimizer.load_state_dict(checkpoint["optimizer"])
+            except ValueError as exc:
+                self.log(f"Optimizer state skipped while resuming: {exc}")
+
+        if isinstance(checkpoint, dict) and "lr_scheduler" in checkpoint:
+            try:
+                self.lr_scheduler.load_state_dict(checkpoint["lr_scheduler"])
+            except ValueError as exc:
+                self.log(f"LR scheduler state skipped while resuming: {exc}")
+
+        if isinstance(checkpoint, dict) and "scaler" in checkpoint:
+            try:
+                self.scaler.load_state_dict(checkpoint["scaler"])
+            except ValueError as exc:
+                self.log(f"GradScaler state skipped while resuming: {exc}")
+
+        if isinstance(checkpoint, dict) and "epoch" in checkpoint:
+            self.start_epoch = int(checkpoint["epoch"]) + 1
+        self.log(f"Resume loaded. Training will start at epoch {self.start_epoch}.")
 
     def _compute_supervised_loss(self, out_edge, out_pred_masks, gts, edges):
         loss_dice = self.dice_loss(out_edge, edges)
@@ -269,6 +370,8 @@ class Trainer:
         if self.rank != 0:
             return  # 只有主进程保存模型
 
+        self._save_latest_training_state(epoch)
+
         if (
             epoch >= self.config.epochs - self.config.save_last
             and epoch % self.config.save_step == 0
@@ -278,6 +381,23 @@ class Trainer:
             save_path = os.path.join(self.config.save_model_dir, self.config.name, f"epoch_{epoch}.pth")
             torch.save(model_state, save_path)
             self.log(f"Checkpoint saved to {save_path}")
+
+    def _save_latest_training_state(self, epoch: int):
+        save_path = os.path.join(
+            self.config.save_model_dir,
+            self.config.name,
+            "latest.ckpt",
+        )
+        checkpoint = {
+            "epoch": epoch,
+            "model": self._unwrap_model().state_dict(),
+            "optimizer": self.optimizer.state_dict(),
+            "lr_scheduler": self.lr_scheduler.state_dict(),
+            "scaler": self.scaler.state_dict(),
+            "config": self.config.model_dump(mode="json"),
+        }
+        torch.save(checkpoint, save_path)
+        self.log(f"Latest training state saved to {save_path}")
 
     def _unwrap_model(self):
         model = self.model
@@ -438,10 +558,12 @@ class Trainer:
             self.scaler.update()
 
             self.loss_log.update(total_loss.item(), inputs.size(0))
+            self._step_lr_scheduler("iter")
 
             if self.rank == 0 and batch_idx % 50 == 0:
                 log_msg = (
                     f"Epoch[{epoch}/{self.config.epochs}] Iter[{batch_idx}/{len(self.train_loader)}] | "
+                    f"LR: {self._current_lr():.8f} | "
                     f"Total Loss: {total_loss.item():.3f} | "
                     f"Hard Loss: {hard_loss.item():.3f} | "
                     f"Structure Loss: {loss_structure.item():.3f} | "
@@ -456,13 +578,20 @@ class Trainer:
                 self.log(log_msg)
 
         self.log(
-            f"@==Final== Epoch[{epoch}/{self.config.epochs}] Avg Training Loss: {self.loss_log.avg:.3f}"
+            f"@==Final== Epoch[{epoch}/{self.config.epochs}] "
+            f"Avg Training Loss: {self.loss_log.avg:.3f} | LR: {self._current_lr():.8f}"
         )
-        self.lr_scheduler.step()
+        self._step_lr_scheduler("epoch")
 
     def train(self):
         self.log("Starting training process...")
-        for epoch in range(1, self.config.epochs + 1):
+        if self.start_epoch > self.config.epochs:
+            self.log(
+                f"Resume epoch {self.start_epoch} is past configured epochs "
+                f"{self.config.epochs}; nothing to train."
+            )
+            return
+        for epoch in range(self.start_epoch, self.config.epochs + 1):
             self.train_epoch(epoch)
             self._save_checkpoint(epoch)
             should_eval = (
