@@ -9,9 +9,42 @@ from pydantic import BaseModel, DirectoryPath, Field, FilePath, model_validator
 
 class WeightsPaths(BaseModel):
     """Defines and validates paths to backbone weights."""
+    pvt_v2_b0: Optional[FilePath] = None
+    pvt_v2_b1: Optional[FilePath] = None
     pvt_v2_b2: Optional[FilePath] = None
+    pvt_v2_b3: Optional[FilePath] = None
     pvt_v2_b4: Optional[FilePath] = None
     pvt_v2_b5: Optional[FilePath] = None
+    mobilemamba_t2: Optional[FilePath] = None
+    mobilemamba_t4: Optional[FilePath] = None
+    mobilemamba_s6: Optional[FilePath] = None
+    mobilemamba_b1: Optional[FilePath] = None
+    mobilemamba_b2: Optional[FilePath] = None
+    mobilemamba_b4: Optional[FilePath] = None
+
+
+class DistillationConfig(BaseModel):
+    """Teacher-Student distillation settings."""
+
+    enabled: bool = False
+    teacher_checkpoint: Optional[str] = None
+    teacher_backbone: Optional[str] = None
+    teacher_lateral_channels: Optional[List[int]] = None
+    temperature: float = Field(1.0, gt=0)
+    hard_loss_weight: float = Field(1.0, ge=0)
+    mask_loss_weight: float = Field(1.0, ge=0)
+    edge_loss_weight: float = Field(0.2, ge=0)
+
+
+class EvalDuringTrainingConfig(BaseModel):
+    """Validation/evaluation settings used during training."""
+
+    enabled: bool = False
+    interval: int = Field(0, ge=0)
+    pred_root: str = "preds_train"
+    save_dir: str = "results_train"
+    keep_predictions: bool = False
+    run_at_end: bool = True
 
 # --- Main Configuration Class ---
 
@@ -36,6 +69,8 @@ class Config(BaseModel):
     lateral_channels: List[int]
     resume: Optional[str] = None # Allows the field to be missing or empty ""
     compile: bool = True
+    distillation: DistillationConfig = Field(default_factory=DistillationConfig)
+    eval_during_training: EvalDuringTrainingConfig = Field(default_factory=EvalDuringTrainingConfig)
 
     # --- Multi-GPU Settings ---
     device_ids: List[int]
@@ -43,7 +78,7 @@ class Config(BaseModel):
 
     # --- Save Settings ---
     save_model_dir: str 
-    name: str 
+    name: Optional[str] = None
     save_last: int = Field(..., ge=0)
     save_step: int = Field(..., gt=0)
 
@@ -60,8 +95,17 @@ class Config(BaseModel):
     def validate_selected_backbone_weight(self) -> "Config":
         if not hasattr(self.weights, self.backbone):
             raise ValueError(f"No weight path configured for backbone '{self.backbone}'")
-        if getattr(self.weights, self.backbone) is None:
+        weight_path = getattr(self.weights, self.backbone)
+        if weight_path is None and not self.backbone.startswith("mobilemamba_"):
             raise ValueError(f"Weight path for backbone '{self.backbone}' is required")
+        if self.eval_during_training.enabled and self.eval_during_training.interval <= 0:
+            raise ValueError("eval_during_training.interval must be > 0 when eval_during_training.enabled is true")
+        if self.distillation.enabled:
+            teacher_checkpoint = self.distillation.teacher_checkpoint
+            if not teacher_checkpoint:
+                raise ValueError("distillation.teacher_checkpoint is required when distillation is enabled")
+            if not Path(teacher_checkpoint).is_file():
+                raise ValueError(f"Teacher checkpoint not found: {teacher_checkpoint}")
         return self
     
     # --- Helper Properties (for cleaner code in train.py) ---
@@ -83,8 +127,12 @@ class Config(BaseModel):
 
 def load_config(config_path: str = "config.yaml") -> Config:
     """Loads a YAML configuration file into a validated Config object."""
-    with open(config_path, 'r') as f:
+    config_file = Path(config_path)
+    with open(config_file, 'r') as f:
         config_dict = yaml.safe_load(f)
-    
+
+    if not config_dict.get("name"):
+        config_dict["name"] = config_file.stem
+
     # Pydantic will raise a ValidationError if the config is invalid
     return Config(**config_dict)

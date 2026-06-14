@@ -7,6 +7,7 @@ timm
 scipy
 kornia
 einops
+PyWavelets
 tqdm
 prettytable
 pydantic>=2

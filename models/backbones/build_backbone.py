@@ -17,6 +17,14 @@ from models.backbones.pvt_v2 import (
     pvt_v2_b4,
     pvt_v2_b5,
 )
+from models.backbones.mobilemamba import (
+    mobilemamba_t2,
+    mobilemamba_t4,
+    mobilemamba_s6,
+    mobilemamba_b1,
+    mobilemamba_b2,
+    mobilemamba_b4,
+)
 
 
 def build_backbone(config, bb_name, pretrained=True, params_settings=""):
@@ -28,6 +36,9 @@ def build_backbone(config, bb_name, pretrained=True, params_settings=""):
 
 def load_weights(config, model, model_name):
     weight_path = getattr(config.weights, model_name)
+    if weight_path is None:
+        print(f"No pretrained weights configured for '{model_name}'. Training from scratch.")
+        return model
 
     save_model = torch.load(
         weight_path, map_location="cpu", weights_only=True

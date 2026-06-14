@@ -1,0 +1,72 @@
+# Training Parameters
+batch_size: 4
+batch_size_valid: 8
+epochs: 120
+lr: 0.0001
+weight_decay: 0.0001
+rand_seed: 42
+precisionHigh: true
+
+# Dataset Configuration
+train_dir: /root/data-tmp/COD/Train
+test_dir: /root/data-tmp/COD/Test/COD10K
+load_all: false
+
+# Model Configuration
+backbone: mobilemamba_t2
+img_size: 416
+lateral_channels: [272, 144, 72, 36]
+resume: ""
+compile: false
+
+# Teacher-Student Distillation
+distillation:
+  enabled: true
+  teacher_checkpoint: /root/data-tmp/epoch_120.pth
+  teacher_backbone: pvt_v2_b5
+  teacher_lateral_channels: [512, 320, 128, 64]
+  temperature: 2.0
+  hard_loss_weight: 1.0
+  mask_loss_weight: 0.5
+  edge_loss_weight: 0.2
+
+# Periodic evaluation during training
+eval_during_training:
+  enabled: true
+  interval: 10
+  pred_root: /root/data-tmp/preds_train
+  save_dir: /root/data-tmp/results_train
+  keep_predictions: true
+  run_at_end: true
+
+# Multi-GPU Settings
+device_ids: [0, 1, 2, 3]
+multi_GPU: true
+
+# Save Settings
+save_model_dir: /root/data-tmp/ESCNet/checkpoints
+name: null
+save_last: 60
+save_step: 10
+
+# Data Augmentation
+preproc_methods:
+  - flip
+  - rotate
+  - pepper
+  - crop
+
+# Path Settings
+weights:
+  pvt_v2_b0: /root/data-tmp/weights/pvt_v2_b0.pth
+  pvt_v2_b5: /root/data-tmp/weights/pvt_v2_b5_22k.pth
+  mobilemamba_t2: /root/data-tmp/weights/mobilemamba_t2s.pth
+  # Optional if you download official pretrained weights:
+  # mobilemamba_t4: /path/to/mobilemamba_t4.pth
+  # mobilemamba_s6: /path/to/mobilemamba_s6.pth
+  # mobilemamba_b1: /path/to/mobilemamba_b1.pth
+  # mobilemamba_b2: /path/to/mobilemamba_b2.pth
+  # mobilemamba_b4: /path/to/mobilemamba_b4.pth
+
+# System
+num_workers: 4

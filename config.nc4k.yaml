@@ -27,7 +27,7 @@ multi_GPU: false
 
 # Save Settings
 save_model_dir: checkpoints
-name: escnet
+name: null
 save_last: 30
 save_step: 3
 
