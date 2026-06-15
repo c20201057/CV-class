@@ -1,0 +1,13 @@
+{
+  "exp_id": "light_b2_c64_no_edge_guidance_e120_s42_prob_eval",
+  "repo": "/root/data-tmp/workspace/02_experiments/code/light_escnet_b2_c64_no_edge_guidance",
+  "checkpoint": "/root/data-tmp/workspace/02_experiments/runs/light_b2_c64_no_edge_guidance_e120_s42/light_b2_c64_no_edge_guidance_e120_s42_b6_w8_4gpu/epoch_120.pth",
+  "device": "cuda:0",
+  "method": "no_edge_guidance_epoch120",
+  "datasets": [
+    "CAMO",
+    "COD10K",
+    "NC4K"
+  ],
+  "prediction_protocol": "sigmoid_probability_png_align_corners_false"
+}

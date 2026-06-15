@@ -1,0 +1,49 @@
+batch_size: 6
+batch_size_valid: 8
+epochs: 120
+lr: 7.5e-05
+weight_decay: 0.00015
+rand_seed: 42
+precisionHigh: true
+train_dir: /dev/shm/escnet_fast_kd/data/Train
+test_dir: /root/data-tmp/COD/Test/NC4K
+load_all: false
+backbone: pvt_v2_b2
+img_size: 416
+lateral_channels:
+- 512
+- 320
+- 128
+- 64
+inter_channel: 64
+bb_pretrained: true
+resume: /root/data-tmp/workspace/02_experiments/runs/kd_light_b2_c64_e120_s42_recover_epoch10_fast_shm_4gpu/latest_train_state.pth
+compile: false
+device_ids:
+- 0
+multi_GPU: false
+save_model_dir: /dev/shm/escnet_fast_kd/runs
+name: kd_light_b2_c64_e120_s42_continue_epoch20_b6_w8_4gpu
+save_last: 120
+save_step: 20
+preproc_methods:
+- flip
+- rotate
+- pepper
+- crop
+weights:
+  pvt_v2_b2: /dev/shm/escnet_fast_kd/weights/pvt_v2_b2.pth
+  pvt_v2_b4: null
+  pvt_v2_b5: /dev/shm/escnet_fast_kd/weights/pvt_v2_b5_22k.pth
+kd_enabled: true
+kd_mode: online
+kd_teacher_config: /root/data-tmp/workspace/02_experiments/code/kd_light_escnet_b2_c64/configs/teacher_b5.yaml
+kd_teacher_ckpt: /dev/shm/escnet_fast_kd/weights/teacher_epoch_120.pth
+kd_loss: mse
+kd_weight: 0.5
+kd_temperature: 2.0
+kd_warmup_epochs: 5
+kd_cache_dir: null
+num_workers: 8
+persistent_workers: true
+prefetch_factor: 4

@@ -1,0 +1,1 @@
+/dev/shm/escnet_ablation_no_edge/logs/train_no_edge_guidance_b6_w8_4gpu_20260614T162810Z.log

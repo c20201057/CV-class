@@ -1,0 +1,2 @@
+dataset,gt_count,pred_count,result_txt
+CAMO,250,250,/root/data-tmp/workspace/02_experiments/runs/smoke_eval_suite_b5_camo/results/CAMO/result.txt

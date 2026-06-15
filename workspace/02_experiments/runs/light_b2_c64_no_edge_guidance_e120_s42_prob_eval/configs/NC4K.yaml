@@ -1,0 +1,41 @@
+batch_size: 6
+batch_size_valid: 8
+epochs: 120
+lr: 7.5e-05
+weight_decay: 0.00015
+rand_seed: 42
+precisionHigh: true
+train_dir: /dev/shm/escnet_fast_kd/data/Train
+test_dir: /root/data-tmp/COD/Test/NC4K
+load_all: false
+backbone: pvt_v2_b2
+img_size: 416
+lateral_channels:
+- 512
+- 320
+- 128
+- 64
+inter_channel: 64
+bb_pretrained: true
+resume: ''
+compile: false
+device_ids:
+- 0
+multi_GPU: false
+save_model_dir: /dev/shm/escnet_ablation_no_edge/runs
+name: light_b2_c64_no_edge_guidance_e120_s42_b6_w8_4gpu
+save_last: 120
+save_step: 20
+preproc_methods:
+- flip
+- rotate
+- pepper
+- crop
+weights:
+  pvt_v2_b2: /dev/shm/escnet_fast_kd/weights/pvt_v2_b2.pth
+  pvt_v2_b4: null
+  pvt_v2_b5: /dev/shm/escnet_fast_kd/weights/pvt_v2_b5_22k.pth
+num_workers: 8
+persistent_workers: true
+prefetch_factor: 4
+disable_decoder_edge_guidance: true

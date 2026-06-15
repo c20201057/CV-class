@@ -1,0 +1,5 @@
+| exp_id | dataset | method | Smeasure | wFmeasure | meanFm | meanEm | MAE | source | protocol | repo_boundary | checkpoint | status |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| baseline_escnet_b5_clean_prob_e120 | CAMO | epoch_120 | 0.881 | 0.842 | 0.864 | 0.933 | 0.043 | /root/data-tmp/workspace/02_experiments/runs/baseline_escnet_b5_clean_prob_e120/results/CAMO/result.txt | prob_map | clean_baseline_snapshot | /root/data-tmp/epoch_120.pth | clean_prob_re_eval_pending_integrity |
+| baseline_escnet_b5_clean_prob_e120 | COD10K | epoch_120 | 0.877 | 0.802 | 0.824 | 0.938 | 0.021 | /root/data-tmp/workspace/02_experiments/runs/baseline_escnet_b5_clean_prob_e120/results/COD10K/result.txt | prob_map | clean_baseline_snapshot | /root/data-tmp/epoch_120.pth | clean_prob_re_eval_pending_integrity |
+| baseline_escnet_b5_clean_prob_e120 | NC4K | epoch_120 | 0.897 | 0.857 | 0.878 | 0.942 | 0.029 | /root/data-tmp/workspace/02_experiments/runs/baseline_escnet_b5_clean_prob_e120/results/NC4K/result.txt | prob_map | clean_baseline_snapshot | /root/data-tmp/epoch_120.pth | clean_prob_re_eval_pending_integrity |

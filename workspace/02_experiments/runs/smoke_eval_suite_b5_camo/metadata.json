@@ -1,0 +1,13 @@
+{
+  "exp_id": "smoke_eval_suite_b5_camo",
+  "repo": "/root/ESCNet",
+  "ckpt": "/root/ESCNet/checkpoints/escnet/epoch_120.pth",
+  "out_root": "/root/data-tmp/workspace/02_experiments/runs",
+  "run_dir": "/root/data-tmp/workspace/02_experiments/runs/smoke_eval_suite_b5_camo",
+  "dataset_root": "/root/data-tmp/COD/Test",
+  "datasets": [
+    "CAMO"
+  ],
+  "device_ids": "0",
+  "config_template": null
+}

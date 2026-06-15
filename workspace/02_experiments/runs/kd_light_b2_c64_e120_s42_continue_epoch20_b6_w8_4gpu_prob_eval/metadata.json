@@ -1,0 +1,13 @@
+{
+  "exp_id": "kd_light_b2_c64_e120_s42_continue_epoch20_b6_w8_4gpu_prob_eval",
+  "repo": "/root/data-tmp/workspace/02_experiments/code/kd_light_escnet_b2_c64",
+  "checkpoint": "/root/data-tmp/workspace/02_experiments/runs/kd_light_b2_c64_e120_s42_continue_epoch20_b6_w8_4gpu/epoch_120.pth",
+  "device": "cuda:0",
+  "method": "epoch_120",
+  "datasets": [
+    "CAMO",
+    "COD10K",
+    "NC4K"
+  ],
+  "prediction_protocol": "sigmoid_probability_png_align_corners_false"
+}

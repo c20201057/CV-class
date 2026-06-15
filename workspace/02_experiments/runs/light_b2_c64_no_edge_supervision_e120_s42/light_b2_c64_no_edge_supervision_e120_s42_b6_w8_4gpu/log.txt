@@ -1,0 +1,647 @@
+2026-06-15 12:45:57,549 INFO Trainer initialized on rank 0 with device 0.
+2026-06-15 12:45:57,549 INFO Full config:
+{
+  "batch_size": 6,
+  "batch_size_valid": 8,
+  "epochs": 120,
+  "lr": 0.000075,
+  "weight_decay": 0.00015,
+  "rand_seed": 42,
+  "precisionHigh": true,
+  "train_dir": "/dev/shm/escnet_fast_kd/data/Train",
+  "test_dir": "/root/data-tmp/COD/Test/COD10K",
+  "load_all": false,
+  "backbone": "pvt_v2_b2",
+  "img_size": 416,
+  "lateral_channels": [
+    512,
+    320,
+    128,
+    64
+  ],
+  "inter_channel": 64,
+  "bb_pretrained": true,
+  "resume": "",
+  "compile": false,
+  "disable_decoder_edge_guidance": false,
+  "edge_loss_weight": 0.0,
+  "device_ids": [
+    0,
+    1,
+    2,
+    3
+  ],
+  "multi_GPU": true,
+  "save_model_dir": "/dev/shm/escnet_ablation_no_edge_supervision/runs",
+  "name": "light_b2_c64_no_edge_supervision_e120_s42_b6_w8_4gpu",
+  "save_last": 120,
+  "save_step": 20,
+  "preproc_methods": [
+    "flip",
+    "rotate",
+    "pepper",
+    "crop"
+  ],
+  "weights": {
+    "pvt_v2_b2": "/dev/shm/escnet_fast_kd/weights/pvt_v2_b2.pth",
+    "pvt_v2_b4": null,
+    "pvt_v2_b5": "/dev/shm/escnet_fast_kd/weights/pvt_v2_b5_22k.pth"
+  },
+  "num_workers": 8,
+  "persistent_workers": true,
+  "prefetch_factor": 4
+}
+2026-06-15 12:45:57,648 INFO 168 batches of train dataloader created.
+2026-06-15 12:46:25,081 INFO Model, optimizer, and scheduler have been initialized.
+2026-06-15 12:46:25,082 INFO Starting training process...
+2026-06-15 12:46:30,408 INFO Epoch[1/120] Iter[0/168] | Total Loss: 5.102 | Structure Loss: 5.102 | Edge Loss: 0.000 | Raw Edge Loss: 0.990 | Edge Loss Weight: 0.000
+2026-06-15 12:47:14,403 INFO Epoch[1/120] Iter[50/168] | Total Loss: 3.102 | Structure Loss: 3.102 | Edge Loss: 0.000 | Raw Edge Loss: 0.995 | Edge Loss Weight: 0.000
+2026-06-15 12:47:58,093 INFO Epoch[1/120] Iter[100/168] | Total Loss: 3.513 | Structure Loss: 3.513 | Edge Loss: 0.000 | Raw Edge Loss: 0.992 | Edge Loss Weight: 0.000
+2026-06-15 12:48:40,849 INFO Epoch[1/120] Iter[150/168] | Total Loss: 3.088 | Structure Loss: 3.088 | Edge Loss: 0.000 | Raw Edge Loss: 0.992 | Edge Loss Weight: 0.000
+2026-06-15 12:48:54,134 INFO @==Final== Epoch[1/120] Avg Training Loss: 3.337
+2026-06-15 12:48:57,243 INFO Epoch[2/120] Iter[0/168] | Total Loss: 2.587 | Structure Loss: 2.587 | Edge Loss: 0.000 | Raw Edge Loss: 0.983 | Edge Loss Weight: 0.000
+2026-06-15 12:49:42,103 INFO Epoch[2/120] Iter[50/168] | Total Loss: 2.473 | Structure Loss: 2.473 | Edge Loss: 0.000 | Raw Edge Loss: 0.990 | Edge Loss Weight: 0.000
+2026-06-15 12:50:25,747 INFO Epoch[2/120] Iter[100/168] | Total Loss: 2.098 | Structure Loss: 2.098 | Edge Loss: 0.000 | Raw Edge Loss: 0.999 | Edge Loss Weight: 0.000
+2026-06-15 12:51:08,307 INFO Epoch[2/120] Iter[150/168] | Total Loss: 2.116 | Structure Loss: 2.116 | Edge Loss: 0.000 | Raw Edge Loss: 0.994 | Edge Loss Weight: 0.000
+2026-06-15 12:51:21,321 INFO @==Final== Epoch[2/120] Avg Training Loss: 2.562
+2026-06-15 12:51:24,120 INFO Epoch[3/120] Iter[0/168] | Total Loss: 2.358 | Structure Loss: 2.358 | Edge Loss: 0.000 | Raw Edge Loss: 0.992 | Edge Loss Weight: 0.000
+2026-06-15 12:52:07,053 INFO Epoch[3/120] Iter[50/168] | Total Loss: 2.707 | Structure Loss: 2.707 | Edge Loss: 0.000 | Raw Edge Loss: 0.994 | Edge Loss Weight: 0.000
+2026-06-15 12:52:49,809 INFO Epoch[3/120] Iter[100/168] | Total Loss: 2.693 | Structure Loss: 2.693 | Edge Loss: 0.000 | Raw Edge Loss: 0.996 | Edge Loss Weight: 0.000
+2026-06-15 12:53:32,265 INFO Epoch[3/120] Iter[150/168] | Total Loss: 2.216 | Structure Loss: 2.216 | Edge Loss: 0.000 | Raw Edge Loss: 0.994 | Edge Loss Weight: 0.000
+2026-06-15 12:53:45,354 INFO @==Final== Epoch[3/120] Avg Training Loss: 2.360
+2026-06-15 12:53:48,152 INFO Epoch[4/120] Iter[0/168] | Total Loss: 2.847 | Structure Loss: 2.847 | Edge Loss: 0.000 | Raw Edge Loss: 0.999 | Edge Loss Weight: 0.000
+2026-06-15 12:54:31,612 INFO Epoch[4/120] Iter[50/168] | Total Loss: 1.997 | Structure Loss: 1.997 | Edge Loss: 0.000 | Raw Edge Loss: 0.992 | Edge Loss Weight: 0.000
+2026-06-15 12:55:25,854 INFO Epoch[4/120] Iter[100/168] | Total Loss: 2.341 | Structure Loss: 2.341 | Edge Loss: 0.000 | Raw Edge Loss: 0.993 | Edge Loss Weight: 0.000
+2026-06-15 12:56:12,598 INFO Epoch[4/120] Iter[150/168] | Total Loss: 2.141 | Structure Loss: 2.141 | Edge Loss: 0.000 | Raw Edge Loss: 0.997 | Edge Loss Weight: 0.000
+2026-06-15 12:56:26,309 INFO @==Final== Epoch[4/120] Avg Training Loss: 2.186
+2026-06-15 12:56:29,230 INFO Epoch[5/120] Iter[0/168] | Total Loss: 2.325 | Structure Loss: 2.325 | Edge Loss: 0.000 | Raw Edge Loss: 0.995 | Edge Loss Weight: 0.000
+2026-06-15 12:57:12,074 INFO Epoch[5/120] Iter[50/168] | Total Loss: 1.689 | Structure Loss: 1.689 | Edge Loss: 0.000 | Raw Edge Loss: 0.995 | Edge Loss Weight: 0.000
+2026-06-15 12:57:58,748 INFO Epoch[5/120] Iter[100/168] | Total Loss: 1.696 | Structure Loss: 1.696 | Edge Loss: 0.000 | Raw Edge Loss: 0.997 | Edge Loss Weight: 0.000
+2026-06-15 12:58:44,978 INFO Epoch[5/120] Iter[150/168] | Total Loss: 2.229 | Structure Loss: 2.229 | Edge Loss: 0.000 | Raw Edge Loss: 0.994 | Edge Loss Weight: 0.000
+2026-06-15 12:59:01,181 INFO @==Final== Epoch[5/120] Avg Training Loss: 2.051
+2026-06-15 12:59:04,117 INFO Epoch[6/120] Iter[0/168] | Total Loss: 1.818 | Structure Loss: 1.818 | Edge Loss: 0.000 | Raw Edge Loss: 0.997 | Edge Loss Weight: 0.000
+2026-06-15 12:59:52,070 INFO Epoch[6/120] Iter[50/168] | Total Loss: 2.172 | Structure Loss: 2.172 | Edge Loss: 0.000 | Raw Edge Loss: 0.995 | Edge Loss Weight: 0.000
+2026-06-15 13:00:34,591 INFO Epoch[6/120] Iter[100/168] | Total Loss: 1.512 | Structure Loss: 1.512 | Edge Loss: 0.000 | Raw Edge Loss: 0.997 | Edge Loss Weight: 0.000
+2026-06-15 13:01:20,344 INFO Epoch[6/120] Iter[150/168] | Total Loss: 2.140 | Structure Loss: 2.140 | Edge Loss: 0.000 | Raw Edge Loss: 0.996 | Edge Loss Weight: 0.000
+2026-06-15 13:01:36,572 INFO @==Final== Epoch[6/120] Avg Training Loss: 1.934
+2026-06-15 13:01:39,424 INFO Epoch[7/120] Iter[0/168] | Total Loss: 2.092 | Structure Loss: 2.092 | Edge Loss: 0.000 | Raw Edge Loss: 0.997 | Edge Loss Weight: 0.000
+2026-06-15 13:02:22,974 INFO Epoch[7/120] Iter[50/168] | Total Loss: 1.621 | Structure Loss: 1.621 | Edge Loss: 0.000 | Raw Edge Loss: 0.996 | Edge Loss Weight: 0.000
+2026-06-15 13:03:05,834 INFO Epoch[7/120] Iter[100/168] | Total Loss: 1.664 | Structure Loss: 1.664 | Edge Loss: 0.000 | Raw Edge Loss: 0.996 | Edge Loss Weight: 0.000
+2026-06-15 13:03:56,939 INFO Epoch[7/120] Iter[150/168] | Total Loss: 2.104 | Structure Loss: 2.104 | Edge Loss: 0.000 | Raw Edge Loss: 0.994 | Edge Loss Weight: 0.000
+2026-06-15 13:04:10,869 INFO @==Final== Epoch[7/120] Avg Training Loss: 1.937
+2026-06-15 13:04:13,810 INFO Epoch[8/120] Iter[0/168] | Total Loss: 2.270 | Structure Loss: 2.270 | Edge Loss: 0.000 | Raw Edge Loss: 0.997 | Edge Loss Weight: 0.000
+2026-06-15 13:04:58,969 INFO Epoch[8/120] Iter[50/168] | Total Loss: 1.485 | Structure Loss: 1.485 | Edge Loss: 0.000 | Raw Edge Loss: 0.997 | Edge Loss Weight: 0.000
+2026-06-15 13:05:48,739 INFO Epoch[8/120] Iter[100/168] | Total Loss: 1.405 | Structure Loss: 1.405 | Edge Loss: 0.000 | Raw Edge Loss: 0.994 | Edge Loss Weight: 0.000
+2026-06-15 13:06:37,441 INFO Epoch[8/120] Iter[150/168] | Total Loss: 1.985 | Structure Loss: 1.985 | Edge Loss: 0.000 | Raw Edge Loss: 0.998 | Edge Loss Weight: 0.000
+2026-06-15 13:06:53,256 INFO @==Final== Epoch[8/120] Avg Training Loss: 1.810
+2026-06-15 13:06:56,050 INFO Epoch[9/120] Iter[0/168] | Total Loss: 1.616 | Structure Loss: 1.616 | Edge Loss: 0.000 | Raw Edge Loss: 0.997 | Edge Loss Weight: 0.000
+2026-06-15 13:07:41,514 INFO Epoch[9/120] Iter[50/168] | Total Loss: 1.732 | Structure Loss: 1.732 | Edge Loss: 0.000 | Raw Edge Loss: 0.996 | Edge Loss Weight: 0.000
+2026-06-15 13:08:26,034 INFO Epoch[9/120] Iter[100/168] | Total Loss: 1.891 | Structure Loss: 1.891 | Edge Loss: 0.000 | Raw Edge Loss: 0.991 | Edge Loss Weight: 0.000
+2026-06-15 13:09:13,965 INFO Epoch[9/120] Iter[150/168] | Total Loss: 1.684 | Structure Loss: 1.684 | Edge Loss: 0.000 | Raw Edge Loss: 0.993 | Edge Loss Weight: 0.000
+2026-06-15 13:09:26,741 INFO @==Final== Epoch[9/120] Avg Training Loss: 1.740
+2026-06-15 13:09:29,435 INFO Epoch[10/120] Iter[0/168] | Total Loss: 1.806 | Structure Loss: 1.806 | Edge Loss: 0.000 | Raw Edge Loss: 0.997 | Edge Loss Weight: 0.000
+2026-06-15 13:10:16,816 INFO Epoch[10/120] Iter[50/168] | Total Loss: 1.850 | Structure Loss: 1.850 | Edge Loss: 0.000 | Raw Edge Loss: 0.998 | Edge Loss Weight: 0.000
+2026-06-15 13:10:59,289 INFO Epoch[10/120] Iter[100/168] | Total Loss: 2.083 | Structure Loss: 2.083 | Edge Loss: 0.000 | Raw Edge Loss: 0.999 | Edge Loss Weight: 0.000
+2026-06-15 13:11:44,590 INFO Epoch[10/120] Iter[150/168] | Total Loss: 1.576 | Structure Loss: 1.576 | Edge Loss: 0.000 | Raw Edge Loss: 0.997 | Edge Loss Weight: 0.000
+2026-06-15 13:12:00,587 INFO @==Final== Epoch[10/120] Avg Training Loss: 1.682
+2026-06-15 13:12:03,311 INFO Epoch[11/120] Iter[0/168] | Total Loss: 1.460 | Structure Loss: 1.460 | Edge Loss: 0.000 | Raw Edge Loss: 0.997 | Edge Loss Weight: 0.000
+2026-06-15 13:12:45,871 INFO Epoch[11/120] Iter[50/168] | Total Loss: 1.734 | Structure Loss: 1.734 | Edge Loss: 0.000 | Raw Edge Loss: 0.998 | Edge Loss Weight: 0.000
+2026-06-15 13:13:32,735 INFO Epoch[11/120] Iter[100/168] | Total Loss: 1.451 | Structure Loss: 1.451 | Edge Loss: 0.000 | Raw Edge Loss: 0.996 | Edge Loss Weight: 0.000
+2026-06-15 13:14:15,228 INFO Epoch[11/120] Iter[150/168] | Total Loss: 2.465 | Structure Loss: 2.465 | Edge Loss: 0.000 | Raw Edge Loss: 0.999 | Edge Loss Weight: 0.000
+2026-06-15 13:14:28,618 INFO @==Final== Epoch[11/120] Avg Training Loss: 1.775
+2026-06-15 13:14:31,495 INFO Epoch[12/120] Iter[0/168] | Total Loss: 1.768 | Structure Loss: 1.768 | Edge Loss: 0.000 | Raw Edge Loss: 0.995 | Edge Loss Weight: 0.000
+2026-06-15 13:15:14,033 INFO Epoch[12/120] Iter[50/168] | Total Loss: 1.411 | Structure Loss: 1.411 | Edge Loss: 0.000 | Raw Edge Loss: 0.998 | Edge Loss Weight: 0.000
+2026-06-15 13:15:56,368 INFO Epoch[12/120] Iter[100/168] | Total Loss: 1.345 | Structure Loss: 1.345 | Edge Loss: 0.000 | Raw Edge Loss: 0.996 | Edge Loss Weight: 0.000
+2026-06-15 13:16:53,654 INFO Epoch[12/120] Iter[150/168] | Total Loss: 1.682 | Structure Loss: 1.682 | Edge Loss: 0.000 | Raw Edge Loss: 0.996 | Edge Loss Weight: 0.000
+2026-06-15 13:17:07,988 INFO @==Final== Epoch[12/120] Avg Training Loss: 1.707
+2026-06-15 13:17:10,961 INFO Epoch[13/120] Iter[0/168] | Total Loss: 1.220 | Structure Loss: 1.220 | Edge Loss: 0.000 | Raw Edge Loss: 0.998 | Edge Loss Weight: 0.000
+2026-06-15 13:18:00,709 INFO Epoch[13/120] Iter[50/168] | Total Loss: 1.688 | Structure Loss: 1.688 | Edge Loss: 0.000 | Raw Edge Loss: 0.999 | Edge Loss Weight: 0.000
+2026-06-15 13:18:51,338 INFO Epoch[13/120] Iter[100/168] | Total Loss: 1.279 | Structure Loss: 1.279 | Edge Loss: 0.000 | Raw Edge Loss: 0.996 | Edge Loss Weight: 0.000
+2026-06-15 13:19:42,254 INFO Epoch[13/120] Iter[150/168] | Total Loss: 2.231 | Structure Loss: 2.231 | Edge Loss: 0.000 | Raw Edge Loss: 0.995 | Edge Loss Weight: 0.000
+2026-06-15 13:20:00,437 INFO @==Final== Epoch[13/120] Avg Training Loss: 1.511
+2026-06-15 13:20:03,259 INFO Epoch[14/120] Iter[0/168] | Total Loss: 1.264 | Structure Loss: 1.264 | Edge Loss: 0.000 | Raw Edge Loss: 0.997 | Edge Loss Weight: 0.000
+2026-06-15 13:21:01,631 INFO Epoch[14/120] Iter[50/168] | Total Loss: 1.517 | Structure Loss: 1.517 | Edge Loss: 0.000 | Raw Edge Loss: 0.998 | Edge Loss Weight: 0.000
+2026-06-15 13:21:46,026 INFO Epoch[14/120] Iter[100/168] | Total Loss: 1.277 | Structure Loss: 1.277 | Edge Loss: 0.000 | Raw Edge Loss: 0.997 | Edge Loss Weight: 0.000
+2026-06-15 13:22:35,965 INFO Epoch[14/120] Iter[150/168] | Total Loss: 1.403 | Structure Loss: 1.403 | Edge Loss: 0.000 | Raw Edge Loss: 0.999 | Edge Loss Weight: 0.000
+2026-06-15 13:22:48,858 INFO @==Final== Epoch[14/120] Avg Training Loss: 1.499
+2026-06-15 13:22:51,583 INFO Epoch[15/120] Iter[0/168] | Total Loss: 1.547 | Structure Loss: 1.547 | Edge Loss: 0.000 | Raw Edge Loss: 0.997 | Edge Loss Weight: 0.000
+2026-06-15 13:23:37,096 INFO Epoch[15/120] Iter[50/168] | Total Loss: 1.903 | Structure Loss: 1.903 | Edge Loss: 0.000 | Raw Edge Loss: 0.997 | Edge Loss Weight: 0.000
+2026-06-15 13:24:24,531 INFO Epoch[15/120] Iter[100/168] | Total Loss: 0.929 | Structure Loss: 0.929 | Edge Loss: 0.000 | Raw Edge Loss: 0.998 | Edge Loss Weight: 0.000
+2026-06-15 13:25:07,729 INFO Epoch[15/120] Iter[150/168] | Total Loss: 1.314 | Structure Loss: 1.314 | Edge Loss: 0.000 | Raw Edge Loss: 0.997 | Edge Loss Weight: 0.000
+2026-06-15 13:25:22,358 INFO @==Final== Epoch[15/120] Avg Training Loss: 1.383
+2026-06-15 13:25:25,147 INFO Epoch[16/120] Iter[0/168] | Total Loss: 1.299 | Structure Loss: 1.299 | Edge Loss: 0.000 | Raw Edge Loss: 0.996 | Edge Loss Weight: 0.000
+2026-06-15 13:26:07,598 INFO Epoch[16/120] Iter[50/168] | Total Loss: 1.003 | Structure Loss: 1.003 | Edge Loss: 0.000 | Raw Edge Loss: 0.998 | Edge Loss Weight: 0.000
+2026-06-15 13:26:54,604 INFO Epoch[16/120] Iter[100/168] | Total Loss: 1.205 | Structure Loss: 1.205 | Edge Loss: 0.000 | Raw Edge Loss: 0.998 | Edge Loss Weight: 0.000
+2026-06-15 13:27:40,960 INFO Epoch[16/120] Iter[150/168] | Total Loss: 1.156 | Structure Loss: 1.156 | Edge Loss: 0.000 | Raw Edge Loss: 0.999 | Edge Loss Weight: 0.000
+2026-06-15 13:27:58,797 INFO @==Final== Epoch[16/120] Avg Training Loss: 1.340
+2026-06-15 13:28:01,441 INFO Epoch[17/120] Iter[0/168] | Total Loss: 2.257 | Structure Loss: 2.257 | Edge Loss: 0.000 | Raw Edge Loss: 0.999 | Edge Loss Weight: 0.000
+2026-06-15 13:28:47,178 INFO Epoch[17/120] Iter[50/168] | Total Loss: 1.475 | Structure Loss: 1.475 | Edge Loss: 0.000 | Raw Edge Loss: 0.999 | Edge Loss Weight: 0.000
+2026-06-15 13:29:29,601 INFO Epoch[17/120] Iter[100/168] | Total Loss: 1.111 | Structure Loss: 1.111 | Edge Loss: 0.000 | Raw Edge Loss: 0.999 | Edge Loss Weight: 0.000
+2026-06-15 13:30:13,366 INFO Epoch[17/120] Iter[150/168] | Total Loss: 1.425 | Structure Loss: 1.425 | Edge Loss: 0.000 | Raw Edge Loss: 0.997 | Edge Loss Weight: 0.000
+2026-06-15 13:30:27,479 INFO @==Final== Epoch[17/120] Avg Training Loss: 1.306
+2026-06-15 13:30:30,208 INFO Epoch[18/120] Iter[0/168] | Total Loss: 1.161 | Structure Loss: 1.161 | Edge Loss: 0.000 | Raw Edge Loss: 0.999 | Edge Loss Weight: 0.000
+2026-06-15 13:31:17,433 INFO Epoch[18/120] Iter[50/168] | Total Loss: 1.072 | Structure Loss: 1.072 | Edge Loss: 0.000 | Raw Edge Loss: 0.996 | Edge Loss Weight: 0.000
+2026-06-15 13:32:04,415 INFO Epoch[18/120] Iter[100/168] | Total Loss: 0.975 | Structure Loss: 0.975 | Edge Loss: 0.000 | Raw Edge Loss: 0.998 | Edge Loss Weight: 0.000
+2026-06-15 13:32:49,308 INFO Epoch[18/120] Iter[150/168] | Total Loss: 1.154 | Structure Loss: 1.154 | Edge Loss: 0.000 | Raw Edge Loss: 0.998 | Edge Loss Weight: 0.000
+2026-06-15 13:33:05,957 INFO @==Final== Epoch[18/120] Avg Training Loss: 1.270
+2026-06-15 13:33:08,714 INFO Epoch[19/120] Iter[0/168] | Total Loss: 1.725 | Structure Loss: 1.725 | Edge Loss: 0.000 | Raw Edge Loss: 0.997 | Edge Loss Weight: 0.000
+2026-06-15 13:33:56,284 INFO Epoch[19/120] Iter[50/168] | Total Loss: 0.804 | Structure Loss: 0.804 | Edge Loss: 0.000 | Raw Edge Loss: 0.999 | Edge Loss Weight: 0.000
+2026-06-15 13:34:40,862 INFO Epoch[19/120] Iter[100/168] | Total Loss: 1.930 | Structure Loss: 1.930 | Edge Loss: 0.000 | Raw Edge Loss: 0.998 | Edge Loss Weight: 0.000
+2026-06-15 13:35:24,055 INFO Epoch[19/120] Iter[150/168] | Total Loss: 1.303 | Structure Loss: 1.303 | Edge Loss: 0.000 | Raw Edge Loss: 0.998 | Edge Loss Weight: 0.000
+2026-06-15 13:35:40,704 INFO @==Final== Epoch[19/120] Avg Training Loss: 1.278
+2026-06-15 13:35:43,480 INFO Epoch[20/120] Iter[0/168] | Total Loss: 1.391 | Structure Loss: 1.391 | Edge Loss: 0.000 | Raw Edge Loss: 0.999 | Edge Loss Weight: 0.000
+2026-06-15 13:36:26,652 INFO Epoch[20/120] Iter[50/168] | Total Loss: 1.899 | Structure Loss: 1.899 | Edge Loss: 0.000 | Raw Edge Loss: 0.999 | Edge Loss Weight: 0.000
+2026-06-15 13:37:09,717 INFO Epoch[20/120] Iter[100/168] | Total Loss: 1.016 | Structure Loss: 1.016 | Edge Loss: 0.000 | Raw Edge Loss: 0.998 | Edge Loss Weight: 0.000
+2026-06-15 13:37:58,024 INFO Epoch[20/120] Iter[150/168] | Total Loss: 1.575 | Structure Loss: 1.575 | Edge Loss: 0.000 | Raw Edge Loss: 1.000 | Edge Loss Weight: 0.000
+2026-06-15 13:38:15,986 INFO @==Final== Epoch[20/120] Avg Training Loss: 1.246
+2026-06-15 13:38:16,387 INFO Checkpoint saved to /dev/shm/escnet_ablation_no_edge_supervision/runs/light_b2_c64_no_edge_supervision_e120_s42_b6_w8_4gpu/epoch_20.pth
+2026-06-15 13:38:18,848 INFO Epoch[21/120] Iter[0/168] | Total Loss: 1.434 | Structure Loss: 1.434 | Edge Loss: 0.000 | Raw Edge Loss: 0.998 | Edge Loss Weight: 0.000
+2026-06-15 13:39:01,510 INFO Epoch[21/120] Iter[50/168] | Total Loss: 1.467 | Structure Loss: 1.467 | Edge Loss: 0.000 | Raw Edge Loss: 0.999 | Edge Loss Weight: 0.000
+2026-06-15 13:39:47,501 INFO Epoch[21/120] Iter[100/168] | Total Loss: 1.627 | Structure Loss: 1.627 | Edge Loss: 0.000 | Raw Edge Loss: 0.992 | Edge Loss Weight: 0.000
+2026-06-15 13:40:29,926 INFO Epoch[21/120] Iter[150/168] | Total Loss: 1.187 | Structure Loss: 1.187 | Edge Loss: 0.000 | Raw Edge Loss: 0.999 | Edge Loss Weight: 0.000
+2026-06-15 13:40:43,971 INFO @==Final== Epoch[21/120] Avg Training Loss: 1.200
+2026-06-15 13:40:46,913 INFO Epoch[22/120] Iter[0/168] | Total Loss: 1.302 | Structure Loss: 1.302 | Edge Loss: 0.000 | Raw Edge Loss: 0.997 | Edge Loss Weight: 0.000
+2026-06-15 13:41:29,683 INFO Epoch[22/120] Iter[50/168] | Total Loss: 1.281 | Structure Loss: 1.281 | Edge Loss: 0.000 | Raw Edge Loss: 0.998 | Edge Loss Weight: 0.000
+2026-06-15 13:42:19,802 INFO Epoch[22/120] Iter[100/168] | Total Loss: 1.215 | Structure Loss: 1.215 | Edge Loss: 0.000 | Raw Edge Loss: 0.997 | Edge Loss Weight: 0.000
+2026-06-15 13:43:00,416 INFO Epoch[22/120] Iter[150/168] | Total Loss: 0.947 | Structure Loss: 0.947 | Edge Loss: 0.000 | Raw Edge Loss: 0.999 | Edge Loss Weight: 0.000
+2026-06-15 13:43:18,878 INFO @==Final== Epoch[22/120] Avg Training Loss: 1.165
+2026-06-15 13:43:21,788 INFO Epoch[23/120] Iter[0/168] | Total Loss: 0.886 | Structure Loss: 0.886 | Edge Loss: 0.000 | Raw Edge Loss: 0.999 | Edge Loss Weight: 0.000
+2026-06-15 13:44:08,493 INFO Epoch[23/120] Iter[50/168] | Total Loss: 0.959 | Structure Loss: 0.959 | Edge Loss: 0.000 | Raw Edge Loss: 0.999 | Edge Loss Weight: 0.000
+2026-06-15 13:44:53,038 INFO Epoch[23/120] Iter[100/168] | Total Loss: 1.316 | Structure Loss: 1.316 | Edge Loss: 0.000 | Raw Edge Loss: 0.998 | Edge Loss Weight: 0.000
+2026-06-15 13:45:34,891 INFO Epoch[23/120] Iter[150/168] | Total Loss: 1.518 | Structure Loss: 1.518 | Edge Loss: 0.000 | Raw Edge Loss: 0.988 | Edge Loss Weight: 0.000
+2026-06-15 13:45:49,636 INFO @==Final== Epoch[23/120] Avg Training Loss: 1.156
+2026-06-15 13:45:52,824 INFO Epoch[24/120] Iter[0/168] | Total Loss: 0.890 | Structure Loss: 0.890 | Edge Loss: 0.000 | Raw Edge Loss: 0.999 | Edge Loss Weight: 0.000
+2026-06-15 13:46:45,500 INFO Epoch[24/120] Iter[50/168] | Total Loss: 0.940 | Structure Loss: 0.940 | Edge Loss: 0.000 | Raw Edge Loss: 0.998 | Edge Loss Weight: 0.000
+2026-06-15 13:47:32,324 INFO Epoch[24/120] Iter[100/168] | Total Loss: 1.102 | Structure Loss: 1.102 | Edge Loss: 0.000 | Raw Edge Loss: 0.998 | Edge Loss Weight: 0.000
+2026-06-15 13:48:16,537 INFO Epoch[24/120] Iter[150/168] | Total Loss: 1.315 | Structure Loss: 1.315 | Edge Loss: 0.000 | Raw Edge Loss: 0.993 | Edge Loss Weight: 0.000
+2026-06-15 13:48:34,641 INFO @==Final== Epoch[24/120] Avg Training Loss: 1.107
+2026-06-15 13:48:38,022 INFO Epoch[25/120] Iter[0/168] | Total Loss: 0.927 | Structure Loss: 0.927 | Edge Loss: 0.000 | Raw Edge Loss: 0.998 | Edge Loss Weight: 0.000
+2026-06-15 13:49:22,544 INFO Epoch[25/120] Iter[50/168] | Total Loss: 1.215 | Structure Loss: 1.215 | Edge Loss: 0.000 | Raw Edge Loss: 0.999 | Edge Loss Weight: 0.000
+2026-06-15 13:50:09,090 INFO Epoch[25/120] Iter[100/168] | Total Loss: 0.909 | Structure Loss: 0.909 | Edge Loss: 0.000 | Raw Edge Loss: 0.999 | Edge Loss Weight: 0.000
+2026-06-15 13:50:59,319 INFO Epoch[25/120] Iter[150/168] | Total Loss: 1.153 | Structure Loss: 1.153 | Edge Loss: 0.000 | Raw Edge Loss: 0.995 | Edge Loss Weight: 0.000
+2026-06-15 13:51:11,869 INFO @==Final== Epoch[25/120] Avg Training Loss: 1.083
+2026-06-15 13:51:14,664 INFO Epoch[26/120] Iter[0/168] | Total Loss: 1.089 | Structure Loss: 1.089 | Edge Loss: 0.000 | Raw Edge Loss: 0.998 | Edge Loss Weight: 0.000
+2026-06-15 13:51:56,261 INFO Epoch[26/120] Iter[50/168] | Total Loss: 1.084 | Structure Loss: 1.084 | Edge Loss: 0.000 | Raw Edge Loss: 0.998 | Edge Loss Weight: 0.000
+2026-06-15 13:52:38,237 INFO Epoch[26/120] Iter[100/168] | Total Loss: 1.007 | Structure Loss: 1.007 | Edge Loss: 0.000 | Raw Edge Loss: 0.999 | Edge Loss Weight: 0.000
+2026-06-15 13:53:29,449 INFO Epoch[26/120] Iter[150/168] | Total Loss: 1.383 | Structure Loss: 1.383 | Edge Loss: 0.000 | Raw Edge Loss: 0.996 | Edge Loss Weight: 0.000
+2026-06-15 13:53:45,614 INFO @==Final== Epoch[26/120] Avg Training Loss: 1.080
+2026-06-15 13:53:48,478 INFO Epoch[27/120] Iter[0/168] | Total Loss: 0.962 | Structure Loss: 0.962 | Edge Loss: 0.000 | Raw Edge Loss: 0.997 | Edge Loss Weight: 0.000
+2026-06-15 13:54:38,143 INFO Epoch[27/120] Iter[50/168] | Total Loss: 0.955 | Structure Loss: 0.955 | Edge Loss: 0.000 | Raw Edge Loss: 0.997 | Edge Loss Weight: 0.000
+2026-06-15 13:55:32,206 INFO Epoch[27/120] Iter[100/168] | Total Loss: 0.648 | Structure Loss: 0.648 | Edge Loss: 0.000 | Raw Edge Loss: 0.999 | Edge Loss Weight: 0.000
+2026-06-15 13:56:16,326 INFO Epoch[27/120] Iter[150/168] | Total Loss: 1.288 | Structure Loss: 1.288 | Edge Loss: 0.000 | Raw Edge Loss: 0.999 | Edge Loss Weight: 0.000
+2026-06-15 13:56:31,757 INFO @==Final== Epoch[27/120] Avg Training Loss: 1.086
+2026-06-15 13:56:34,617 INFO Epoch[28/120] Iter[0/168] | Total Loss: 0.812 | Structure Loss: 0.812 | Edge Loss: 0.000 | Raw Edge Loss: 0.999 | Edge Loss Weight: 0.000
+2026-06-15 13:57:19,166 INFO Epoch[28/120] Iter[50/168] | Total Loss: 0.784 | Structure Loss: 0.784 | Edge Loss: 0.000 | Raw Edge Loss: 0.999 | Edge Loss Weight: 0.000
+2026-06-15 13:58:03,209 INFO Epoch[28/120] Iter[100/168] | Total Loss: 0.958 | Structure Loss: 0.958 | Edge Loss: 0.000 | Raw Edge Loss: 0.998 | Edge Loss Weight: 0.000
+2026-06-15 13:58:44,703 INFO Epoch[28/120] Iter[150/168] | Total Loss: 0.904 | Structure Loss: 0.904 | Edge Loss: 0.000 | Raw Edge Loss: 0.998 | Edge Loss Weight: 0.000
+2026-06-15 13:59:00,988 INFO @==Final== Epoch[28/120] Avg Training Loss: 1.043
+2026-06-15 13:59:03,781 INFO Epoch[29/120] Iter[0/168] | Total Loss: 0.743 | Structure Loss: 0.743 | Edge Loss: 0.000 | Raw Edge Loss: 0.997 | Edge Loss Weight: 0.000
+2026-06-15 13:59:46,951 INFO Epoch[29/120] Iter[50/168] | Total Loss: 0.863 | Structure Loss: 0.863 | Edge Loss: 0.000 | Raw Edge Loss: 0.999 | Edge Loss Weight: 0.000
+2026-06-15 14:00:29,753 INFO Epoch[29/120] Iter[100/168] | Total Loss: 0.849 | Structure Loss: 0.849 | Edge Loss: 0.000 | Raw Edge Loss: 0.997 | Edge Loss Weight: 0.000
+2026-06-15 14:01:15,586 INFO Epoch[29/120] Iter[150/168] | Total Loss: 1.094 | Structure Loss: 1.094 | Edge Loss: 0.000 | Raw Edge Loss: 0.995 | Edge Loss Weight: 0.000
+2026-06-15 14:01:32,514 INFO @==Final== Epoch[29/120] Avg Training Loss: 1.012
+2026-06-15 14:01:35,557 INFO Epoch[30/120] Iter[0/168] | Total Loss: 1.388 | Structure Loss: 1.388 | Edge Loss: 0.000 | Raw Edge Loss: 0.997 | Edge Loss Weight: 0.000
+2026-06-15 14:02:17,172 INFO Epoch[30/120] Iter[50/168] | Total Loss: 0.678 | Structure Loss: 0.678 | Edge Loss: 0.000 | Raw Edge Loss: 0.999 | Edge Loss Weight: 0.000
+2026-06-15 14:03:02,660 INFO Epoch[30/120] Iter[100/168] | Total Loss: 0.998 | Structure Loss: 0.998 | Edge Loss: 0.000 | Raw Edge Loss: 0.997 | Edge Loss Weight: 0.000
+2026-06-15 14:03:44,140 INFO Epoch[30/120] Iter[150/168] | Total Loss: 1.085 | Structure Loss: 1.085 | Edge Loss: 0.000 | Raw Edge Loss: 1.000 | Edge Loss Weight: 0.000
+2026-06-15 14:04:00,847 INFO @==Final== Epoch[30/120] Avg Training Loss: 0.995
+2026-06-15 14:04:03,649 INFO Epoch[31/120] Iter[0/168] | Total Loss: 0.867 | Structure Loss: 0.867 | Edge Loss: 0.000 | Raw Edge Loss: 0.998 | Edge Loss Weight: 0.000
+2026-06-15 14:04:46,180 INFO Epoch[31/120] Iter[50/168] | Total Loss: 0.768 | Structure Loss: 0.768 | Edge Loss: 0.000 | Raw Edge Loss: 0.999 | Edge Loss Weight: 0.000
+2026-06-15 14:05:34,339 INFO Epoch[31/120] Iter[100/168] | Total Loss: 1.097 | Structure Loss: 1.097 | Edge Loss: 0.000 | Raw Edge Loss: 0.997 | Edge Loss Weight: 0.000
+2026-06-15 14:06:18,444 INFO Epoch[31/120] Iter[150/168] | Total Loss: 0.665 | Structure Loss: 0.665 | Edge Loss: 0.000 | Raw Edge Loss: 0.999 | Edge Loss Weight: 0.000
+2026-06-15 14:06:31,511 INFO @==Final== Epoch[31/120] Avg Training Loss: 0.977
+2026-06-15 14:06:34,470 INFO Epoch[32/120] Iter[0/168] | Total Loss: 0.738 | Structure Loss: 0.738 | Edge Loss: 0.000 | Raw Edge Loss: 0.997 | Edge Loss Weight: 0.000
+2026-06-15 14:07:15,816 INFO Epoch[32/120] Iter[50/168] | Total Loss: 1.072 | Structure Loss: 1.072 | Edge Loss: 0.000 | Raw Edge Loss: 0.998 | Edge Loss Weight: 0.000
+2026-06-15 14:08:04,399 INFO Epoch[32/120] Iter[100/168] | Total Loss: 0.724 | Structure Loss: 0.724 | Edge Loss: 0.000 | Raw Edge Loss: 0.997 | Edge Loss Weight: 0.000
+2026-06-15 14:08:46,231 INFO Epoch[32/120] Iter[150/168] | Total Loss: 1.275 | Structure Loss: 1.275 | Edge Loss: 0.000 | Raw Edge Loss: 0.998 | Edge Loss Weight: 0.000
+2026-06-15 14:09:01,983 INFO @==Final== Epoch[32/120] Avg Training Loss: 0.963
+2026-06-15 14:09:04,683 INFO Epoch[33/120] Iter[0/168] | Total Loss: 0.921 | Structure Loss: 0.921 | Edge Loss: 0.000 | Raw Edge Loss: 0.999 | Edge Loss Weight: 0.000
+2026-06-15 14:09:46,561 INFO Epoch[33/120] Iter[50/168] | Total Loss: 1.113 | Structure Loss: 1.113 | Edge Loss: 0.000 | Raw Edge Loss: 0.997 | Edge Loss Weight: 0.000
+2026-06-15 14:10:33,025 INFO Epoch[33/120] Iter[100/168] | Total Loss: 1.037 | Structure Loss: 1.037 | Edge Loss: 0.000 | Raw Edge Loss: 0.992 | Edge Loss Weight: 0.000
+2026-06-15 14:11:17,718 INFO Epoch[33/120] Iter[150/168] | Total Loss: 0.788 | Structure Loss: 0.788 | Edge Loss: 0.000 | Raw Edge Loss: 0.997 | Edge Loss Weight: 0.000
+2026-06-15 14:11:33,679 INFO @==Final== Epoch[33/120] Avg Training Loss: 1.000
+2026-06-15 14:11:36,426 INFO Epoch[34/120] Iter[0/168] | Total Loss: 1.174 | Structure Loss: 1.174 | Edge Loss: 0.000 | Raw Edge Loss: 0.996 | Edge Loss Weight: 0.000
+2026-06-15 14:12:21,486 INFO Epoch[34/120] Iter[50/168] | Total Loss: 0.865 | Structure Loss: 0.865 | Edge Loss: 0.000 | Raw Edge Loss: 0.997 | Edge Loss Weight: 0.000
+2026-06-15 14:13:04,971 INFO Epoch[34/120] Iter[100/168] | Total Loss: 1.797 | Structure Loss: 1.797 | Edge Loss: 0.000 | Raw Edge Loss: 0.999 | Edge Loss Weight: 0.000
+2026-06-15 14:13:50,113 INFO Epoch[34/120] Iter[150/168] | Total Loss: 1.300 | Structure Loss: 1.300 | Edge Loss: 0.000 | Raw Edge Loss: 0.992 | Edge Loss Weight: 0.000
+2026-06-15 14:14:02,907 INFO @==Final== Epoch[34/120] Avg Training Loss: 1.044
+2026-06-15 14:14:05,757 INFO Epoch[35/120] Iter[0/168] | Total Loss: 1.142 | Structure Loss: 1.142 | Edge Loss: 0.000 | Raw Edge Loss: 0.998 | Edge Loss Weight: 0.000
+2026-06-15 14:14:49,476 INFO Epoch[35/120] Iter[50/168] | Total Loss: 0.837 | Structure Loss: 0.837 | Edge Loss: 0.000 | Raw Edge Loss: 1.000 | Edge Loss Weight: 0.000
+2026-06-15 14:15:31,255 INFO Epoch[35/120] Iter[100/168] | Total Loss: 0.941 | Structure Loss: 0.941 | Edge Loss: 0.000 | Raw Edge Loss: 0.998 | Edge Loss Weight: 0.000
+2026-06-15 14:16:12,595 INFO Epoch[35/120] Iter[150/168] | Total Loss: 1.301 | Structure Loss: 1.301 | Edge Loss: 0.000 | Raw Edge Loss: 0.996 | Edge Loss Weight: 0.000
+2026-06-15 14:16:27,967 INFO @==Final== Epoch[35/120] Avg Training Loss: 1.072
+2026-06-15 14:16:30,649 INFO Epoch[36/120] Iter[0/168] | Total Loss: 1.575 | Structure Loss: 1.575 | Edge Loss: 0.000 | Raw Edge Loss: 0.996 | Edge Loss Weight: 0.000
+2026-06-15 14:17:14,508 INFO Epoch[36/120] Iter[50/168] | Total Loss: 1.272 | Structure Loss: 1.272 | Edge Loss: 0.000 | Raw Edge Loss: 0.998 | Edge Loss Weight: 0.000
+2026-06-15 14:17:58,750 INFO Epoch[36/120] Iter[100/168] | Total Loss: 0.889 | Structure Loss: 0.889 | Edge Loss: 0.000 | Raw Edge Loss: 0.999 | Edge Loss Weight: 0.000
+2026-06-15 14:18:42,927 INFO Epoch[36/120] Iter[150/168] | Total Loss: 0.906 | Structure Loss: 0.906 | Edge Loss: 0.000 | Raw Edge Loss: 0.995 | Edge Loss Weight: 0.000
+2026-06-15 14:18:57,222 INFO @==Final== Epoch[36/120] Avg Training Loss: 1.004
+2026-06-15 14:19:00,351 INFO Epoch[37/120] Iter[0/168] | Total Loss: 0.707 | Structure Loss: 0.707 | Edge Loss: 0.000 | Raw Edge Loss: 0.993 | Edge Loss Weight: 0.000
+2026-06-15 14:19:43,394 INFO Epoch[37/120] Iter[50/168] | Total Loss: 0.961 | Structure Loss: 0.961 | Edge Loss: 0.000 | Raw Edge Loss: 0.998 | Edge Loss Weight: 0.000
+2026-06-15 14:20:25,356 INFO Epoch[37/120] Iter[100/168] | Total Loss: 0.747 | Structure Loss: 0.747 | Edge Loss: 0.000 | Raw Edge Loss: 0.995 | Edge Loss Weight: 0.000
+2026-06-15 14:21:06,635 INFO Epoch[37/120] Iter[150/168] | Total Loss: 0.737 | Structure Loss: 0.737 | Edge Loss: 0.000 | Raw Edge Loss: 0.998 | Edge Loss Weight: 0.000
+2026-06-15 14:21:24,959 INFO @==Final== Epoch[37/120] Avg Training Loss: 0.939
+2026-06-15 14:21:28,197 INFO Epoch[38/120] Iter[0/168] | Total Loss: 1.039 | Structure Loss: 1.039 | Edge Loss: 0.000 | Raw Edge Loss: 0.999 | Edge Loss Weight: 0.000
+2026-06-15 14:22:11,352 INFO Epoch[38/120] Iter[50/168] | Total Loss: 0.898 | Structure Loss: 0.898 | Edge Loss: 0.000 | Raw Edge Loss: 0.997 | Edge Loss Weight: 0.000
+2026-06-15 14:22:56,427 INFO Epoch[38/120] Iter[100/168] | Total Loss: 1.079 | Structure Loss: 1.079 | Edge Loss: 0.000 | Raw Edge Loss: 0.999 | Edge Loss Weight: 0.000
+2026-06-15 14:23:38,273 INFO Epoch[38/120] Iter[150/168] | Total Loss: 1.031 | Structure Loss: 1.031 | Edge Loss: 0.000 | Raw Edge Loss: 0.994 | Edge Loss Weight: 0.000
+2026-06-15 14:23:53,619 INFO @==Final== Epoch[38/120] Avg Training Loss: 0.962
+2026-06-15 14:23:56,612 INFO Epoch[39/120] Iter[0/168] | Total Loss: 1.406 | Structure Loss: 1.406 | Edge Loss: 0.000 | Raw Edge Loss: 0.999 | Edge Loss Weight: 0.000
+2026-06-15 14:24:37,802 INFO Epoch[39/120] Iter[50/168] | Total Loss: 0.575 | Structure Loss: 0.575 | Edge Loss: 0.000 | Raw Edge Loss: 0.998 | Edge Loss Weight: 0.000
+2026-06-15 14:25:18,976 INFO Epoch[39/120] Iter[100/168] | Total Loss: 1.127 | Structure Loss: 1.127 | Edge Loss: 0.000 | Raw Edge Loss: 0.992 | Edge Loss Weight: 0.000
+2026-06-15 14:26:07,911 INFO Epoch[39/120] Iter[150/168] | Total Loss: 0.747 | Structure Loss: 0.747 | Edge Loss: 0.000 | Raw Edge Loss: 0.998 | Edge Loss Weight: 0.000
+2026-06-15 14:26:24,726 INFO @==Final== Epoch[39/120] Avg Training Loss: 0.926
+2026-06-15 14:26:27,583 INFO Epoch[40/120] Iter[0/168] | Total Loss: 1.012 | Structure Loss: 1.012 | Edge Loss: 0.000 | Raw Edge Loss: 0.996 | Edge Loss Weight: 0.000
+2026-06-15 14:27:09,768 INFO Epoch[40/120] Iter[50/168] | Total Loss: 1.060 | Structure Loss: 1.060 | Edge Loss: 0.000 | Raw Edge Loss: 0.995 | Edge Loss Weight: 0.000
+2026-06-15 14:27:51,698 INFO Epoch[40/120] Iter[100/168] | Total Loss: 0.567 | Structure Loss: 0.567 | Edge Loss: 0.000 | Raw Edge Loss: 0.999 | Edge Loss Weight: 0.000
+2026-06-15 14:28:33,148 INFO Epoch[40/120] Iter[150/168] | Total Loss: 0.862 | Structure Loss: 0.862 | Edge Loss: 0.000 | Raw Edge Loss: 0.997 | Edge Loss Weight: 0.000
+2026-06-15 14:28:46,185 INFO @==Final== Epoch[40/120] Avg Training Loss: 0.900
+2026-06-15 14:28:46,498 INFO Checkpoint saved to /dev/shm/escnet_ablation_no_edge_supervision/runs/light_b2_c64_no_edge_supervision_e120_s42_b6_w8_4gpu/epoch_40.pth
+2026-06-15 14:28:48,899 INFO Epoch[41/120] Iter[0/168] | Total Loss: 1.117 | Structure Loss: 1.117 | Edge Loss: 0.000 | Raw Edge Loss: 0.998 | Edge Loss Weight: 0.000
+2026-06-15 14:29:33,615 INFO Epoch[41/120] Iter[50/168] | Total Loss: 0.892 | Structure Loss: 0.892 | Edge Loss: 0.000 | Raw Edge Loss: 0.999 | Edge Loss Weight: 0.000
+2026-06-15 14:30:20,434 INFO Epoch[41/120] Iter[100/168] | Total Loss: 0.582 | Structure Loss: 0.582 | Edge Loss: 0.000 | Raw Edge Loss: 0.997 | Edge Loss Weight: 0.000
+2026-06-15 14:31:02,429 INFO Epoch[41/120] Iter[150/168] | Total Loss: 1.464 | Structure Loss: 1.464 | Edge Loss: 0.000 | Raw Edge Loss: 0.990 | Edge Loss Weight: 0.000
+2026-06-15 14:31:18,511 INFO @==Final== Epoch[41/120] Avg Training Loss: 0.909
+2026-06-15 14:31:21,529 INFO Epoch[42/120] Iter[0/168] | Total Loss: 0.837 | Structure Loss: 0.837 | Edge Loss: 0.000 | Raw Edge Loss: 0.999 | Edge Loss Weight: 0.000
+2026-06-15 14:32:07,078 INFO Epoch[42/120] Iter[50/168] | Total Loss: 0.948 | Structure Loss: 0.948 | Edge Loss: 0.000 | Raw Edge Loss: 0.996 | Edge Loss Weight: 0.000
+2026-06-15 14:32:50,656 INFO Epoch[42/120] Iter[100/168] | Total Loss: 1.308 | Structure Loss: 1.308 | Edge Loss: 0.000 | Raw Edge Loss: 0.996 | Edge Loss Weight: 0.000
+2026-06-15 14:33:38,509 INFO Epoch[42/120] Iter[150/168] | Total Loss: 0.721 | Structure Loss: 0.721 | Edge Loss: 0.000 | Raw Edge Loss: 0.998 | Edge Loss Weight: 0.000
+2026-06-15 14:33:53,424 INFO @==Final== Epoch[42/120] Avg Training Loss: 0.892
+2026-06-15 14:33:56,271 INFO Epoch[43/120] Iter[0/168] | Total Loss: 0.705 | Structure Loss: 0.705 | Edge Loss: 0.000 | Raw Edge Loss: 0.997 | Edge Loss Weight: 0.000
+2026-06-15 14:34:38,574 INFO Epoch[43/120] Iter[50/168] | Total Loss: 0.972 | Structure Loss: 0.972 | Edge Loss: 0.000 | Raw Edge Loss: 0.999 | Edge Loss Weight: 0.000
+2026-06-15 14:35:21,525 INFO Epoch[43/120] Iter[100/168] | Total Loss: 0.816 | Structure Loss: 0.816 | Edge Loss: 0.000 | Raw Edge Loss: 0.998 | Edge Loss Weight: 0.000
+2026-06-15 14:36:06,313 INFO Epoch[43/120] Iter[150/168] | Total Loss: 1.148 | Structure Loss: 1.148 | Edge Loss: 0.000 | Raw Edge Loss: 0.997 | Edge Loss Weight: 0.000
+2026-06-15 14:36:19,700 INFO @==Final== Epoch[43/120] Avg Training Loss: 0.924
+2026-06-15 14:36:22,750 INFO Epoch[44/120] Iter[0/168] | Total Loss: 0.552 | Structure Loss: 0.552 | Edge Loss: 0.000 | Raw Edge Loss: 0.998 | Edge Loss Weight: 0.000
+2026-06-15 14:37:09,858 INFO Epoch[44/120] Iter[50/168] | Total Loss: 0.761 | Structure Loss: 0.761 | Edge Loss: 0.000 | Raw Edge Loss: 0.999 | Edge Loss Weight: 0.000
+2026-06-15 14:38:00,068 INFO Epoch[44/120] Iter[100/168] | Total Loss: 0.781 | Structure Loss: 0.781 | Edge Loss: 0.000 | Raw Edge Loss: 0.998 | Edge Loss Weight: 0.000
+2026-06-15 14:38:46,567 INFO Epoch[44/120] Iter[150/168] | Total Loss: 1.300 | Structure Loss: 1.300 | Edge Loss: 0.000 | Raw Edge Loss: 0.991 | Edge Loss Weight: 0.000
+2026-06-15 14:39:04,902 INFO @==Final== Epoch[44/120] Avg Training Loss: 1.101
+2026-06-15 14:39:07,851 INFO Epoch[45/120] Iter[0/168] | Total Loss: 1.284 | Structure Loss: 1.284 | Edge Loss: 0.000 | Raw Edge Loss: 0.994 | Edge Loss Weight: 0.000
+2026-06-15 14:39:51,746 INFO Epoch[45/120] Iter[50/168] | Total Loss: 1.268 | Structure Loss: 1.268 | Edge Loss: 0.000 | Raw Edge Loss: 0.998 | Edge Loss Weight: 0.000
+2026-06-15 14:40:38,567 INFO Epoch[45/120] Iter[100/168] | Total Loss: 1.212 | Structure Loss: 1.212 | Edge Loss: 0.000 | Raw Edge Loss: 0.999 | Edge Loss Weight: 0.000
+2026-06-15 14:41:20,460 INFO Epoch[45/120] Iter[150/168] | Total Loss: 0.775 | Structure Loss: 0.775 | Edge Loss: 0.000 | Raw Edge Loss: 0.998 | Edge Loss Weight: 0.000
+2026-06-15 14:41:34,768 INFO @==Final== Epoch[45/120] Avg Training Loss: 1.022
+2026-06-15 14:41:37,791 INFO Epoch[46/120] Iter[0/168] | Total Loss: 1.469 | Structure Loss: 1.469 | Edge Loss: 0.000 | Raw Edge Loss: 0.997 | Edge Loss Weight: 0.000
+2026-06-15 14:42:23,639 INFO Epoch[46/120] Iter[50/168] | Total Loss: 1.013 | Structure Loss: 1.013 | Edge Loss: 0.000 | Raw Edge Loss: 0.999 | Edge Loss Weight: 0.000
+2026-06-15 14:43:05,585 INFO Epoch[46/120] Iter[100/168] | Total Loss: 1.101 | Structure Loss: 1.101 | Edge Loss: 0.000 | Raw Edge Loss: 0.997 | Edge Loss Weight: 0.000
+2026-06-15 14:43:46,785 INFO Epoch[46/120] Iter[150/168] | Total Loss: 0.778 | Structure Loss: 0.778 | Edge Loss: 0.000 | Raw Edge Loss: 0.996 | Edge Loss Weight: 0.000
+2026-06-15 14:43:59,610 INFO @==Final== Epoch[46/120] Avg Training Loss: 0.949
+2026-06-15 14:44:02,432 INFO Epoch[47/120] Iter[0/168] | Total Loss: 1.092 | Structure Loss: 1.092 | Edge Loss: 0.000 | Raw Edge Loss: 0.998 | Edge Loss Weight: 0.000
+2026-06-15 14:44:46,301 INFO Epoch[47/120] Iter[50/168] | Total Loss: 0.907 | Structure Loss: 0.907 | Edge Loss: 0.000 | Raw Edge Loss: 0.996 | Edge Loss Weight: 0.000
+2026-06-15 14:45:28,829 INFO Epoch[47/120] Iter[100/168] | Total Loss: 0.521 | Structure Loss: 0.521 | Edge Loss: 0.000 | Raw Edge Loss: 0.995 | Edge Loss Weight: 0.000
+2026-06-15 14:46:08,866 INFO Epoch[47/120] Iter[150/168] | Total Loss: 1.268 | Structure Loss: 1.268 | Edge Loss: 0.000 | Raw Edge Loss: 0.997 | Edge Loss Weight: 0.000
+2026-06-15 14:46:24,115 INFO @==Final== Epoch[47/120] Avg Training Loss: 0.917
+2026-06-15 14:46:26,926 INFO Epoch[48/120] Iter[0/168] | Total Loss: 0.492 | Structure Loss: 0.492 | Edge Loss: 0.000 | Raw Edge Loss: 0.998 | Edge Loss Weight: 0.000
+2026-06-15 14:47:11,497 INFO Epoch[48/120] Iter[50/168] | Total Loss: 1.202 | Structure Loss: 1.202 | Edge Loss: 0.000 | Raw Edge Loss: 0.999 | Edge Loss Weight: 0.000
+2026-06-15 14:47:52,897 INFO Epoch[48/120] Iter[100/168] | Total Loss: 0.907 | Structure Loss: 0.907 | Edge Loss: 0.000 | Raw Edge Loss: 0.998 | Edge Loss Weight: 0.000
+2026-06-15 14:48:34,553 INFO Epoch[48/120] Iter[150/168] | Total Loss: 1.245 | Structure Loss: 1.245 | Edge Loss: 0.000 | Raw Edge Loss: 0.998 | Edge Loss Weight: 0.000
+2026-06-15 14:48:47,354 INFO @==Final== Epoch[48/120] Avg Training Loss: 0.891
+2026-06-15 14:48:50,074 INFO Epoch[49/120] Iter[0/168] | Total Loss: 0.736 | Structure Loss: 0.736 | Edge Loss: 0.000 | Raw Edge Loss: 0.994 | Edge Loss Weight: 0.000
+2026-06-15 14:49:33,455 INFO Epoch[49/120] Iter[50/168] | Total Loss: 0.665 | Structure Loss: 0.665 | Edge Loss: 0.000 | Raw Edge Loss: 0.993 | Edge Loss Weight: 0.000
+2026-06-15 14:50:22,049 INFO Epoch[49/120] Iter[100/168] | Total Loss: 0.887 | Structure Loss: 0.887 | Edge Loss: 0.000 | Raw Edge Loss: 0.997 | Edge Loss Weight: 0.000
+2026-06-15 14:51:10,950 INFO Epoch[49/120] Iter[150/168] | Total Loss: 0.592 | Structure Loss: 0.592 | Edge Loss: 0.000 | Raw Edge Loss: 0.999 | Edge Loss Weight: 0.000
+2026-06-15 14:51:28,808 INFO @==Final== Epoch[49/120] Avg Training Loss: 0.888
+2026-06-15 14:51:32,027 INFO Epoch[50/120] Iter[0/168] | Total Loss: 0.886 | Structure Loss: 0.886 | Edge Loss: 0.000 | Raw Edge Loss: 0.998 | Edge Loss Weight: 0.000
+2026-06-15 14:52:24,214 INFO Epoch[50/120] Iter[50/168] | Total Loss: 0.457 | Structure Loss: 0.457 | Edge Loss: 0.000 | Raw Edge Loss: 0.997 | Edge Loss Weight: 0.000
+2026-06-15 14:53:09,551 INFO Epoch[50/120] Iter[100/168] | Total Loss: 1.259 | Structure Loss: 1.259 | Edge Loss: 0.000 | Raw Edge Loss: 0.997 | Edge Loss Weight: 0.000
+2026-06-15 14:53:52,726 INFO Epoch[50/120] Iter[150/168] | Total Loss: 0.642 | Structure Loss: 0.642 | Edge Loss: 0.000 | Raw Edge Loss: 0.998 | Edge Loss Weight: 0.000
+2026-06-15 14:54:05,504 INFO @==Final== Epoch[50/120] Avg Training Loss: 0.880
+2026-06-15 14:54:08,249 INFO Epoch[51/120] Iter[0/168] | Total Loss: 1.012 | Structure Loss: 1.012 | Edge Loss: 0.000 | Raw Edge Loss: 0.998 | Edge Loss Weight: 0.000
+2026-06-15 14:54:50,395 INFO Epoch[51/120] Iter[50/168] | Total Loss: 0.814 | Structure Loss: 0.814 | Edge Loss: 0.000 | Raw Edge Loss: 0.998 | Edge Loss Weight: 0.000
+2026-06-15 14:55:32,417 INFO Epoch[51/120] Iter[100/168] | Total Loss: 0.706 | Structure Loss: 0.706 | Edge Loss: 0.000 | Raw Edge Loss: 0.998 | Edge Loss Weight: 0.000
+2026-06-15 14:56:14,123 INFO Epoch[51/120] Iter[150/168] | Total Loss: 1.468 | Structure Loss: 1.468 | Edge Loss: 0.000 | Raw Edge Loss: 0.993 | Edge Loss Weight: 0.000
+2026-06-15 14:56:31,732 INFO @==Final== Epoch[51/120] Avg Training Loss: 0.871
+2026-06-15 14:56:34,650 INFO Epoch[52/120] Iter[0/168] | Total Loss: 0.990 | Structure Loss: 0.990 | Edge Loss: 0.000 | Raw Edge Loss: 0.999 | Edge Loss Weight: 0.000
+2026-06-15 14:57:16,571 INFO Epoch[52/120] Iter[50/168] | Total Loss: 0.854 | Structure Loss: 0.854 | Edge Loss: 0.000 | Raw Edge Loss: 0.999 | Edge Loss Weight: 0.000
+2026-06-15 14:58:05,830 INFO Epoch[52/120] Iter[100/168] | Total Loss: 0.460 | Structure Loss: 0.460 | Edge Loss: 0.000 | Raw Edge Loss: 0.998 | Edge Loss Weight: 0.000
+2026-06-15 14:58:49,080 INFO Epoch[52/120] Iter[150/168] | Total Loss: 1.171 | Structure Loss: 1.171 | Edge Loss: 0.000 | Raw Edge Loss: 0.997 | Edge Loss Weight: 0.000
+2026-06-15 14:59:04,437 INFO @==Final== Epoch[52/120] Avg Training Loss: 0.872
+2026-06-15 14:59:07,588 INFO Epoch[53/120] Iter[0/168] | Total Loss: 0.647 | Structure Loss: 0.647 | Edge Loss: 0.000 | Raw Edge Loss: 0.996 | Edge Loss Weight: 0.000
+2026-06-15 15:00:02,053 INFO Epoch[53/120] Iter[50/168] | Total Loss: 0.999 | Structure Loss: 0.999 | Edge Loss: 0.000 | Raw Edge Loss: 0.999 | Edge Loss Weight: 0.000
+2026-06-15 15:00:54,860 INFO Epoch[53/120] Iter[100/168] | Total Loss: 0.819 | Structure Loss: 0.819 | Edge Loss: 0.000 | Raw Edge Loss: 0.998 | Edge Loss Weight: 0.000
+2026-06-15 15:01:47,379 INFO Epoch[53/120] Iter[150/168] | Total Loss: 0.531 | Structure Loss: 0.531 | Edge Loss: 0.000 | Raw Edge Loss: 0.999 | Edge Loss Weight: 0.000
+2026-06-15 15:02:05,680 INFO @==Final== Epoch[53/120] Avg Training Loss: 0.845
+2026-06-15 15:02:08,588 INFO Epoch[54/120] Iter[0/168] | Total Loss: 0.905 | Structure Loss: 0.905 | Edge Loss: 0.000 | Raw Edge Loss: 0.992 | Edge Loss Weight: 0.000
+2026-06-15 15:02:59,759 INFO Epoch[54/120] Iter[50/168] | Total Loss: 0.854 | Structure Loss: 0.854 | Edge Loss: 0.000 | Raw Edge Loss: 0.995 | Edge Loss Weight: 0.000
+2026-06-15 15:03:54,073 INFO Epoch[54/120] Iter[100/168] | Total Loss: 1.006 | Structure Loss: 1.006 | Edge Loss: 0.000 | Raw Edge Loss: 0.999 | Edge Loss Weight: 0.000
+2026-06-15 15:04:37,805 INFO Epoch[54/120] Iter[150/168] | Total Loss: 0.868 | Structure Loss: 0.868 | Edge Loss: 0.000 | Raw Edge Loss: 0.998 | Edge Loss Weight: 0.000
+2026-06-15 15:04:50,273 INFO @==Final== Epoch[54/120] Avg Training Loss: 0.844
+2026-06-15 15:04:53,253 INFO Epoch[55/120] Iter[0/168] | Total Loss: 0.928 | Structure Loss: 0.928 | Edge Loss: 0.000 | Raw Edge Loss: 0.999 | Edge Loss Weight: 0.000
+2026-06-15 15:05:45,111 INFO Epoch[55/120] Iter[50/168] | Total Loss: 0.769 | Structure Loss: 0.769 | Edge Loss: 0.000 | Raw Edge Loss: 0.999 | Edge Loss Weight: 0.000
+2026-06-15 15:06:39,016 INFO Epoch[55/120] Iter[100/168] | Total Loss: 0.756 | Structure Loss: 0.756 | Edge Loss: 0.000 | Raw Edge Loss: 0.999 | Edge Loss Weight: 0.000
+2026-06-15 15:07:38,465 INFO Epoch[55/120] Iter[150/168] | Total Loss: 1.442 | Structure Loss: 1.442 | Edge Loss: 0.000 | Raw Edge Loss: 0.998 | Edge Loss Weight: 0.000
+2026-06-15 15:07:56,753 INFO @==Final== Epoch[55/120] Avg Training Loss: 0.841
+2026-06-15 15:07:59,894 INFO Epoch[56/120] Iter[0/168] | Total Loss: 0.971 | Structure Loss: 0.971 | Edge Loss: 0.000 | Raw Edge Loss: 0.995 | Edge Loss Weight: 0.000
+2026-06-15 15:08:54,949 INFO Epoch[56/120] Iter[50/168] | Total Loss: 0.996 | Structure Loss: 0.996 | Edge Loss: 0.000 | Raw Edge Loss: 0.999 | Edge Loss Weight: 0.000
+2026-06-15 15:09:48,312 INFO Epoch[56/120] Iter[100/168] | Total Loss: 0.745 | Structure Loss: 0.745 | Edge Loss: 0.000 | Raw Edge Loss: 0.999 | Edge Loss Weight: 0.000
+2026-06-15 15:10:43,983 INFO Epoch[56/120] Iter[150/168] | Total Loss: 0.642 | Structure Loss: 0.642 | Edge Loss: 0.000 | Raw Edge Loss: 0.999 | Edge Loss Weight: 0.000
+2026-06-15 15:10:57,227 INFO @==Final== Epoch[56/120] Avg Training Loss: 0.832
+2026-06-15 15:10:59,955 INFO Epoch[57/120] Iter[0/168] | Total Loss: 0.561 | Structure Loss: 0.561 | Edge Loss: 0.000 | Raw Edge Loss: 0.999 | Edge Loss Weight: 0.000
+2026-06-15 15:11:42,673 INFO Epoch[57/120] Iter[50/168] | Total Loss: 0.643 | Structure Loss: 0.643 | Edge Loss: 0.000 | Raw Edge Loss: 0.999 | Edge Loss Weight: 0.000
+2026-06-15 15:12:28,578 INFO Epoch[57/120] Iter[100/168] | Total Loss: 0.794 | Structure Loss: 0.794 | Edge Loss: 0.000 | Raw Edge Loss: 0.998 | Edge Loss Weight: 0.000
+2026-06-15 15:13:10,599 INFO Epoch[57/120] Iter[150/168] | Total Loss: 1.530 | Structure Loss: 1.530 | Edge Loss: 0.000 | Raw Edge Loss: 0.996 | Edge Loss Weight: 0.000
+2026-06-15 15:13:25,765 INFO @==Final== Epoch[57/120] Avg Training Loss: 0.846
+2026-06-15 15:13:28,495 INFO Epoch[58/120] Iter[0/168] | Total Loss: 1.194 | Structure Loss: 1.194 | Edge Loss: 0.000 | Raw Edge Loss: 0.998 | Edge Loss Weight: 0.000
+2026-06-15 15:14:13,953 INFO Epoch[58/120] Iter[50/168] | Total Loss: 1.331 | Structure Loss: 1.331 | Edge Loss: 0.000 | Raw Edge Loss: 0.998 | Edge Loss Weight: 0.000
+2026-06-15 15:14:56,375 INFO Epoch[58/120] Iter[100/168] | Total Loss: 0.911 | Structure Loss: 0.911 | Edge Loss: 0.000 | Raw Edge Loss: 0.999 | Edge Loss Weight: 0.000
+2026-06-15 15:15:51,381 INFO Epoch[58/120] Iter[150/168] | Total Loss: 1.048 | Structure Loss: 1.048 | Edge Loss: 0.000 | Raw Edge Loss: 0.996 | Edge Loss Weight: 0.000
+2026-06-15 15:16:05,092 INFO @==Final== Epoch[58/120] Avg Training Loss: 0.840
+2026-06-15 15:16:07,888 INFO Epoch[59/120] Iter[0/168] | Total Loss: 0.979 | Structure Loss: 0.979 | Edge Loss: 0.000 | Raw Edge Loss: 0.990 | Edge Loss Weight: 0.000
+2026-06-15 15:16:50,064 INFO Epoch[59/120] Iter[50/168] | Total Loss: 0.659 | Structure Loss: 0.659 | Edge Loss: 0.000 | Raw Edge Loss: 0.999 | Edge Loss Weight: 0.000
+2026-06-15 15:17:38,644 INFO Epoch[59/120] Iter[100/168] | Total Loss: 0.593 | Structure Loss: 0.593 | Edge Loss: 0.000 | Raw Edge Loss: 0.998 | Edge Loss Weight: 0.000
+2026-06-15 15:18:28,965 INFO Epoch[59/120] Iter[150/168] | Total Loss: 0.687 | Structure Loss: 0.687 | Edge Loss: 0.000 | Raw Edge Loss: 0.997 | Edge Loss Weight: 0.000
+2026-06-15 15:18:41,911 INFO @==Final== Epoch[59/120] Avg Training Loss: 0.801
+2026-06-15 15:18:44,663 INFO Epoch[60/120] Iter[0/168] | Total Loss: 1.024 | Structure Loss: 1.024 | Edge Loss: 0.000 | Raw Edge Loss: 0.995 | Edge Loss Weight: 0.000
+2026-06-15 15:19:26,543 INFO Epoch[60/120] Iter[50/168] | Total Loss: 0.960 | Structure Loss: 0.960 | Edge Loss: 0.000 | Raw Edge Loss: 0.997 | Edge Loss Weight: 0.000
+2026-06-15 15:20:08,565 INFO Epoch[60/120] Iter[100/168] | Total Loss: 0.760 | Structure Loss: 0.760 | Edge Loss: 0.000 | Raw Edge Loss: 0.998 | Edge Loss Weight: 0.000
+2026-06-15 15:20:53,629 INFO Epoch[60/120] Iter[150/168] | Total Loss: 1.022 | Structure Loss: 1.022 | Edge Loss: 0.000 | Raw Edge Loss: 0.994 | Edge Loss Weight: 0.000
+2026-06-15 15:21:06,342 INFO @==Final== Epoch[60/120] Avg Training Loss: 0.831
+2026-06-15 15:21:06,662 INFO Checkpoint saved to /dev/shm/escnet_ablation_no_edge_supervision/runs/light_b2_c64_no_edge_supervision_e120_s42_b6_w8_4gpu/epoch_60.pth
+2026-06-15 15:21:09,142 INFO Epoch[61/120] Iter[0/168] | Total Loss: 1.017 | Structure Loss: 1.017 | Edge Loss: 0.000 | Raw Edge Loss: 0.997 | Edge Loss Weight: 0.000
+2026-06-15 15:21:59,794 INFO Epoch[61/120] Iter[50/168] | Total Loss: 0.791 | Structure Loss: 0.791 | Edge Loss: 0.000 | Raw Edge Loss: 0.996 | Edge Loss Weight: 0.000
+2026-06-15 15:22:41,917 INFO Epoch[61/120] Iter[100/168] | Total Loss: 0.750 | Structure Loss: 0.750 | Edge Loss: 0.000 | Raw Edge Loss: 0.998 | Edge Loss Weight: 0.000
+2026-06-15 15:23:27,316 INFO Epoch[61/120] Iter[150/168] | Total Loss: 1.270 | Structure Loss: 1.270 | Edge Loss: 0.000 | Raw Edge Loss: 0.996 | Edge Loss Weight: 0.000
+2026-06-15 15:23:40,236 INFO @==Final== Epoch[61/120] Avg Training Loss: 0.828
+2026-06-15 15:23:43,084 INFO Epoch[62/120] Iter[0/168] | Total Loss: 0.902 | Structure Loss: 0.902 | Edge Loss: 0.000 | Raw Edge Loss: 0.995 | Edge Loss Weight: 0.000
+2026-06-15 15:24:24,927 INFO Epoch[62/120] Iter[50/168] | Total Loss: 1.243 | Structure Loss: 1.243 | Edge Loss: 0.000 | Raw Edge Loss: 0.999 | Edge Loss Weight: 0.000
+2026-06-15 15:25:16,505 INFO Epoch[62/120] Iter[100/168] | Total Loss: 0.701 | Structure Loss: 0.701 | Edge Loss: 0.000 | Raw Edge Loss: 0.997 | Edge Loss Weight: 0.000
+2026-06-15 15:26:01,193 INFO Epoch[62/120] Iter[150/168] | Total Loss: 0.824 | Structure Loss: 0.824 | Edge Loss: 0.000 | Raw Edge Loss: 0.996 | Edge Loss Weight: 0.000
+2026-06-15 15:26:14,288 INFO @==Final== Epoch[62/120] Avg Training Loss: 0.805
+2026-06-15 15:26:16,981 INFO Epoch[63/120] Iter[0/168] | Total Loss: 0.568 | Structure Loss: 0.568 | Edge Loss: 0.000 | Raw Edge Loss: 0.998 | Edge Loss Weight: 0.000
+2026-06-15 15:27:01,485 INFO Epoch[63/120] Iter[50/168] | Total Loss: 0.842 | Structure Loss: 0.842 | Edge Loss: 0.000 | Raw Edge Loss: 0.998 | Edge Loss Weight: 0.000
+2026-06-15 15:27:47,114 INFO Epoch[63/120] Iter[100/168] | Total Loss: 0.724 | Structure Loss: 0.724 | Edge Loss: 0.000 | Raw Edge Loss: 0.996 | Edge Loss Weight: 0.000
+2026-06-15 15:28:31,842 INFO Epoch[63/120] Iter[150/168] | Total Loss: 0.725 | Structure Loss: 0.725 | Edge Loss: 0.000 | Raw Edge Loss: 0.998 | Edge Loss Weight: 0.000
+2026-06-15 15:28:45,810 INFO @==Final== Epoch[63/120] Avg Training Loss: 0.812
+2026-06-15 15:28:48,895 INFO Epoch[64/120] Iter[0/168] | Total Loss: 0.525 | Structure Loss: 0.525 | Edge Loss: 0.000 | Raw Edge Loss: 0.997 | Edge Loss Weight: 0.000
+2026-06-15 15:29:32,257 INFO Epoch[64/120] Iter[50/168] | Total Loss: 0.626 | Structure Loss: 0.626 | Edge Loss: 0.000 | Raw Edge Loss: 0.999 | Edge Loss Weight: 0.000
+2026-06-15 15:30:18,718 INFO Epoch[64/120] Iter[100/168] | Total Loss: 1.057 | Structure Loss: 1.057 | Edge Loss: 0.000 | Raw Edge Loss: 0.998 | Edge Loss Weight: 0.000
+2026-06-15 15:31:05,056 INFO Epoch[64/120] Iter[150/168] | Total Loss: 0.739 | Structure Loss: 0.739 | Edge Loss: 0.000 | Raw Edge Loss: 0.999 | Edge Loss Weight: 0.000
+2026-06-15 15:31:19,331 INFO @==Final== Epoch[64/120] Avg Training Loss: 0.816
+2026-06-15 15:31:22,533 INFO Epoch[65/120] Iter[0/168] | Total Loss: 0.998 | Structure Loss: 0.998 | Edge Loss: 0.000 | Raw Edge Loss: 0.996 | Edge Loss Weight: 0.000
+2026-06-15 15:32:12,594 INFO Epoch[65/120] Iter[50/168] | Total Loss: 0.769 | Structure Loss: 0.769 | Edge Loss: 0.000 | Raw Edge Loss: 0.998 | Edge Loss Weight: 0.000
+2026-06-15 15:32:55,756 INFO Epoch[65/120] Iter[100/168] | Total Loss: 0.983 | Structure Loss: 0.983 | Edge Loss: 0.000 | Raw Edge Loss: 0.998 | Edge Loss Weight: 0.000
+2026-06-15 15:33:37,509 INFO Epoch[65/120] Iter[150/168] | Total Loss: 0.532 | Structure Loss: 0.532 | Edge Loss: 0.000 | Raw Edge Loss: 0.999 | Edge Loss Weight: 0.000
+2026-06-15 15:33:50,208 INFO @==Final== Epoch[65/120] Avg Training Loss: 0.847
+2026-06-15 15:33:52,969 INFO Epoch[66/120] Iter[0/168] | Total Loss: 1.028 | Structure Loss: 1.028 | Edge Loss: 0.000 | Raw Edge Loss: 0.998 | Edge Loss Weight: 0.000
+2026-06-15 15:34:34,420 INFO Epoch[66/120] Iter[50/168] | Total Loss: 0.759 | Structure Loss: 0.759 | Edge Loss: 0.000 | Raw Edge Loss: 0.999 | Edge Loss Weight: 0.000
+2026-06-15 15:35:16,129 INFO Epoch[66/120] Iter[100/168] | Total Loss: 0.704 | Structure Loss: 0.704 | Edge Loss: 0.000 | Raw Edge Loss: 0.999 | Edge Loss Weight: 0.000
+2026-06-15 15:35:57,968 INFO Epoch[66/120] Iter[150/168] | Total Loss: 0.732 | Structure Loss: 0.732 | Edge Loss: 0.000 | Raw Edge Loss: 0.996 | Edge Loss Weight: 0.000
+2026-06-15 15:36:10,480 INFO @==Final== Epoch[66/120] Avg Training Loss: 0.821
+2026-06-15 15:36:13,212 INFO Epoch[67/120] Iter[0/168] | Total Loss: 0.614 | Structure Loss: 0.614 | Edge Loss: 0.000 | Raw Edge Loss: 0.997 | Edge Loss Weight: 0.000
+2026-06-15 15:36:55,091 INFO Epoch[67/120] Iter[50/168] | Total Loss: 0.734 | Structure Loss: 0.734 | Edge Loss: 0.000 | Raw Edge Loss: 0.998 | Edge Loss Weight: 0.000
+2026-06-15 15:37:37,029 INFO Epoch[67/120] Iter[100/168] | Total Loss: 0.958 | Structure Loss: 0.958 | Edge Loss: 0.000 | Raw Edge Loss: 0.999 | Edge Loss Weight: 0.000
+2026-06-15 15:38:27,969 INFO Epoch[67/120] Iter[150/168] | Total Loss: 1.900 | Structure Loss: 1.900 | Edge Loss: 0.000 | Raw Edge Loss: 0.996 | Edge Loss Weight: 0.000
+2026-06-15 15:38:40,633 INFO @==Final== Epoch[67/120] Avg Training Loss: 0.870
+2026-06-15 15:38:43,444 INFO Epoch[68/120] Iter[0/168] | Total Loss: 0.974 | Structure Loss: 0.974 | Edge Loss: 0.000 | Raw Edge Loss: 0.996 | Edge Loss Weight: 0.000
+2026-06-15 15:39:25,616 INFO Epoch[68/120] Iter[50/168] | Total Loss: 0.631 | Structure Loss: 0.631 | Edge Loss: 0.000 | Raw Edge Loss: 0.998 | Edge Loss Weight: 0.000
+2026-06-15 15:40:08,111 INFO Epoch[68/120] Iter[100/168] | Total Loss: 0.522 | Structure Loss: 0.522 | Edge Loss: 0.000 | Raw Edge Loss: 0.996 | Edge Loss Weight: 0.000
+2026-06-15 15:40:54,710 INFO Epoch[68/120] Iter[150/168] | Total Loss: 0.569 | Structure Loss: 0.569 | Edge Loss: 0.000 | Raw Edge Loss: 0.998 | Edge Loss Weight: 0.000
+2026-06-15 15:41:10,646 INFO @==Final== Epoch[68/120] Avg Training Loss: 0.800
+2026-06-15 15:41:13,507 INFO Epoch[69/120] Iter[0/168] | Total Loss: 0.894 | Structure Loss: 0.894 | Edge Loss: 0.000 | Raw Edge Loss: 0.998 | Edge Loss Weight: 0.000
+2026-06-15 15:41:57,747 INFO Epoch[69/120] Iter[50/168] | Total Loss: 1.715 | Structure Loss: 1.715 | Edge Loss: 0.000 | Raw Edge Loss: 0.997 | Edge Loss Weight: 0.000
+2026-06-15 15:42:46,443 INFO Epoch[69/120] Iter[100/168] | Total Loss: 0.856 | Structure Loss: 0.856 | Edge Loss: 0.000 | Raw Edge Loss: 0.999 | Edge Loss Weight: 0.000
+2026-06-15 15:43:39,094 INFO Epoch[69/120] Iter[150/168] | Total Loss: 1.398 | Structure Loss: 1.398 | Edge Loss: 0.000 | Raw Edge Loss: 0.995 | Edge Loss Weight: 0.000
+2026-06-15 15:43:51,687 INFO @==Final== Epoch[69/120] Avg Training Loss: 0.799
+2026-06-15 15:43:54,337 INFO Epoch[70/120] Iter[0/168] | Total Loss: 0.788 | Structure Loss: 0.788 | Edge Loss: 0.000 | Raw Edge Loss: 0.997 | Edge Loss Weight: 0.000
+2026-06-15 15:44:40,174 INFO Epoch[70/120] Iter[50/168] | Total Loss: 0.563 | Structure Loss: 0.563 | Edge Loss: 0.000 | Raw Edge Loss: 0.999 | Edge Loss Weight: 0.000
+2026-06-15 15:45:29,495 INFO Epoch[70/120] Iter[100/168] | Total Loss: 0.465 | Structure Loss: 0.465 | Edge Loss: 0.000 | Raw Edge Loss: 0.999 | Edge Loss Weight: 0.000
+2026-06-15 15:46:16,790 INFO Epoch[70/120] Iter[150/168] | Total Loss: 0.801 | Structure Loss: 0.801 | Edge Loss: 0.000 | Raw Edge Loss: 0.998 | Edge Loss Weight: 0.000
+2026-06-15 15:46:34,613 INFO @==Final== Epoch[70/120] Avg Training Loss: 0.811
+2026-06-15 15:46:37,581 INFO Epoch[71/120] Iter[0/168] | Total Loss: 0.851 | Structure Loss: 0.851 | Edge Loss: 0.000 | Raw Edge Loss: 0.999 | Edge Loss Weight: 0.000
+2026-06-15 15:47:19,844 INFO Epoch[71/120] Iter[50/168] | Total Loss: 0.571 | Structure Loss: 0.571 | Edge Loss: 0.000 | Raw Edge Loss: 0.997 | Edge Loss Weight: 0.000
+2026-06-15 15:48:14,940 INFO Epoch[71/120] Iter[100/168] | Total Loss: 0.817 | Structure Loss: 0.817 | Edge Loss: 0.000 | Raw Edge Loss: 0.999 | Edge Loss Weight: 0.000
+2026-06-15 15:49:00,365 INFO Epoch[71/120] Iter[150/168] | Total Loss: 0.976 | Structure Loss: 0.976 | Edge Loss: 0.000 | Raw Edge Loss: 0.997 | Edge Loss Weight: 0.000
+2026-06-15 15:49:18,780 INFO @==Final== Epoch[71/120] Avg Training Loss: 0.794
+2026-06-15 15:49:21,919 INFO Epoch[72/120] Iter[0/168] | Total Loss: 1.103 | Structure Loss: 1.103 | Edge Loss: 0.000 | Raw Edge Loss: 0.994 | Edge Loss Weight: 0.000
+2026-06-15 15:50:17,975 INFO Epoch[72/120] Iter[50/168] | Total Loss: 1.001 | Structure Loss: 1.001 | Edge Loss: 0.000 | Raw Edge Loss: 0.997 | Edge Loss Weight: 0.000
+2026-06-15 15:51:12,852 INFO Epoch[72/120] Iter[100/168] | Total Loss: 0.437 | Structure Loss: 0.437 | Edge Loss: 0.000 | Raw Edge Loss: 0.996 | Edge Loss Weight: 0.000
+2026-06-15 15:52:06,228 INFO Epoch[72/120] Iter[150/168] | Total Loss: 0.618 | Structure Loss: 0.618 | Edge Loss: 0.000 | Raw Edge Loss: 1.000 | Edge Loss Weight: 0.000
+2026-06-15 15:52:22,630 INFO @==Final== Epoch[72/120] Avg Training Loss: 0.775
+2026-06-15 15:52:25,712 INFO Epoch[73/120] Iter[0/168] | Total Loss: 0.728 | Structure Loss: 0.728 | Edge Loss: 0.000 | Raw Edge Loss: 0.997 | Edge Loss Weight: 0.000
+2026-06-15 15:53:12,600 INFO Epoch[73/120] Iter[50/168] | Total Loss: 0.595 | Structure Loss: 0.595 | Edge Loss: 0.000 | Raw Edge Loss: 0.998 | Edge Loss Weight: 0.000
+2026-06-15 15:53:57,650 INFO Epoch[73/120] Iter[100/168] | Total Loss: 1.002 | Structure Loss: 1.002 | Edge Loss: 0.000 | Raw Edge Loss: 0.996 | Edge Loss Weight: 0.000
+2026-06-15 15:54:45,163 INFO Epoch[73/120] Iter[150/168] | Total Loss: 1.277 | Structure Loss: 1.277 | Edge Loss: 0.000 | Raw Edge Loss: 0.998 | Edge Loss Weight: 0.000
+2026-06-15 15:54:58,093 INFO @==Final== Epoch[73/120] Avg Training Loss: 0.774
+2026-06-15 15:55:00,903 INFO Epoch[74/120] Iter[0/168] | Total Loss: 0.639 | Structure Loss: 0.639 | Edge Loss: 0.000 | Raw Edge Loss: 0.995 | Edge Loss Weight: 0.000
+2026-06-15 15:55:48,928 INFO Epoch[74/120] Iter[50/168] | Total Loss: 0.608 | Structure Loss: 0.608 | Edge Loss: 0.000 | Raw Edge Loss: 0.997 | Edge Loss Weight: 0.000
+2026-06-15 15:56:44,093 INFO Epoch[74/120] Iter[100/168] | Total Loss: 0.997 | Structure Loss: 0.997 | Edge Loss: 0.000 | Raw Edge Loss: 0.997 | Edge Loss Weight: 0.000
+2026-06-15 15:57:26,762 INFO Epoch[74/120] Iter[150/168] | Total Loss: 0.823 | Structure Loss: 0.823 | Edge Loss: 0.000 | Raw Edge Loss: 0.992 | Edge Loss Weight: 0.000
+2026-06-15 15:57:40,544 INFO @==Final== Epoch[74/120] Avg Training Loss: 0.767
+2026-06-15 15:57:43,626 INFO Epoch[75/120] Iter[0/168] | Total Loss: 1.053 | Structure Loss: 1.053 | Edge Loss: 0.000 | Raw Edge Loss: 0.999 | Edge Loss Weight: 0.000
+2026-06-15 15:58:36,010 INFO Epoch[75/120] Iter[50/168] | Total Loss: 1.150 | Structure Loss: 1.150 | Edge Loss: 0.000 | Raw Edge Loss: 0.998 | Edge Loss Weight: 0.000
+2026-06-15 15:59:28,449 INFO Epoch[75/120] Iter[100/168] | Total Loss: 0.609 | Structure Loss: 0.609 | Edge Loss: 0.000 | Raw Edge Loss: 0.997 | Edge Loss Weight: 0.000
+2026-06-15 16:00:16,801 INFO Epoch[75/120] Iter[150/168] | Total Loss: 0.677 | Structure Loss: 0.677 | Edge Loss: 0.000 | Raw Edge Loss: 0.999 | Edge Loss Weight: 0.000
+2026-06-15 16:00:32,239 INFO @==Final== Epoch[75/120] Avg Training Loss: 0.763
+2026-06-15 16:00:35,233 INFO Epoch[76/120] Iter[0/168] | Total Loss: 0.829 | Structure Loss: 0.829 | Edge Loss: 0.000 | Raw Edge Loss: 0.996 | Edge Loss Weight: 0.000
+2026-06-15 16:01:30,859 INFO Epoch[76/120] Iter[50/168] | Total Loss: 0.611 | Structure Loss: 0.611 | Edge Loss: 0.000 | Raw Edge Loss: 0.998 | Edge Loss Weight: 0.000
+2026-06-15 16:02:24,905 INFO Epoch[76/120] Iter[100/168] | Total Loss: 0.611 | Structure Loss: 0.611 | Edge Loss: 0.000 | Raw Edge Loss: 0.997 | Edge Loss Weight: 0.000
+2026-06-15 16:03:18,559 INFO Epoch[76/120] Iter[150/168] | Total Loss: 0.636 | Structure Loss: 0.636 | Edge Loss: 0.000 | Raw Edge Loss: 0.998 | Edge Loss Weight: 0.000
+2026-06-15 16:03:36,959 INFO @==Final== Epoch[76/120] Avg Training Loss: 0.778
+2026-06-15 16:03:39,855 INFO Epoch[77/120] Iter[0/168] | Total Loss: 0.947 | Structure Loss: 0.947 | Edge Loss: 0.000 | Raw Edge Loss: 0.999 | Edge Loss Weight: 0.000
+2026-06-15 16:04:31,987 INFO Epoch[77/120] Iter[50/168] | Total Loss: 0.805 | Structure Loss: 0.805 | Edge Loss: 0.000 | Raw Edge Loss: 0.998 | Edge Loss Weight: 0.000
+2026-06-15 16:05:14,508 INFO Epoch[77/120] Iter[100/168] | Total Loss: 0.721 | Structure Loss: 0.721 | Edge Loss: 0.000 | Raw Edge Loss: 0.998 | Edge Loss Weight: 0.000
+2026-06-15 16:05:57,689 INFO Epoch[77/120] Iter[150/168] | Total Loss: 0.800 | Structure Loss: 0.800 | Edge Loss: 0.000 | Raw Edge Loss: 0.999 | Edge Loss Weight: 0.000
+2026-06-15 16:06:18,702 INFO @==Final== Epoch[77/120] Avg Training Loss: 0.773
+2026-06-15 16:06:21,694 INFO Epoch[78/120] Iter[0/168] | Total Loss: 0.976 | Structure Loss: 0.976 | Edge Loss: 0.000 | Raw Edge Loss: 0.998 | Edge Loss Weight: 0.000
+2026-06-15 16:07:15,380 INFO Epoch[78/120] Iter[50/168] | Total Loss: 0.790 | Structure Loss: 0.790 | Edge Loss: 0.000 | Raw Edge Loss: 0.999 | Edge Loss Weight: 0.000
+2026-06-15 16:08:04,037 INFO Epoch[78/120] Iter[100/168] | Total Loss: 0.842 | Structure Loss: 0.842 | Edge Loss: 0.000 | Raw Edge Loss: 0.997 | Edge Loss Weight: 0.000
+2026-06-15 16:08:57,403 INFO Epoch[78/120] Iter[150/168] | Total Loss: 0.852 | Structure Loss: 0.852 | Edge Loss: 0.000 | Raw Edge Loss: 0.998 | Edge Loss Weight: 0.000
+2026-06-15 16:09:09,786 INFO @==Final== Epoch[78/120] Avg Training Loss: 0.769
+2026-06-15 16:09:12,656 INFO Epoch[79/120] Iter[0/168] | Total Loss: 1.169 | Structure Loss: 1.169 | Edge Loss: 0.000 | Raw Edge Loss: 0.998 | Edge Loss Weight: 0.000
+2026-06-15 16:09:54,832 INFO Epoch[79/120] Iter[50/168] | Total Loss: 0.669 | Structure Loss: 0.669 | Edge Loss: 0.000 | Raw Edge Loss: 0.995 | Edge Loss Weight: 0.000
+2026-06-15 16:10:38,816 INFO Epoch[79/120] Iter[100/168] | Total Loss: 0.745 | Structure Loss: 0.745 | Edge Loss: 0.000 | Raw Edge Loss: 0.997 | Edge Loss Weight: 0.000
+2026-06-15 16:11:19,937 INFO Epoch[79/120] Iter[150/168] | Total Loss: 0.462 | Structure Loss: 0.462 | Edge Loss: 0.000 | Raw Edge Loss: 0.998 | Edge Loss Weight: 0.000
+2026-06-15 16:11:34,812 INFO @==Final== Epoch[79/120] Avg Training Loss: 0.769
+2026-06-15 16:11:37,638 INFO Epoch[80/120] Iter[0/168] | Total Loss: 0.882 | Structure Loss: 0.882 | Edge Loss: 0.000 | Raw Edge Loss: 0.995 | Edge Loss Weight: 0.000
+2026-06-15 16:12:19,736 INFO Epoch[80/120] Iter[50/168] | Total Loss: 0.595 | Structure Loss: 0.595 | Edge Loss: 0.000 | Raw Edge Loss: 0.997 | Edge Loss Weight: 0.000
+2026-06-15 16:13:04,218 INFO Epoch[80/120] Iter[100/168] | Total Loss: 0.950 | Structure Loss: 0.950 | Edge Loss: 0.000 | Raw Edge Loss: 0.998 | Edge Loss Weight: 0.000
+2026-06-15 16:13:48,823 INFO Epoch[80/120] Iter[150/168] | Total Loss: 0.810 | Structure Loss: 0.810 | Edge Loss: 0.000 | Raw Edge Loss: 0.999 | Edge Loss Weight: 0.000
+2026-06-15 16:14:06,467 INFO @==Final== Epoch[80/120] Avg Training Loss: 0.801
+2026-06-15 16:14:06,763 INFO Checkpoint saved to /dev/shm/escnet_ablation_no_edge_supervision/runs/light_b2_c64_no_edge_supervision_e120_s42_b6_w8_4gpu/epoch_80.pth
+2026-06-15 16:14:09,148 INFO Epoch[81/120] Iter[0/168] | Total Loss: 0.736 | Structure Loss: 0.736 | Edge Loss: 0.000 | Raw Edge Loss: 0.998 | Edge Loss Weight: 0.000
+2026-06-15 16:14:51,349 INFO Epoch[81/120] Iter[50/168] | Total Loss: 0.568 | Structure Loss: 0.568 | Edge Loss: 0.000 | Raw Edge Loss: 0.992 | Edge Loss Weight: 0.000
+2026-06-15 16:15:39,378 INFO Epoch[81/120] Iter[100/168] | Total Loss: 0.592 | Structure Loss: 0.592 | Edge Loss: 0.000 | Raw Edge Loss: 0.997 | Edge Loss Weight: 0.000
+2026-06-15 16:16:21,859 INFO Epoch[81/120] Iter[150/168] | Total Loss: 0.513 | Structure Loss: 0.513 | Edge Loss: 0.000 | Raw Edge Loss: 0.998 | Edge Loss Weight: 0.000
+2026-06-15 16:16:34,713 INFO @==Final== Epoch[81/120] Avg Training Loss: 0.767
+2026-06-15 16:16:37,620 INFO Epoch[82/120] Iter[0/168] | Total Loss: 0.890 | Structure Loss: 0.890 | Edge Loss: 0.000 | Raw Edge Loss: 0.999 | Edge Loss Weight: 0.000
+2026-06-15 16:17:19,565 INFO Epoch[82/120] Iter[50/168] | Total Loss: 0.766 | Structure Loss: 0.766 | Edge Loss: 0.000 | Raw Edge Loss: 0.999 | Edge Loss Weight: 0.000
+2026-06-15 16:18:01,374 INFO Epoch[82/120] Iter[100/168] | Total Loss: 0.741 | Structure Loss: 0.741 | Edge Loss: 0.000 | Raw Edge Loss: 0.999 | Edge Loss Weight: 0.000
+2026-06-15 16:18:45,435 INFO Epoch[82/120] Iter[150/168] | Total Loss: 0.892 | Structure Loss: 0.892 | Edge Loss: 0.000 | Raw Edge Loss: 0.999 | Edge Loss Weight: 0.000
+2026-06-15 16:18:58,570 INFO @==Final== Epoch[82/120] Avg Training Loss: 0.760
+2026-06-15 16:19:01,428 INFO Epoch[83/120] Iter[0/168] | Total Loss: 0.900 | Structure Loss: 0.900 | Edge Loss: 0.000 | Raw Edge Loss: 0.999 | Edge Loss Weight: 0.000
+2026-06-15 16:19:43,576 INFO Epoch[83/120] Iter[50/168] | Total Loss: 0.725 | Structure Loss: 0.725 | Edge Loss: 0.000 | Raw Edge Loss: 0.999 | Edge Loss Weight: 0.000
+2026-06-15 16:20:28,294 INFO Epoch[83/120] Iter[100/168] | Total Loss: 0.966 | Structure Loss: 0.966 | Edge Loss: 0.000 | Raw Edge Loss: 0.999 | Edge Loss Weight: 0.000
+2026-06-15 16:21:13,586 INFO Epoch[83/120] Iter[150/168] | Total Loss: 0.563 | Structure Loss: 0.563 | Edge Loss: 0.000 | Raw Edge Loss: 0.999 | Edge Loss Weight: 0.000
+2026-06-15 16:21:26,431 INFO @==Final== Epoch[83/120] Avg Training Loss: 0.750
+2026-06-15 16:21:29,238 INFO Epoch[84/120] Iter[0/168] | Total Loss: 0.923 | Structure Loss: 0.923 | Edge Loss: 0.000 | Raw Edge Loss: 0.997 | Edge Loss Weight: 0.000
+2026-06-15 16:22:14,638 INFO Epoch[84/120] Iter[50/168] | Total Loss: 0.722 | Structure Loss: 0.722 | Edge Loss: 0.000 | Raw Edge Loss: 0.998 | Edge Loss Weight: 0.000
+2026-06-15 16:22:59,295 INFO Epoch[84/120] Iter[100/168] | Total Loss: 1.196 | Structure Loss: 1.196 | Edge Loss: 0.000 | Raw Edge Loss: 0.998 | Edge Loss Weight: 0.000
+2026-06-15 16:23:40,937 INFO Epoch[84/120] Iter[150/168] | Total Loss: 0.726 | Structure Loss: 0.726 | Edge Loss: 0.000 | Raw Edge Loss: 0.998 | Edge Loss Weight: 0.000
+2026-06-15 16:23:55,989 INFO @==Final== Epoch[84/120] Avg Training Loss: 0.773
+2026-06-15 16:23:58,826 INFO Epoch[85/120] Iter[0/168] | Total Loss: 1.388 | Structure Loss: 1.388 | Edge Loss: 0.000 | Raw Edge Loss: 0.992 | Edge Loss Weight: 0.000
+2026-06-15 16:24:45,723 INFO Epoch[85/120] Iter[50/168] | Total Loss: 0.894 | Structure Loss: 0.894 | Edge Loss: 0.000 | Raw Edge Loss: 0.993 | Edge Loss Weight: 0.000
+2026-06-15 16:25:28,029 INFO Epoch[85/120] Iter[100/168] | Total Loss: 0.525 | Structure Loss: 0.525 | Edge Loss: 0.000 | Raw Edge Loss: 0.997 | Edge Loss Weight: 0.000
+2026-06-15 16:26:09,361 INFO Epoch[85/120] Iter[150/168] | Total Loss: 0.761 | Structure Loss: 0.761 | Edge Loss: 0.000 | Raw Edge Loss: 0.997 | Edge Loss Weight: 0.000
+2026-06-15 16:26:22,373 INFO @==Final== Epoch[85/120] Avg Training Loss: 0.784
+2026-06-15 16:26:25,129 INFO Epoch[86/120] Iter[0/168] | Total Loss: 0.877 | Structure Loss: 0.877 | Edge Loss: 0.000 | Raw Edge Loss: 0.998 | Edge Loss Weight: 0.000
+2026-06-15 16:27:07,266 INFO Epoch[86/120] Iter[50/168] | Total Loss: 0.692 | Structure Loss: 0.692 | Edge Loss: 0.000 | Raw Edge Loss: 0.994 | Edge Loss Weight: 0.000
+2026-06-15 16:27:48,755 INFO Epoch[86/120] Iter[100/168] | Total Loss: 1.191 | Structure Loss: 1.191 | Edge Loss: 0.000 | Raw Edge Loss: 0.997 | Edge Loss Weight: 0.000
+2026-06-15 16:28:39,477 INFO Epoch[86/120] Iter[150/168] | Total Loss: 0.509 | Structure Loss: 0.509 | Edge Loss: 0.000 | Raw Edge Loss: 0.997 | Edge Loss Weight: 0.000
+2026-06-15 16:28:56,299 INFO @==Final== Epoch[86/120] Avg Training Loss: 0.742
+2026-06-15 16:28:59,204 INFO Epoch[87/120] Iter[0/168] | Total Loss: 1.011 | Structure Loss: 1.011 | Edge Loss: 0.000 | Raw Edge Loss: 0.999 | Edge Loss Weight: 0.000
+2026-06-15 16:29:41,193 INFO Epoch[87/120] Iter[50/168] | Total Loss: 0.729 | Structure Loss: 0.729 | Edge Loss: 0.000 | Raw Edge Loss: 0.995 | Edge Loss Weight: 0.000
+2026-06-15 16:30:25,793 INFO Epoch[87/120] Iter[100/168] | Total Loss: 0.373 | Structure Loss: 0.373 | Edge Loss: 0.000 | Raw Edge Loss: 0.997 | Edge Loss Weight: 0.000
+2026-06-15 16:31:10,415 INFO Epoch[87/120] Iter[150/168] | Total Loss: 0.696 | Structure Loss: 0.696 | Edge Loss: 0.000 | Raw Edge Loss: 0.999 | Edge Loss Weight: 0.000
+2026-06-15 16:31:23,760 INFO @==Final== Epoch[87/120] Avg Training Loss: 0.751
+2026-06-15 16:31:26,811 INFO Epoch[88/120] Iter[0/168] | Total Loss: 0.443 | Structure Loss: 0.443 | Edge Loss: 0.000 | Raw Edge Loss: 0.997 | Edge Loss Weight: 0.000
+2026-06-15 16:32:07,601 INFO Epoch[88/120] Iter[50/168] | Total Loss: 0.694 | Structure Loss: 0.694 | Edge Loss: 0.000 | Raw Edge Loss: 0.998 | Edge Loss Weight: 0.000
+2026-06-15 16:32:53,849 INFO Epoch[88/120] Iter[100/168] | Total Loss: 0.877 | Structure Loss: 0.877 | Edge Loss: 0.000 | Raw Edge Loss: 0.998 | Edge Loss Weight: 0.000
+2026-06-15 16:33:35,686 INFO Epoch[88/120] Iter[150/168] | Total Loss: 0.752 | Structure Loss: 0.752 | Edge Loss: 0.000 | Raw Edge Loss: 0.998 | Edge Loss Weight: 0.000
+2026-06-15 16:33:49,056 INFO @==Final== Epoch[88/120] Avg Training Loss: 0.758
+2026-06-15 16:33:51,932 INFO Epoch[89/120] Iter[0/168] | Total Loss: 0.551 | Structure Loss: 0.551 | Edge Loss: 0.000 | Raw Edge Loss: 0.998 | Edge Loss Weight: 0.000
+2026-06-15 16:34:34,029 INFO Epoch[89/120] Iter[50/168] | Total Loss: 0.789 | Structure Loss: 0.789 | Edge Loss: 0.000 | Raw Edge Loss: 0.992 | Edge Loss Weight: 0.000
+2026-06-15 16:35:15,816 INFO Epoch[89/120] Iter[100/168] | Total Loss: 0.781 | Structure Loss: 0.781 | Edge Loss: 0.000 | Raw Edge Loss: 0.996 | Edge Loss Weight: 0.000
+2026-06-15 16:36:03,900 INFO Epoch[89/120] Iter[150/168] | Total Loss: 0.805 | Structure Loss: 0.805 | Edge Loss: 0.000 | Raw Edge Loss: 0.997 | Edge Loss Weight: 0.000
+2026-06-15 16:36:19,903 INFO @==Final== Epoch[89/120] Avg Training Loss: 0.781
+2026-06-15 16:36:22,748 INFO Epoch[90/120] Iter[0/168] | Total Loss: 0.700 | Structure Loss: 0.700 | Edge Loss: 0.000 | Raw Edge Loss: 0.998 | Edge Loss Weight: 0.000
+2026-06-15 16:37:04,592 INFO Epoch[90/120] Iter[50/168] | Total Loss: 0.740 | Structure Loss: 0.740 | Edge Loss: 0.000 | Raw Edge Loss: 0.999 | Edge Loss Weight: 0.000
+2026-06-15 16:37:46,647 INFO Epoch[90/120] Iter[100/168] | Total Loss: 1.279 | Structure Loss: 1.279 | Edge Loss: 0.000 | Raw Edge Loss: 0.996 | Edge Loss Weight: 0.000
+2026-06-15 16:38:30,192 INFO Epoch[90/120] Iter[150/168] | Total Loss: 0.711 | Structure Loss: 0.711 | Edge Loss: 0.000 | Raw Edge Loss: 0.996 | Edge Loss Weight: 0.000
+2026-06-15 16:38:43,804 INFO @==Final== Epoch[90/120] Avg Training Loss: 0.772
+2026-06-15 16:38:46,585 INFO Epoch[91/120] Iter[0/168] | Total Loss: 0.677 | Structure Loss: 0.677 | Edge Loss: 0.000 | Raw Edge Loss: 0.997 | Edge Loss Weight: 0.000
+2026-06-15 16:39:31,549 INFO Epoch[91/120] Iter[50/168] | Total Loss: 0.911 | Structure Loss: 0.911 | Edge Loss: 0.000 | Raw Edge Loss: 0.995 | Edge Loss Weight: 0.000
+2026-06-15 16:40:13,479 INFO Epoch[91/120] Iter[100/168] | Total Loss: 0.603 | Structure Loss: 0.603 | Edge Loss: 0.000 | Raw Edge Loss: 0.991 | Edge Loss Weight: 0.000
+2026-06-15 16:40:55,376 INFO Epoch[91/120] Iter[150/168] | Total Loss: 1.092 | Structure Loss: 1.092 | Edge Loss: 0.000 | Raw Edge Loss: 0.999 | Edge Loss Weight: 0.000
+2026-06-15 16:41:09,884 INFO @==Final== Epoch[91/120] Avg Training Loss: 0.784
+2026-06-15 16:41:12,661 INFO Epoch[92/120] Iter[0/168] | Total Loss: 0.668 | Structure Loss: 0.668 | Edge Loss: 0.000 | Raw Edge Loss: 0.998 | Edge Loss Weight: 0.000
+2026-06-15 16:41:55,602 INFO Epoch[92/120] Iter[50/168] | Total Loss: 0.757 | Structure Loss: 0.757 | Edge Loss: 0.000 | Raw Edge Loss: 0.995 | Edge Loss Weight: 0.000
+2026-06-15 16:42:40,178 INFO Epoch[92/120] Iter[100/168] | Total Loss: 0.610 | Structure Loss: 0.610 | Edge Loss: 0.000 | Raw Edge Loss: 0.999 | Edge Loss Weight: 0.000
+2026-06-15 16:43:24,043 INFO Epoch[92/120] Iter[150/168] | Total Loss: 0.936 | Structure Loss: 0.936 | Edge Loss: 0.000 | Raw Edge Loss: 0.996 | Edge Loss Weight: 0.000
+2026-06-15 16:43:37,343 INFO @==Final== Epoch[92/120] Avg Training Loss: 0.784
+2026-06-15 16:43:40,491 INFO Epoch[93/120] Iter[0/168] | Total Loss: 0.721 | Structure Loss: 0.721 | Edge Loss: 0.000 | Raw Edge Loss: 0.996 | Edge Loss Weight: 0.000
+2026-06-15 16:44:23,479 INFO Epoch[93/120] Iter[50/168] | Total Loss: 0.595 | Structure Loss: 0.595 | Edge Loss: 0.000 | Raw Edge Loss: 0.997 | Edge Loss Weight: 0.000
+2026-06-15 16:45:05,442 INFO Epoch[93/120] Iter[100/168] | Total Loss: 0.986 | Structure Loss: 0.986 | Edge Loss: 0.000 | Raw Edge Loss: 0.997 | Edge Loss Weight: 0.000
+2026-06-15 16:45:49,985 INFO Epoch[93/120] Iter[150/168] | Total Loss: 0.749 | Structure Loss: 0.749 | Edge Loss: 0.000 | Raw Edge Loss: 0.999 | Edge Loss Weight: 0.000
+2026-06-15 16:46:08,129 INFO @==Final== Epoch[93/120] Avg Training Loss: 0.750
+2026-06-15 16:46:10,878 INFO Epoch[94/120] Iter[0/168] | Total Loss: 0.736 | Structure Loss: 0.736 | Edge Loss: 0.000 | Raw Edge Loss: 0.998 | Edge Loss Weight: 0.000
+2026-06-15 16:46:52,901 INFO Epoch[94/120] Iter[50/168] | Total Loss: 0.390 | Structure Loss: 0.390 | Edge Loss: 0.000 | Raw Edge Loss: 0.998 | Edge Loss Weight: 0.000
+2026-06-15 16:47:34,846 INFO Epoch[94/120] Iter[100/168] | Total Loss: 0.832 | Structure Loss: 0.832 | Edge Loss: 0.000 | Raw Edge Loss: 0.997 | Edge Loss Weight: 0.000
+2026-06-15 16:48:23,345 INFO Epoch[94/120] Iter[150/168] | Total Loss: 0.658 | Structure Loss: 0.658 | Edge Loss: 0.000 | Raw Edge Loss: 0.996 | Edge Loss Weight: 0.000
+2026-06-15 16:48:36,556 INFO @==Final== Epoch[94/120] Avg Training Loss: 0.733
+2026-06-15 16:48:39,624 INFO Epoch[95/120] Iter[0/168] | Total Loss: 0.934 | Structure Loss: 0.934 | Edge Loss: 0.000 | Raw Edge Loss: 0.998 | Edge Loss Weight: 0.000
+2026-06-15 16:49:25,250 INFO Epoch[95/120] Iter[50/168] | Total Loss: 0.643 | Structure Loss: 0.643 | Edge Loss: 0.000 | Raw Edge Loss: 0.997 | Edge Loss Weight: 0.000
+2026-06-15 16:50:14,794 INFO Epoch[95/120] Iter[100/168] | Total Loss: 0.931 | Structure Loss: 0.931 | Edge Loss: 0.000 | Raw Edge Loss: 0.999 | Edge Loss Weight: 0.000
+2026-06-15 16:50:56,347 INFO Epoch[95/120] Iter[150/168] | Total Loss: 0.668 | Structure Loss: 0.668 | Edge Loss: 0.000 | Raw Edge Loss: 0.998 | Edge Loss Weight: 0.000
+2026-06-15 16:51:11,119 INFO @==Final== Epoch[95/120] Avg Training Loss: 0.749
+2026-06-15 16:51:13,965 INFO Epoch[96/120] Iter[0/168] | Total Loss: 1.349 | Structure Loss: 1.349 | Edge Loss: 0.000 | Raw Edge Loss: 0.994 | Edge Loss Weight: 0.000
+2026-06-15 16:51:56,209 INFO Epoch[96/120] Iter[50/168] | Total Loss: 0.899 | Structure Loss: 0.899 | Edge Loss: 0.000 | Raw Edge Loss: 0.997 | Edge Loss Weight: 0.000
+2026-06-15 16:52:41,325 INFO Epoch[96/120] Iter[100/168] | Total Loss: 0.734 | Structure Loss: 0.734 | Edge Loss: 0.000 | Raw Edge Loss: 0.999 | Edge Loss Weight: 0.000
+2026-06-15 16:53:28,794 INFO Epoch[96/120] Iter[150/168] | Total Loss: 0.930 | Structure Loss: 0.930 | Edge Loss: 0.000 | Raw Edge Loss: 0.998 | Edge Loss Weight: 0.000
+2026-06-15 16:53:43,671 INFO @==Final== Epoch[96/120] Avg Training Loss: 0.750
+2026-06-15 16:53:46,336 INFO Epoch[97/120] Iter[0/168] | Total Loss: 0.726 | Structure Loss: 0.726 | Edge Loss: 0.000 | Raw Edge Loss: 0.998 | Edge Loss Weight: 0.000
+2026-06-15 16:54:30,775 INFO Epoch[97/120] Iter[50/168] | Total Loss: 0.784 | Structure Loss: 0.784 | Edge Loss: 0.000 | Raw Edge Loss: 0.999 | Edge Loss Weight: 0.000
+2026-06-15 16:55:12,587 INFO Epoch[97/120] Iter[100/168] | Total Loss: 0.655 | Structure Loss: 0.655 | Edge Loss: 0.000 | Raw Edge Loss: 0.997 | Edge Loss Weight: 0.000
+2026-06-15 16:55:58,554 INFO Epoch[97/120] Iter[150/168] | Total Loss: 1.019 | Structure Loss: 1.019 | Edge Loss: 0.000 | Raw Edge Loss: 0.998 | Edge Loss Weight: 0.000
+2026-06-15 16:56:11,286 INFO @==Final== Epoch[97/120] Avg Training Loss: 0.749
+2026-06-15 16:56:14,076 INFO Epoch[98/120] Iter[0/168] | Total Loss: 0.680 | Structure Loss: 0.680 | Edge Loss: 0.000 | Raw Edge Loss: 0.997 | Edge Loss Weight: 0.000
+2026-06-15 16:56:56,132 INFO Epoch[98/120] Iter[50/168] | Total Loss: 0.701 | Structure Loss: 0.701 | Edge Loss: 0.000 | Raw Edge Loss: 0.992 | Edge Loss Weight: 0.000
+2026-06-15 16:57:38,388 INFO Epoch[98/120] Iter[100/168] | Total Loss: 0.713 | Structure Loss: 0.713 | Edge Loss: 0.000 | Raw Edge Loss: 0.999 | Edge Loss Weight: 0.000
+2026-06-15 16:58:19,509 INFO Epoch[98/120] Iter[150/168] | Total Loss: 0.903 | Structure Loss: 0.903 | Edge Loss: 0.000 | Raw Edge Loss: 0.997 | Edge Loss Weight: 0.000
+2026-06-15 16:58:41,816 INFO @==Final== Epoch[98/120] Avg Training Loss: 0.723
+2026-06-15 16:58:44,884 INFO Epoch[99/120] Iter[0/168] | Total Loss: 0.765 | Structure Loss: 0.765 | Edge Loss: 0.000 | Raw Edge Loss: 0.999 | Edge Loss Weight: 0.000
+2026-06-15 16:59:26,838 INFO Epoch[99/120] Iter[50/168] | Total Loss: 1.130 | Structure Loss: 1.130 | Edge Loss: 0.000 | Raw Edge Loss: 0.998 | Edge Loss Weight: 0.000
+2026-06-15 17:00:12,873 INFO Epoch[99/120] Iter[100/168] | Total Loss: 0.465 | Structure Loss: 0.465 | Edge Loss: 0.000 | Raw Edge Loss: 0.999 | Edge Loss Weight: 0.000
+2026-06-15 17:00:59,617 INFO Epoch[99/120] Iter[150/168] | Total Loss: 0.582 | Structure Loss: 0.582 | Edge Loss: 0.000 | Raw Edge Loss: 0.999 | Edge Loss Weight: 0.000
+2026-06-15 17:01:12,962 INFO @==Final== Epoch[99/120] Avg Training Loss: 0.733
+2026-06-15 17:01:15,880 INFO Epoch[100/120] Iter[0/168] | Total Loss: 0.790 | Structure Loss: 0.790 | Edge Loss: 0.000 | Raw Edge Loss: 0.998 | Edge Loss Weight: 0.000
+2026-06-15 17:01:57,153 INFO Epoch[100/120] Iter[50/168] | Total Loss: 1.123 | Structure Loss: 1.123 | Edge Loss: 0.000 | Raw Edge Loss: 0.998 | Edge Loss Weight: 0.000
+2026-06-15 17:02:41,528 INFO Epoch[100/120] Iter[100/168] | Total Loss: 0.624 | Structure Loss: 0.624 | Edge Loss: 0.000 | Raw Edge Loss: 0.995 | Edge Loss Weight: 0.000
+2026-06-15 17:03:32,672 INFO Epoch[100/120] Iter[150/168] | Total Loss: 0.734 | Structure Loss: 0.734 | Edge Loss: 0.000 | Raw Edge Loss: 0.998 | Edge Loss Weight: 0.000
+2026-06-15 17:03:45,583 INFO @==Final== Epoch[100/120] Avg Training Loss: 0.750
+2026-06-15 17:03:45,904 INFO Checkpoint saved to /dev/shm/escnet_ablation_no_edge_supervision/runs/light_b2_c64_no_edge_supervision_e120_s42_b6_w8_4gpu/epoch_100.pth
+2026-06-15 17:03:48,399 INFO Epoch[101/120] Iter[0/168] | Total Loss: 0.781 | Structure Loss: 0.781 | Edge Loss: 0.000 | Raw Edge Loss: 0.999 | Edge Loss Weight: 0.000
+2026-06-15 17:04:43,540 INFO Epoch[101/120] Iter[50/168] | Total Loss: 0.617 | Structure Loss: 0.617 | Edge Loss: 0.000 | Raw Edge Loss: 0.999 | Edge Loss Weight: 0.000
+2026-06-15 17:05:25,817 INFO Epoch[101/120] Iter[100/168] | Total Loss: 0.673 | Structure Loss: 0.673 | Edge Loss: 0.000 | Raw Edge Loss: 0.998 | Edge Loss Weight: 0.000
+2026-06-15 17:06:07,311 INFO Epoch[101/120] Iter[150/168] | Total Loss: 0.704 | Structure Loss: 0.704 | Edge Loss: 0.000 | Raw Edge Loss: 0.996 | Edge Loss Weight: 0.000
+2026-06-15 17:06:19,924 INFO @==Final== Epoch[101/120] Avg Training Loss: 0.723
+2026-06-15 17:06:22,748 INFO Epoch[102/120] Iter[0/168] | Total Loss: 0.701 | Structure Loss: 0.701 | Edge Loss: 0.000 | Raw Edge Loss: 0.999 | Edge Loss Weight: 0.000
+2026-06-15 17:07:10,116 INFO Epoch[102/120] Iter[50/168] | Total Loss: 0.680 | Structure Loss: 0.680 | Edge Loss: 0.000 | Raw Edge Loss: 0.999 | Edge Loss Weight: 0.000
+2026-06-15 17:07:52,517 INFO Epoch[102/120] Iter[100/168] | Total Loss: 0.630 | Structure Loss: 0.630 | Edge Loss: 0.000 | Raw Edge Loss: 0.996 | Edge Loss Weight: 0.000
+2026-06-15 17:08:34,471 INFO Epoch[102/120] Iter[150/168] | Total Loss: 1.166 | Structure Loss: 1.166 | Edge Loss: 0.000 | Raw Edge Loss: 0.975 | Edge Loss Weight: 0.000
+2026-06-15 17:08:48,554 INFO @==Final== Epoch[102/120] Avg Training Loss: 0.745
+2026-06-15 17:08:51,593 INFO Epoch[103/120] Iter[0/168] | Total Loss: 0.718 | Structure Loss: 0.718 | Edge Loss: 0.000 | Raw Edge Loss: 0.997 | Edge Loss Weight: 0.000
+2026-06-15 17:09:33,779 INFO Epoch[103/120] Iter[50/168] | Total Loss: 0.553 | Structure Loss: 0.553 | Edge Loss: 0.000 | Raw Edge Loss: 0.997 | Edge Loss Weight: 0.000
+2026-06-15 17:10:29,315 INFO Epoch[103/120] Iter[100/168] | Total Loss: 0.615 | Structure Loss: 0.615 | Edge Loss: 0.000 | Raw Edge Loss: 0.998 | Edge Loss Weight: 0.000
+2026-06-15 17:11:12,491 INFO Epoch[103/120] Iter[150/168] | Total Loss: 0.949 | Structure Loss: 0.949 | Edge Loss: 0.000 | Raw Edge Loss: 0.997 | Edge Loss Weight: 0.000
+2026-06-15 17:11:29,192 INFO @==Final== Epoch[103/120] Avg Training Loss: 0.732
+2026-06-15 17:11:32,082 INFO Epoch[104/120] Iter[0/168] | Total Loss: 0.713 | Structure Loss: 0.713 | Edge Loss: 0.000 | Raw Edge Loss: 0.998 | Edge Loss Weight: 0.000
+2026-06-15 17:12:15,648 INFO Epoch[104/120] Iter[50/168] | Total Loss: 0.840 | Structure Loss: 0.840 | Edge Loss: 0.000 | Raw Edge Loss: 0.998 | Edge Loss Weight: 0.000
+2026-06-15 17:13:01,966 INFO Epoch[104/120] Iter[100/168] | Total Loss: 0.792 | Structure Loss: 0.792 | Edge Loss: 0.000 | Raw Edge Loss: 0.996 | Edge Loss Weight: 0.000
+2026-06-15 17:13:45,718 INFO Epoch[104/120] Iter[150/168] | Total Loss: 0.941 | Structure Loss: 0.941 | Edge Loss: 0.000 | Raw Edge Loss: 0.997 | Edge Loss Weight: 0.000
+2026-06-15 17:14:03,485 INFO @==Final== Epoch[104/120] Avg Training Loss: 0.732
+2026-06-15 17:14:06,615 INFO Epoch[105/120] Iter[0/168] | Total Loss: 0.810 | Structure Loss: 0.810 | Edge Loss: 0.000 | Raw Edge Loss: 0.996 | Edge Loss Weight: 0.000
+2026-06-15 17:14:50,544 INFO Epoch[105/120] Iter[50/168] | Total Loss: 0.806 | Structure Loss: 0.806 | Edge Loss: 0.000 | Raw Edge Loss: 0.996 | Edge Loss Weight: 0.000
+2026-06-15 17:15:36,634 INFO Epoch[105/120] Iter[100/168] | Total Loss: 0.575 | Structure Loss: 0.575 | Edge Loss: 0.000 | Raw Edge Loss: 0.998 | Edge Loss Weight: 0.000
+2026-06-15 17:16:22,647 INFO Epoch[105/120] Iter[150/168] | Total Loss: 0.751 | Structure Loss: 0.751 | Edge Loss: 0.000 | Raw Edge Loss: 0.995 | Edge Loss Weight: 0.000
+2026-06-15 17:16:38,364 INFO @==Final== Epoch[105/120] Avg Training Loss: 0.739
+2026-06-15 17:16:41,142 INFO Epoch[106/120] Iter[0/168] | Total Loss: 0.854 | Structure Loss: 0.854 | Edge Loss: 0.000 | Raw Edge Loss: 0.998 | Edge Loss Weight: 0.000
+2026-06-15 17:17:23,371 INFO Epoch[106/120] Iter[50/168] | Total Loss: 0.499 | Structure Loss: 0.499 | Edge Loss: 0.000 | Raw Edge Loss: 0.998 | Edge Loss Weight: 0.000
+2026-06-15 17:18:09,373 INFO Epoch[106/120] Iter[100/168] | Total Loss: 0.450 | Structure Loss: 0.450 | Edge Loss: 0.000 | Raw Edge Loss: 0.998 | Edge Loss Weight: 0.000
+2026-06-15 17:18:52,627 INFO Epoch[106/120] Iter[150/168] | Total Loss: 0.625 | Structure Loss: 0.625 | Edge Loss: 0.000 | Raw Edge Loss: 0.996 | Edge Loss Weight: 0.000
+2026-06-15 17:19:06,589 INFO @==Final== Epoch[106/120] Avg Training Loss: 0.742
+2026-06-15 17:19:09,579 INFO Epoch[107/120] Iter[0/168] | Total Loss: 0.700 | Structure Loss: 0.700 | Edge Loss: 0.000 | Raw Edge Loss: 0.997 | Edge Loss Weight: 0.000
+2026-06-15 17:19:52,134 INFO Epoch[107/120] Iter[50/168] | Total Loss: 0.518 | Structure Loss: 0.518 | Edge Loss: 0.000 | Raw Edge Loss: 0.998 | Edge Loss Weight: 0.000
+2026-06-15 17:20:39,374 INFO Epoch[107/120] Iter[100/168] | Total Loss: 1.023 | Structure Loss: 1.023 | Edge Loss: 0.000 | Raw Edge Loss: 0.997 | Edge Loss Weight: 0.000
+2026-06-15 17:21:22,752 INFO Epoch[107/120] Iter[150/168] | Total Loss: 0.761 | Structure Loss: 0.761 | Edge Loss: 0.000 | Raw Edge Loss: 0.997 | Edge Loss Weight: 0.000
+2026-06-15 17:21:37,785 INFO @==Final== Epoch[107/120] Avg Training Loss: 0.728
+2026-06-15 17:21:40,844 INFO Epoch[108/120] Iter[0/168] | Total Loss: 0.981 | Structure Loss: 0.981 | Edge Loss: 0.000 | Raw Edge Loss: 0.998 | Edge Loss Weight: 0.000
+2026-06-15 17:22:23,387 INFO Epoch[108/120] Iter[50/168] | Total Loss: 0.836 | Structure Loss: 0.836 | Edge Loss: 0.000 | Raw Edge Loss: 0.999 | Edge Loss Weight: 0.000
+2026-06-15 17:23:08,618 INFO Epoch[108/120] Iter[100/168] | Total Loss: 0.868 | Structure Loss: 0.868 | Edge Loss: 0.000 | Raw Edge Loss: 0.998 | Edge Loss Weight: 0.000
+2026-06-15 17:23:51,288 INFO Epoch[108/120] Iter[150/168] | Total Loss: 0.783 | Structure Loss: 0.783 | Edge Loss: 0.000 | Raw Edge Loss: 0.998 | Edge Loss Weight: 0.000
+2026-06-15 17:24:10,533 INFO @==Final== Epoch[108/120] Avg Training Loss: 0.731
+2026-06-15 17:24:13,705 INFO Epoch[109/120] Iter[0/168] | Total Loss: 1.105 | Structure Loss: 1.105 | Edge Loss: 0.000 | Raw Edge Loss: 0.997 | Edge Loss Weight: 0.000
+2026-06-15 17:25:00,167 INFO Epoch[109/120] Iter[50/168] | Total Loss: 0.748 | Structure Loss: 0.748 | Edge Loss: 0.000 | Raw Edge Loss: 0.994 | Edge Loss Weight: 0.000
+2026-06-15 17:25:45,321 INFO Epoch[109/120] Iter[100/168] | Total Loss: 0.682 | Structure Loss: 0.682 | Edge Loss: 0.000 | Raw Edge Loss: 0.996 | Edge Loss Weight: 0.000
+2026-06-15 17:26:27,585 INFO Epoch[109/120] Iter[150/168] | Total Loss: 0.627 | Structure Loss: 0.627 | Edge Loss: 0.000 | Raw Edge Loss: 0.998 | Edge Loss Weight: 0.000
+2026-06-15 17:26:40,832 INFO @==Final== Epoch[109/120] Avg Training Loss: 0.739
+2026-06-15 17:26:43,873 INFO Epoch[110/120] Iter[0/168] | Total Loss: 0.694 | Structure Loss: 0.694 | Edge Loss: 0.000 | Raw Edge Loss: 0.996 | Edge Loss Weight: 0.000
+2026-06-15 17:27:31,202 INFO Epoch[110/120] Iter[50/168] | Total Loss: 0.794 | Structure Loss: 0.794 | Edge Loss: 0.000 | Raw Edge Loss: 0.996 | Edge Loss Weight: 0.000
+2026-06-15 17:28:14,309 INFO Epoch[110/120] Iter[100/168] | Total Loss: 0.646 | Structure Loss: 0.646 | Edge Loss: 0.000 | Raw Edge Loss: 0.999 | Edge Loss Weight: 0.000
+2026-06-15 17:28:59,889 INFO Epoch[110/120] Iter[150/168] | Total Loss: 0.607 | Structure Loss: 0.607 | Edge Loss: 0.000 | Raw Edge Loss: 0.998 | Edge Loss Weight: 0.000
+2026-06-15 17:29:14,635 INFO @==Final== Epoch[110/120] Avg Training Loss: 0.732
+2026-06-15 17:29:17,682 INFO Epoch[111/120] Iter[0/168] | Total Loss: 0.915 | Structure Loss: 0.915 | Edge Loss: 0.000 | Raw Edge Loss: 0.997 | Edge Loss Weight: 0.000
+2026-06-15 17:30:04,747 INFO Epoch[111/120] Iter[50/168] | Total Loss: 0.737 | Structure Loss: 0.737 | Edge Loss: 0.000 | Raw Edge Loss: 0.994 | Edge Loss Weight: 0.000
+2026-06-15 17:30:48,106 INFO Epoch[111/120] Iter[100/168] | Total Loss: 0.705 | Structure Loss: 0.705 | Edge Loss: 0.000 | Raw Edge Loss: 0.999 | Edge Loss Weight: 0.000
+2026-06-15 17:31:36,726 INFO Epoch[111/120] Iter[150/168] | Total Loss: 0.429 | Structure Loss: 0.429 | Edge Loss: 0.000 | Raw Edge Loss: 0.998 | Edge Loss Weight: 0.000
+2026-06-15 17:31:50,539 INFO @==Final== Epoch[111/120] Avg Training Loss: 0.717
+2026-06-15 17:31:53,439 INFO Epoch[112/120] Iter[0/168] | Total Loss: 0.634 | Structure Loss: 0.634 | Edge Loss: 0.000 | Raw Edge Loss: 0.998 | Edge Loss Weight: 0.000
+2026-06-15 17:32:39,079 INFO Epoch[112/120] Iter[50/168] | Total Loss: 0.697 | Structure Loss: 0.697 | Edge Loss: 0.000 | Raw Edge Loss: 0.998 | Edge Loss Weight: 0.000
+2026-06-15 17:33:23,329 INFO Epoch[112/120] Iter[100/168] | Total Loss: 0.642 | Structure Loss: 0.642 | Edge Loss: 0.000 | Raw Edge Loss: 0.994 | Edge Loss Weight: 0.000
+2026-06-15 17:34:08,379 INFO Epoch[112/120] Iter[150/168] | Total Loss: 0.557 | Structure Loss: 0.557 | Edge Loss: 0.000 | Raw Edge Loss: 0.999 | Edge Loss Weight: 0.000
+2026-06-15 17:34:27,453 INFO @==Final== Epoch[112/120] Avg Training Loss: 0.744
+2026-06-15 17:34:30,301 INFO Epoch[113/120] Iter[0/168] | Total Loss: 0.829 | Structure Loss: 0.829 | Edge Loss: 0.000 | Raw Edge Loss: 0.998 | Edge Loss Weight: 0.000
+2026-06-15 17:35:13,237 INFO Epoch[113/120] Iter[50/168] | Total Loss: 0.572 | Structure Loss: 0.572 | Edge Loss: 0.000 | Raw Edge Loss: 0.999 | Edge Loss Weight: 0.000
+2026-06-15 17:35:57,612 INFO Epoch[113/120] Iter[100/168] | Total Loss: 0.610 | Structure Loss: 0.610 | Edge Loss: 0.000 | Raw Edge Loss: 0.998 | Edge Loss Weight: 0.000
+2026-06-15 17:36:38,581 INFO Epoch[113/120] Iter[150/168] | Total Loss: 0.780 | Structure Loss: 0.780 | Edge Loss: 0.000 | Raw Edge Loss: 0.999 | Edge Loss Weight: 0.000
+2026-06-15 17:36:53,963 INFO @==Final== Epoch[113/120] Avg Training Loss: 0.725
+2026-06-15 17:36:56,754 INFO Epoch[114/120] Iter[0/168] | Total Loss: 0.775 | Structure Loss: 0.775 | Edge Loss: 0.000 | Raw Edge Loss: 0.999 | Edge Loss Weight: 0.000
+2026-06-15 17:37:43,240 INFO Epoch[114/120] Iter[50/168] | Total Loss: 0.798 | Structure Loss: 0.798 | Edge Loss: 0.000 | Raw Edge Loss: 0.997 | Edge Loss Weight: 0.000
+2026-06-15 17:38:30,597 INFO Epoch[114/120] Iter[100/168] | Total Loss: 0.561 | Structure Loss: 0.561 | Edge Loss: 0.000 | Raw Edge Loss: 0.996 | Edge Loss Weight: 0.000
+2026-06-15 17:39:17,463 INFO Epoch[114/120] Iter[150/168] | Total Loss: 0.805 | Structure Loss: 0.805 | Edge Loss: 0.000 | Raw Edge Loss: 0.997 | Edge Loss Weight: 0.000
+2026-06-15 17:39:33,754 INFO @==Final== Epoch[114/120] Avg Training Loss: 0.721
+2026-06-15 17:39:36,769 INFO Epoch[115/120] Iter[0/168] | Total Loss: 0.634 | Structure Loss: 0.634 | Edge Loss: 0.000 | Raw Edge Loss: 0.999 | Edge Loss Weight: 0.000
+2026-06-15 17:40:21,896 INFO Epoch[115/120] Iter[50/168] | Total Loss: 0.830 | Structure Loss: 0.830 | Edge Loss: 0.000 | Raw Edge Loss: 0.996 | Edge Loss Weight: 0.000
+2026-06-15 17:41:07,312 INFO Epoch[115/120] Iter[100/168] | Total Loss: 0.830 | Structure Loss: 0.830 | Edge Loss: 0.000 | Raw Edge Loss: 0.999 | Edge Loss Weight: 0.000
+2026-06-15 17:41:49,465 INFO Epoch[115/120] Iter[150/168] | Total Loss: 0.823 | Structure Loss: 0.823 | Edge Loss: 0.000 | Raw Edge Loss: 0.997 | Edge Loss Weight: 0.000
+2026-06-15 17:42:05,614 INFO @==Final== Epoch[115/120] Avg Training Loss: 0.726
+2026-06-15 17:42:08,419 INFO Epoch[116/120] Iter[0/168] | Total Loss: 0.563 | Structure Loss: 0.563 | Edge Loss: 0.000 | Raw Edge Loss: 0.999 | Edge Loss Weight: 0.000
+2026-06-15 17:42:50,684 INFO Epoch[116/120] Iter[50/168] | Total Loss: 0.958 | Structure Loss: 0.958 | Edge Loss: 0.000 | Raw Edge Loss: 0.998 | Edge Loss Weight: 0.000
+2026-06-15 17:43:32,618 INFO Epoch[116/120] Iter[100/168] | Total Loss: 0.615 | Structure Loss: 0.615 | Edge Loss: 0.000 | Raw Edge Loss: 0.999 | Edge Loss Weight: 0.000
+2026-06-15 17:44:18,328 INFO Epoch[116/120] Iter[150/168] | Total Loss: 0.999 | Structure Loss: 0.999 | Edge Loss: 0.000 | Raw Edge Loss: 0.997 | Edge Loss Weight: 0.000
+2026-06-15 17:44:33,204 INFO @==Final== Epoch[116/120] Avg Training Loss: 0.729
+2026-06-15 17:44:36,059 INFO Epoch[117/120] Iter[0/168] | Total Loss: 0.655 | Structure Loss: 0.655 | Edge Loss: 0.000 | Raw Edge Loss: 0.999 | Edge Loss Weight: 0.000
+2026-06-15 17:45:22,986 INFO Epoch[117/120] Iter[50/168] | Total Loss: 0.724 | Structure Loss: 0.724 | Edge Loss: 0.000 | Raw Edge Loss: 0.996 | Edge Loss Weight: 0.000
+2026-06-15 17:46:05,733 INFO Epoch[117/120] Iter[100/168] | Total Loss: 0.630 | Structure Loss: 0.630 | Edge Loss: 0.000 | Raw Edge Loss: 0.999 | Edge Loss Weight: 0.000
+2026-06-15 17:46:47,487 INFO Epoch[117/120] Iter[150/168] | Total Loss: 0.855 | Structure Loss: 0.855 | Edge Loss: 0.000 | Raw Edge Loss: 0.999 | Edge Loss Weight: 0.000
+2026-06-15 17:47:05,364 INFO @==Final== Epoch[117/120] Avg Training Loss: 0.741
+2026-06-15 17:47:08,368 INFO Epoch[118/120] Iter[0/168] | Total Loss: 0.779 | Structure Loss: 0.779 | Edge Loss: 0.000 | Raw Edge Loss: 0.996 | Edge Loss Weight: 0.000

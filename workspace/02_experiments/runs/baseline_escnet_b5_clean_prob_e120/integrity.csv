@@ -1,0 +1,4 @@
+dataset,gt_count,pred_count,unique_min,result_txt
+CAMO,250,250,239,/root/data-tmp/workspace/02_experiments/runs/baseline_escnet_b5_clean_prob_e120/results/CAMO/result.txt
+COD10K,2026,2026,256,/root/data-tmp/workspace/02_experiments/runs/baseline_escnet_b5_clean_prob_e120/results/COD10K/result.txt
+NC4K,4121,4121,195,/root/data-tmp/workspace/02_experiments/runs/baseline_escnet_b5_clean_prob_e120/results/NC4K/result.txt

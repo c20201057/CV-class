@@ -1,0 +1,91 @@
+# Task Board Consistency Audit
+
+- Status: `pass`
+- Task board: `/root/data-tmp/workspace/03_agent_tasks/task_board.md`
+- Findings: 0
+
+## Findings
+
+- none
+
+## Notes
+
+- path ok: `00_project/orchestrator_tick_latest.md`
+- path ok: `03_agent_tasks/acceptance/agent_acceptance_ledger.md`
+- path ok: `00_project/orchestrator_tick_latest.md`
+- path ok: `00_project/current_run_snapshot.md`
+- path ok: `00_project/master_plan.md`
+- path ok: `03_agent_tasks/prompts/MASTER_TARGET_PROMPT.md`
+- path ok: `03_agent_tasks/prompts/DISPATCH_PACKETS.md`
+- path ok: `00_project/project_profile.md`
+- path ok: `05_reviews/subagent_reviews.md`
+- path ok: `00_project/route_decision.md`
+- path ok: `04_paper/drafts/paper_draft.md`
+- path ok: `00_project/goal_completion_matrix.md`
+- path ok: `00_project/orchestrator_tick_latest.md`
+- path ok: `02_experiments/code/light_escnet_b2_c64_no_edge_supervision`
+- path ok: `02_experiments/runs/light_b2_c64_no_edge_supervision_e120_s42/config_no_edge_supervision_b6_w8_4gpu.yaml`
+- path ok: `/dev/shm/escnet_ablation_no_edge_supervision/logs/train_no_edge_supervision_b6_w8_4gpu_20260615T044543Z.log`
+- path ok: `/dev/shm/escnet_ablation_no_edge_supervision/runs/light_b2_c64_no_edge_supervision_e120_s42_b6_w8_4gpu`
+- path ok: `02_experiments/runs/light_b2_c64_no_edge_supervision_e120_s42/light_b2_c64_no_edge_supervision_e120_s42_b6_w8_4gpu`
+- path ok: `/root/data-tmp/ESCNet/checkpoints/pvt_v2_b0`
+- path ok: `/root/data-tmp/ESCNet/checkpoints/mobilemamba_t2`
+- path ok: `04_paper/drafts/finalization_gates.md`
+- path ok: `04_paper/drafts/claim_evidence_audit.md`
+- path ok: `04_paper/drafts/paper_final_patch_plan.md`
+- path ok: `02_experiments/scripts/GPU_QUEUE.md`
+- path ok: `02_experiments/scripts/start_kd_full_train.sh`
+- path ok: `02_experiments/scripts/watch_gpu_then_start_baseline_clean.sh`
+- path ok: `04_paper/drafts/submission_protocol_checklist.md`
+- path ok: `03_agent_tasks/acceptance/gate_result_acceptance_runbook.md`
+- path ok: `03_agent_tasks/acceptance/agent_acceptance_ledger.md`
+- path ok: `02_experiments/scripts/audit_paper_evidence.py`
+- path ok: `04_paper/scripts/audit_claim_text.py`
+- path ok: `02_experiments/scripts/run_release_audits.sh`
+- path ok: `02_experiments/scripts/RELEASE_AUDIT_REGISTRY.md`
+- path ok: `02_experiments/scripts/audit_release_audit_registry.py`
+- path ok: `02_experiments/scripts/summarize_external_b0.py`
+- path ok: `02_experiments/scripts/watch_external_b0_progress.sh`
+- path ok: `02_experiments/scripts/snapshot_external_b0_dirty_tree.sh`
+- path ok: `02_experiments/code/external_b0_dirty_snapshot_20260613T200614Z_epoch70_metrics_observation`
+- path ok: `02_experiments/scripts/watch_baseline_then_start_kd.sh`
+- path ok: `prompts/audit_prompt_principles.py`
+- path ok: `03_agent_tasks/audit_task_board_consistency.py`
+- path ok: `02_experiments/scripts/orchestrator_tick.py`
+- path ok: `00_project/orchestrator_tick_latest.md`
+- path ok: `00_project/orchestrator_tick_latest.json`
+- path ok: `02_experiments/scripts/summarize_kd_recovery.py`
+- path ok: `02_experiments/scripts/audit_gpu_handoff_consistency.py`
+- path ok: `02_experiments/scripts/audit_gpu_runtime_state.py`
+- path ok: `02_experiments/scripts/audit_route_decision_consistency.py`
+- path ok: `00_project/goal_completion_matrix.md`
+- path ok: `04_paper/drafts/paper_delivery_manifest.md`
+- path ok: `04_paper/scripts/audit_paper_delivery_manifest.py`
+- path ok: `04_paper/drafts/paper_delivery_manifest_audit_latest.md`
+- path ok: `02_experiments/runs/baseline_escnet_b5_clean_prob_e120`
+- path ok: `02_experiments/scripts/summarize_kd_recovery.py`
+- path ok: `02_experiments/runs/kd_recovery_status_latest.md`
+- path ok: `02_experiments/scripts/summarize_external_mobilemamba.py`
+- path ok: `02_experiments/scripts/watch_external_mobilemamba_progress.sh`
+- path ok: `02_experiments/scripts/sync_mobilemamba_observation_state.py`
+- path ok: `02_experiments/runs/mobilemamba_observation_sync_latest.md`
+- path ok: `04_paper/drafts/teacher_share_pack.md`
+- path ok: `04_paper/drafts/presentation_outline.md`
+- path ok: `05_reviews/paper_gate_patch_matrix_review_feynman.md`
+- path ok: `05_reviews/light_b2_c64_narrative_bridge_review_feynman.md`
+- path ok: `03_agent_tasks/prompts/DISPATCH_PACKETS.md#p0-gpu-queue-operator-and-gate-validator`
+- path ok: `03_agent_tasks/pending/P0_gpu_queue_operator.md`
+- path ok: `03_agent_tasks/pending/P0_gate1_kd_handoff_card.md`
+- path ok: `03_agent_tasks/acceptance/gate_result_acceptance_runbook.md`
+- path ok: `02_experiments/runs/`
+- path ok: `03_agent_tasks/prompts/distillation_prompt.md`
+- path ok: `03_agent_tasks/pending/P1_distill_light_b2_c64.md`
+- planned path skipped: `02_experiments/runs/kd_light_b2_c64_e120_s42_recover_b2w0_4gpu_prob_eval`
+- path ok: `03_agent_tasks/prompts/engineer_profile_prompt.md`
+- path ok: `02_experiments/runs/`
+- path ok: `03_agent_tasks/prompts/visualization_prompt.md`
+- path ok: `03_agent_tasks/pending/P1_visual_grid.md`
+- path ok: `02_experiments/figures`
+- path ok: `pending/P1_ablation_configs.md`
+- path ok: `prompts/MASTER_TARGET_PROMPT.md`
+- path ok: `03_agent_tasks/reports/`

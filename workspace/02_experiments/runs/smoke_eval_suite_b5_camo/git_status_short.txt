@@ -1,0 +1,18 @@
+ M config.py
+ M config.yaml
+ M eval.py
+ M run.sh
+?? __pycache__/
+?? checkpoints/
+?? config.camo.yaml
+?? config.nc4k.yaml
+?? logs/
+?? models/__pycache__/
+?? models/backbones/__pycache__/
+?? models/modules/__pycache__/
+?? preds_epoch120_camo/
+?? preds_epoch120_cod10k/
+?? preds_epoch120_nc4k/
+?? requirements.autodl-cu121.txt
+?? results_epoch120/
+?? results_smoke/

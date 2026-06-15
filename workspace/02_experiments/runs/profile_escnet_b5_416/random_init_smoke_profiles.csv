@@ -1,0 +1,2 @@
+exp_id,model,backbone,inter_channel,params,trainable_params,model_size_mb,flops_g,gmacs,flops_gmacs,flops_status,latency_ms,fps,peak_mem_mb,device,img_size,warmup,repeat,checkpoint_status,source,profile_json
+smoke_random_init_cpu,ESCNet,pvt_v2_b5,128,99903234,99903234,381.169,258.043600386,129.021800193,129.021800193,estimated,2286.1978,0.4374,,cpu,416,0,1,random_init,profile_model.py,/root/data-tmp/workspace/02_experiments/runs/profile_escnet_b5_416/random_init_smoke_cpu.json

@@ -1,0 +1,2 @@
+exp_id,dataset,method,Smeasure,wFmeasure,meanFm,meanEm,MAE,source
+smoke_eval_suite_b5_camo,CAMO,epoch_120,0.811,0.761,0.800,0.873,0.067,/root/data-tmp/workspace/02_experiments/runs/smoke_eval_suite_b5_camo/results/CAMO/result.txt

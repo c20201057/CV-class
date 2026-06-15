@@ -1,0 +1,82 @@
+launch_time_utc=20260614T162810Z
+repo=/root/data-tmp/workspace/02_experiments/code/light_escnet_b2_c64_no_edge_guidance
+run_dir=/root/data-tmp/workspace/02_experiments/runs/light_b2_c64_no_edge_guidance_e120_s42
+config=/root/data-tmp/workspace/02_experiments/runs/light_b2_c64_no_edge_guidance_e120_s42/config_no_edge_guidance_b6_w8_4gpu.yaml
+log=/dev/shm/escnet_ablation_no_edge/logs/train_no_edge_guidance_b6_w8_4gpu_20260614T162810Z.log
+nfs_log_after_sync=/root/data-tmp/workspace/02_experiments/runs/light_b2_c64_no_edge_guidance_e120_s42/logs/train_no_edge_guidance_b6_w8_4gpu_20260614T162810Z.log
+tmpdir=/dev/shm/escnet_ablation_no_edge/tmp
+local_scratch=/dev/shm/escnet_ablation_no_edge
+local_save_model_dir=/dev/shm/escnet_ablation_no_edge/runs
+local_train_dir=/dev/shm/escnet_fast_kd/data/Train
+save_step=20
+batch_size=6
+num_workers=8
+disable_decoder_edge_guidance=true
+python=/root/miniconda3/envs/escnet/bin/python
+torchrun=/root/miniconda3/envs/escnet/bin/torchrun
+launch_mode=ddp
+nproc_per_node=4
+master_port=29509
+config_name=light_b2_c64_no_edge_guidance_e120_s42_b6_w8_4gpu
+config_device_ids=0,1,2,3
+sync_command=/root/data-tmp/workspace/02_experiments/scripts/sync_no_edge_guidance_fast_shm_run.sh
+
+Filesystem                                                                       Type     Size  Used Avail Use% Mounted on
+shm                                                                              tmpfs    124G  3.8G  121G   4% /dev/shm
+192.168.33.41:/nfs/users/privatecloud/data/container-295a49aaa9-630fea26-storage nfs4     8.8T  7.6T  1.2T  87% /root/data-tmp
+overlay                                                                          overlay  879G  830G  3.9G 100% /
+
+16K	/dev/shm/escnet_ablation_no_edge
+1.1G	/dev/shm/escnet_fast_kd/data/Train
+886M	/dev/shm/escnet_fast_kd/weights
+
+index, name, memory.used [MiB], utilization.gpu [%]
+0, Tesla V100-SXM2-16GB, 0 MiB, 0 %
+1, Tesla V100-SXM2-16GB, 0 MiB, 0 %
+2, Tesla V100-SXM2-16GB, 0 MiB, 0 %
+3, Tesla V100-SXM2-16GB, 0 MiB, 0 %
+
+batch_size: 6
+batch_size_valid: 8
+epochs: 120
+lr: 7.5e-05
+weight_decay: 0.00015
+rand_seed: 42
+precisionHigh: true
+train_dir: /dev/shm/escnet_fast_kd/data/Train
+test_dir: /root/data-tmp/COD/Test/COD10K
+load_all: false
+backbone: pvt_v2_b2
+img_size: 416
+lateral_channels:
+- 512
+- 320
+- 128
+- 64
+inter_channel: 64
+bb_pretrained: true
+resume: ''
+compile: false
+device_ids:
+- 0
+- 1
+- 2
+- 3
+multi_GPU: true
+save_model_dir: /dev/shm/escnet_ablation_no_edge/runs
+name: light_b2_c64_no_edge_guidance_e120_s42_b6_w8_4gpu
+save_last: 120
+save_step: 20
+preproc_methods:
+- flip
+- rotate
+- pepper
+- crop
+weights:
+  pvt_v2_b2: /dev/shm/escnet_fast_kd/weights/pvt_v2_b2.pth
+  pvt_v2_b4: null
+  pvt_v2_b5: /dev/shm/escnet_fast_kd/weights/pvt_v2_b5_22k.pth
+num_workers: 8
+persistent_workers: true
+prefetch_factor: 4
+disable_decoder_edge_guidance: true

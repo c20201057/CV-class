@@ -1,0 +1,188 @@
+2026-06-14 14:38:56,106 INFO Trainer initialized on rank 0 with device 0.
+2026-06-14 14:38:56,107 INFO Full config:
+{
+  "batch_size": 2,
+  "batch_size_valid": 8,
+  "epochs": 120,
+  "lr": 9.375e-6,
+  "weight_decay": 0.00015,
+  "rand_seed": 42,
+  "precisionHigh": true,
+  "train_dir": "/root/data-tmp/COD/Train",
+  "test_dir": "/root/data-tmp/COD/Test/COD10K",
+  "load_all": false,
+  "backbone": "pvt_v2_b2",
+  "img_size": 416,
+  "lateral_channels": [
+    512,
+    320,
+    128,
+    64
+  ],
+  "inter_channel": 64,
+  "bb_pretrained": true,
+  "resume": "/root/data-tmp/workspace/02_experiments/runs/kd_light_b2_c64_e120_s42/epoch_5.pth",
+  "compile": false,
+  "device_ids": [
+    0
+  ],
+  "multi_GPU": false,
+  "save_model_dir": "/root/data-tmp/workspace/02_experiments/runs",
+  "name": "kd_light_b2_c64_e120_s42_recover_b2w0_1gpu",
+  "save_last": 120,
+  "save_step": 1,
+  "preproc_methods": [
+    "flip",
+    "rotate",
+    "pepper",
+    "crop"
+  ],
+  "weights": {
+    "pvt_v2_b2": "/root/data-tmp/weights/pvt_v2_b2.pth",
+    "pvt_v2_b4": null,
+    "pvt_v2_b5": "/root/data-tmp/weights/pvt_v2_b5_22k.pth"
+  },
+  "kd_enabled": true,
+  "kd_mode": "online",
+  "kd_teacher_config": "/root/data-tmp/workspace/02_experiments/code/kd_light_escnet_b2_c64/configs/teacher_b5.yaml",
+  "kd_teacher_ckpt": "/root/data-tmp/epoch_120.pth",
+  "kd_loss": "mse",
+  "kd_weight": 0.5,
+  "kd_temperature": 2.0,
+  "kd_warmup_epochs": 5,
+  "kd_cache_dir": null,
+  "num_workers": 0
+}
+2026-06-14 14:38:56,890 INFO 2020 batches of train dataloader created.
+2026-06-14 14:38:58,264 INFO Model, optimizer, and scheduler have been initialized.
+2026-06-14 14:38:58,550 INFO Resumed training from /root/data-tmp/workspace/02_experiments/runs/kd_light_b2_c64_e120_s42/epoch_5.pth; loaded_epoch=5, start_epoch=6.
+2026-06-14 14:39:02,870 INFO Online KD teacher loaded from /root/data-tmp/epoch_120.pth
+2026-06-14 14:39:02,871 INFO Starting training process...
+2026-06-14 14:39:03,974 INFO Epoch[6/120] Iter[0/2020] | Total Loss: 3.425 | Structure Loss: 2.544 | Edge Loss: 0.843 | KD Loss: 0.075 | KD Weight: 0.500
+2026-06-14 14:39:20,421 INFO Epoch[6/120] Iter[50/2020] | Total Loss: 2.567 | Structure Loss: 1.712 | Edge Loss: 0.838 | KD Loss: 0.034 | KD Weight: 0.500
+2026-06-14 14:39:37,027 INFO Epoch[6/120] Iter[100/2020] | Total Loss: 3.050 | Structure Loss: 2.167 | Edge Loss: 0.855 | KD Loss: 0.057 | KD Weight: 0.500
+2026-06-14 14:39:53,121 INFO Epoch[6/120] Iter[150/2020] | Total Loss: 2.073 | Structure Loss: 1.205 | Edge Loss: 0.855 | KD Loss: 0.025 | KD Weight: 0.500
+2026-06-14 14:40:10,936 INFO Epoch[6/120] Iter[200/2020] | Total Loss: 2.572 | Structure Loss: 1.711 | Edge Loss: 0.847 | KD Loss: 0.027 | KD Weight: 0.500
+2026-06-14 14:40:27,536 INFO Epoch[6/120] Iter[250/2020] | Total Loss: 2.275 | Structure Loss: 1.435 | Edge Loss: 0.824 | KD Loss: 0.031 | KD Weight: 0.500
+2026-06-14 14:40:43,837 INFO Epoch[6/120] Iter[300/2020] | Total Loss: 2.950 | Structure Loss: 2.075 | Edge Loss: 0.852 | KD Loss: 0.046 | KD Weight: 0.500
+2026-06-14 14:41:00,328 INFO Epoch[6/120] Iter[350/2020] | Total Loss: 2.192 | Structure Loss: 1.353 | Edge Loss: 0.826 | KD Loss: 0.025 | KD Weight: 0.500
+2026-06-14 14:41:16,995 INFO Epoch[6/120] Iter[400/2020] | Total Loss: 2.920 | Structure Loss: 2.035 | Edge Loss: 0.866 | KD Loss: 0.037 | KD Weight: 0.500
+2026-06-14 14:41:33,507 INFO Epoch[6/120] Iter[450/2020] | Total Loss: 2.724 | Structure Loss: 1.905 | Edge Loss: 0.800 | KD Loss: 0.038 | KD Weight: 0.500
+2026-06-14 14:41:50,355 INFO Epoch[6/120] Iter[500/2020] | Total Loss: 2.989 | Structure Loss: 2.053 | Edge Loss: 0.912 | KD Loss: 0.048 | KD Weight: 0.500
+2026-06-14 14:42:06,392 INFO Epoch[6/120] Iter[550/2020] | Total Loss: 2.995 | Structure Loss: 2.150 | Edge Loss: 0.830 | KD Loss: 0.031 | KD Weight: 0.500
+2026-06-14 14:42:23,101 INFO Epoch[6/120] Iter[600/2020] | Total Loss: 2.991 | Structure Loss: 2.102 | Edge Loss: 0.872 | KD Loss: 0.036 | KD Weight: 0.500
+2026-06-14 14:42:39,797 INFO Epoch[6/120] Iter[650/2020] | Total Loss: 3.448 | Structure Loss: 2.566 | Edge Loss: 0.859 | KD Loss: 0.045 | KD Weight: 0.500
+2026-06-14 14:42:56,843 INFO Epoch[6/120] Iter[700/2020] | Total Loss: 3.204 | Structure Loss: 2.323 | Edge Loss: 0.861 | KD Loss: 0.039 | KD Weight: 0.500
+2026-06-14 14:43:14,233 INFO Epoch[6/120] Iter[750/2020] | Total Loss: 2.275 | Structure Loss: 1.521 | Edge Loss: 0.740 | KD Loss: 0.029 | KD Weight: 0.500
+2026-06-14 14:43:31,727 INFO Epoch[6/120] Iter[800/2020] | Total Loss: 3.069 | Structure Loss: 2.156 | Edge Loss: 0.890 | KD Loss: 0.046 | KD Weight: 0.500
+2026-06-14 14:43:49,709 INFO Epoch[6/120] Iter[850/2020] | Total Loss: 2.833 | Structure Loss: 1.960 | Edge Loss: 0.853 | KD Loss: 0.042 | KD Weight: 0.500
+2026-06-14 14:44:06,830 INFO Epoch[6/120] Iter[900/2020] | Total Loss: 2.011 | Structure Loss: 1.282 | Edge Loss: 0.717 | KD Loss: 0.025 | KD Weight: 0.500
+2026-06-14 14:44:23,178 INFO Epoch[6/120] Iter[950/2020] | Total Loss: 2.199 | Structure Loss: 1.377 | Edge Loss: 0.810 | KD Loss: 0.026 | KD Weight: 0.500
+2026-06-14 14:44:39,891 INFO Epoch[6/120] Iter[1000/2020] | Total Loss: 3.289 | Structure Loss: 2.437 | Edge Loss: 0.834 | KD Loss: 0.036 | KD Weight: 0.500
+2026-06-14 14:44:56,993 INFO Epoch[6/120] Iter[1050/2020] | Total Loss: 2.447 | Structure Loss: 1.610 | Edge Loss: 0.823 | KD Loss: 0.028 | KD Weight: 0.500
+2026-06-14 14:45:14,153 INFO Epoch[6/120] Iter[1100/2020] | Total Loss: 1.947 | Structure Loss: 1.094 | Edge Loss: 0.842 | KD Loss: 0.023 | KD Weight: 0.500
+2026-06-14 14:45:30,693 INFO Epoch[6/120] Iter[1150/2020] | Total Loss: 3.088 | Structure Loss: 2.315 | Edge Loss: 0.753 | KD Loss: 0.039 | KD Weight: 0.500
+2026-06-14 14:45:47,665 INFO Epoch[6/120] Iter[1200/2020] | Total Loss: 3.470 | Structure Loss: 2.534 | Edge Loss: 0.920 | KD Loss: 0.033 | KD Weight: 0.500
+2026-06-14 14:46:04,238 INFO Epoch[6/120] Iter[1250/2020] | Total Loss: 2.364 | Structure Loss: 1.520 | Edge Loss: 0.830 | KD Loss: 0.029 | KD Weight: 0.500
+2026-06-14 14:46:21,076 INFO Epoch[6/120] Iter[1300/2020] | Total Loss: 2.616 | Structure Loss: 1.762 | Edge Loss: 0.838 | KD Loss: 0.031 | KD Weight: 0.500
+2026-06-14 14:46:37,030 INFO Epoch[6/120] Iter[1350/2020] | Total Loss: 2.219 | Structure Loss: 1.402 | Edge Loss: 0.805 | KD Loss: 0.025 | KD Weight: 0.500
+2026-06-14 14:46:53,690 INFO Epoch[6/120] Iter[1400/2020] | Total Loss: 2.613 | Structure Loss: 1.737 | Edge Loss: 0.860 | KD Loss: 0.034 | KD Weight: 0.500
+2026-06-14 14:47:09,892 INFO Epoch[6/120] Iter[1450/2020] | Total Loss: 2.498 | Structure Loss: 1.642 | Edge Loss: 0.843 | KD Loss: 0.027 | KD Weight: 0.500
+2026-06-14 14:47:26,156 INFO Epoch[6/120] Iter[1500/2020] | Total Loss: 2.600 | Structure Loss: 1.743 | Edge Loss: 0.844 | KD Loss: 0.026 | KD Weight: 0.500
+2026-06-14 14:47:42,668 INFO Epoch[6/120] Iter[1550/2020] | Total Loss: 3.827 | Structure Loss: 2.906 | Edge Loss: 0.885 | KD Loss: 0.074 | KD Weight: 0.500
+2026-06-14 14:47:59,006 INFO Epoch[6/120] Iter[1600/2020] | Total Loss: 2.870 | Structure Loss: 2.021 | Edge Loss: 0.830 | KD Loss: 0.036 | KD Weight: 0.500
+2026-06-14 14:48:15,591 INFO Epoch[6/120] Iter[1650/2020] | Total Loss: 2.381 | Structure Loss: 1.590 | Edge Loss: 0.778 | KD Loss: 0.025 | KD Weight: 0.500
+2026-06-14 14:48:32,082 INFO Epoch[6/120] Iter[1700/2020] | Total Loss: 2.370 | Structure Loss: 1.617 | Edge Loss: 0.737 | KD Loss: 0.032 | KD Weight: 0.500
+2026-06-14 14:48:48,483 INFO Epoch[6/120] Iter[1750/2020] | Total Loss: 2.219 | Structure Loss: 1.408 | Edge Loss: 0.797 | KD Loss: 0.028 | KD Weight: 0.500
+2026-06-14 14:49:05,113 INFO Epoch[6/120] Iter[1800/2020] | Total Loss: 2.492 | Structure Loss: 1.658 | Edge Loss: 0.820 | KD Loss: 0.026 | KD Weight: 0.500
+2026-06-14 14:49:21,805 INFO Epoch[6/120] Iter[1850/2020] | Total Loss: 2.772 | Structure Loss: 1.922 | Edge Loss: 0.838 | KD Loss: 0.022 | KD Weight: 0.500
+2026-06-14 14:49:38,257 INFO Epoch[6/120] Iter[1900/2020] | Total Loss: 2.705 | Structure Loss: 1.842 | Edge Loss: 0.846 | KD Loss: 0.033 | KD Weight: 0.500
+2026-06-14 14:49:54,837 INFO Epoch[6/120] Iter[1950/2020] | Total Loss: 3.254 | Structure Loss: 2.321 | Edge Loss: 0.916 | KD Loss: 0.034 | KD Weight: 0.500
+2026-06-14 14:50:11,992 INFO Epoch[6/120] Iter[2000/2020] | Total Loss: 2.865 | Structure Loss: 1.991 | Edge Loss: 0.856 | KD Loss: 0.035 | KD Weight: 0.500
+2026-06-14 14:50:18,415 INFO @==Final== Epoch[6/120] Avg Training Loss: 2.690
+2026-06-14 14:50:18,830 INFO Checkpoint saved to /root/data-tmp/workspace/02_experiments/runs/kd_light_b2_c64_e120_s42_recover_b2w0_1gpu/epoch_6.pth
+2026-06-14 14:50:20,137 INFO Training state saved to /root/data-tmp/workspace/02_experiments/runs/kd_light_b2_c64_e120_s42_recover_b2w0_1gpu/latest_train_state.pth
+2026-06-14 14:50:20,502 INFO Epoch[7/120] Iter[0/2020] | Total Loss: 2.628 | Structure Loss: 1.714 | Edge Loss: 0.901 | KD Loss: 0.026 | KD Weight: 0.500
+2026-06-14 14:50:37,177 INFO Epoch[7/120] Iter[50/2020] | Total Loss: 2.523 | Structure Loss: 1.651 | Edge Loss: 0.858 | KD Loss: 0.029 | KD Weight: 0.500
+2026-06-14 14:50:53,839 INFO Epoch[7/120] Iter[100/2020] | Total Loss: 2.186 | Structure Loss: 1.356 | Edge Loss: 0.819 | KD Loss: 0.021 | KD Weight: 0.500
+2026-06-14 14:51:10,276 INFO Epoch[7/120] Iter[150/2020] | Total Loss: 2.450 | Structure Loss: 1.604 | Edge Loss: 0.829 | KD Loss: 0.034 | KD Weight: 0.500
+2026-06-14 14:51:26,755 INFO Epoch[7/120] Iter[200/2020] | Total Loss: 3.265 | Structure Loss: 2.359 | Edge Loss: 0.895 | KD Loss: 0.022 | KD Weight: 0.500
+2026-06-14 14:51:43,545 INFO Epoch[7/120] Iter[250/2020] | Total Loss: 3.132 | Structure Loss: 2.266 | Edge Loss: 0.846 | KD Loss: 0.041 | KD Weight: 0.500
+2026-06-14 14:52:00,592 INFO Epoch[7/120] Iter[300/2020] | Total Loss: 3.145 | Structure Loss: 2.275 | Edge Loss: 0.856 | KD Loss: 0.028 | KD Weight: 0.500
+2026-06-14 14:52:17,449 INFO Epoch[7/120] Iter[350/2020] | Total Loss: 2.237 | Structure Loss: 1.362 | Edge Loss: 0.857 | KD Loss: 0.035 | KD Weight: 0.500
+2026-06-14 14:52:34,045 INFO Epoch[7/120] Iter[400/2020] | Total Loss: 2.472 | Structure Loss: 1.586 | Edge Loss: 0.874 | KD Loss: 0.023 | KD Weight: 0.500
+2026-06-14 14:52:50,517 INFO Epoch[7/120] Iter[450/2020] | Total Loss: 2.501 | Structure Loss: 1.715 | Edge Loss: 0.774 | KD Loss: 0.023 | KD Weight: 0.500
+2026-06-14 14:53:07,951 INFO Epoch[7/120] Iter[500/2020] | Total Loss: 2.141 | Structure Loss: 1.302 | Edge Loss: 0.827 | KD Loss: 0.024 | KD Weight: 0.500
+2026-06-14 14:53:24,533 INFO Epoch[7/120] Iter[550/2020] | Total Loss: 2.173 | Structure Loss: 1.330 | Edge Loss: 0.832 | KD Loss: 0.022 | KD Weight: 0.500
+2026-06-14 14:53:40,957 INFO Epoch[7/120] Iter[600/2020] | Total Loss: 3.133 | Structure Loss: 2.259 | Edge Loss: 0.860 | KD Loss: 0.026 | KD Weight: 0.500
+2026-06-14 14:53:57,320 INFO Epoch[7/120] Iter[650/2020] | Total Loss: 2.626 | Structure Loss: 1.755 | Edge Loss: 0.858 | KD Loss: 0.027 | KD Weight: 0.500
+2026-06-14 14:54:13,502 INFO Epoch[7/120] Iter[700/2020] | Total Loss: 2.098 | Structure Loss: 1.240 | Edge Loss: 0.846 | KD Loss: 0.026 | KD Weight: 0.500
+2026-06-14 14:54:29,911 INFO Epoch[7/120] Iter[750/2020] | Total Loss: 2.427 | Structure Loss: 1.620 | Edge Loss: 0.795 | KD Loss: 0.025 | KD Weight: 0.500
+2026-06-14 14:54:46,914 INFO Epoch[7/120] Iter[800/2020] | Total Loss: 2.805 | Structure Loss: 1.962 | Edge Loss: 0.830 | KD Loss: 0.026 | KD Weight: 0.500
+2026-06-14 14:55:03,424 INFO Epoch[7/120] Iter[850/2020] | Total Loss: 3.704 | Structure Loss: 2.755 | Edge Loss: 0.932 | KD Loss: 0.033 | KD Weight: 0.500
+2026-06-14 14:55:19,874 INFO Epoch[7/120] Iter[900/2020] | Total Loss: 2.655 | Structure Loss: 1.828 | Edge Loss: 0.814 | KD Loss: 0.026 | KD Weight: 0.500
+2026-06-14 14:55:36,474 INFO Epoch[7/120] Iter[950/2020] | Total Loss: 3.364 | Structure Loss: 2.453 | Edge Loss: 0.886 | KD Loss: 0.050 | KD Weight: 0.500
+2026-06-14 14:55:53,060 INFO Epoch[7/120] Iter[1000/2020] | Total Loss: 2.310 | Structure Loss: 1.438 | Edge Loss: 0.859 | KD Loss: 0.026 | KD Weight: 0.500
+2026-06-14 14:56:10,082 INFO Epoch[7/120] Iter[1050/2020] | Total Loss: 2.190 | Structure Loss: 1.372 | Edge Loss: 0.808 | KD Loss: 0.020 | KD Weight: 0.500
+2026-06-14 14:56:26,680 INFO Epoch[7/120] Iter[1100/2020] | Total Loss: 1.960 | Structure Loss: 1.137 | Edge Loss: 0.814 | KD Loss: 0.017 | KD Weight: 0.500
+2026-06-14 14:56:43,295 INFO Epoch[7/120] Iter[1150/2020] | Total Loss: 1.945 | Structure Loss: 1.207 | Edge Loss: 0.728 | KD Loss: 0.021 | KD Weight: 0.500
+2026-06-14 14:56:59,428 INFO Epoch[7/120] Iter[1200/2020] | Total Loss: 1.947 | Structure Loss: 1.118 | Edge Loss: 0.819 | KD Loss: 0.021 | KD Weight: 0.500
+2026-06-14 14:57:15,899 INFO Epoch[7/120] Iter[1250/2020] | Total Loss: 2.821 | Structure Loss: 1.964 | Edge Loss: 0.842 | KD Loss: 0.031 | KD Weight: 0.500
+2026-06-14 14:57:32,341 INFO Epoch[7/120] Iter[1300/2020] | Total Loss: 3.204 | Structure Loss: 2.282 | Edge Loss: 0.903 | KD Loss: 0.037 | KD Weight: 0.500
+2026-06-14 14:57:48,660 INFO Epoch[7/120] Iter[1350/2020] | Total Loss: 2.550 | Structure Loss: 1.720 | Edge Loss: 0.820 | KD Loss: 0.021 | KD Weight: 0.500
+2026-06-14 14:58:04,929 INFO Epoch[7/120] Iter[1400/2020] | Total Loss: 4.133 | Structure Loss: 3.228 | Edge Loss: 0.865 | KD Loss: 0.081 | KD Weight: 0.500
+2026-06-14 14:58:21,204 INFO Epoch[7/120] Iter[1450/2020] | Total Loss: 2.778 | Structure Loss: 1.889 | Edge Loss: 0.871 | KD Loss: 0.037 | KD Weight: 0.500
+2026-06-14 14:58:37,689 INFO Epoch[7/120] Iter[1500/2020] | Total Loss: 2.340 | Structure Loss: 1.506 | Edge Loss: 0.822 | KD Loss: 0.023 | KD Weight: 0.500
+2026-06-14 14:58:55,244 INFO Epoch[7/120] Iter[1550/2020] | Total Loss: 2.095 | Structure Loss: 1.252 | Edge Loss: 0.830 | KD Loss: 0.025 | KD Weight: 0.500
+2026-06-14 14:59:11,766 INFO Epoch[7/120] Iter[1600/2020] | Total Loss: 2.631 | Structure Loss: 1.764 | Edge Loss: 0.856 | KD Loss: 0.021 | KD Weight: 0.500
+2026-06-14 14:59:28,155 INFO Epoch[7/120] Iter[1650/2020] | Total Loss: 2.157 | Structure Loss: 1.310 | Edge Loss: 0.836 | KD Loss: 0.022 | KD Weight: 0.500
+2026-06-14 14:59:44,549 INFO Epoch[7/120] Iter[1700/2020] | Total Loss: 2.781 | Structure Loss: 1.958 | Edge Loss: 0.812 | KD Loss: 0.022 | KD Weight: 0.500
+2026-06-14 15:00:01,367 INFO Epoch[7/120] Iter[1750/2020] | Total Loss: 2.676 | Structure Loss: 1.830 | Edge Loss: 0.837 | KD Loss: 0.018 | KD Weight: 0.500
+2026-06-14 15:00:17,896 INFO Epoch[7/120] Iter[1800/2020] | Total Loss: 2.101 | Structure Loss: 1.280 | Edge Loss: 0.812 | KD Loss: 0.018 | KD Weight: 0.500
+2026-06-14 15:00:34,803 INFO Epoch[7/120] Iter[1850/2020] | Total Loss: 1.984 | Structure Loss: 1.059 | Edge Loss: 0.913 | KD Loss: 0.023 | KD Weight: 0.500
+2026-06-14 15:00:51,057 INFO Epoch[7/120] Iter[1900/2020] | Total Loss: 2.155 | Structure Loss: 1.319 | Edge Loss: 0.827 | KD Loss: 0.017 | KD Weight: 0.500
+2026-06-14 15:01:07,406 INFO Epoch[7/120] Iter[1950/2020] | Total Loss: 2.707 | Structure Loss: 1.890 | Edge Loss: 0.803 | KD Loss: 0.026 | KD Weight: 0.500
+2026-06-14 15:01:24,020 INFO Epoch[7/120] Iter[2000/2020] | Total Loss: 2.567 | Structure Loss: 1.694 | Edge Loss: 0.863 | KD Loss: 0.019 | KD Weight: 0.500
+2026-06-14 15:01:30,543 INFO @==Final== Epoch[7/120] Avg Training Loss: 2.545
+2026-06-14 15:01:30,928 INFO Checkpoint saved to /root/data-tmp/workspace/02_experiments/runs/kd_light_b2_c64_e120_s42_recover_b2w0_1gpu/epoch_7.pth
+2026-06-14 15:01:32,167 INFO Training state saved to /root/data-tmp/workspace/02_experiments/runs/kd_light_b2_c64_e120_s42_recover_b2w0_1gpu/latest_train_state.pth
+2026-06-14 15:01:32,530 INFO Epoch[8/120] Iter[0/2020] | Total Loss: 3.095 | Structure Loss: 2.224 | Edge Loss: 0.856 | KD Loss: 0.031 | KD Weight: 0.500
+2026-06-14 15:01:49,744 INFO Epoch[8/120] Iter[50/2020] | Total Loss: 1.643 | Structure Loss: 0.916 | Edge Loss: 0.721 | KD Loss: 0.012 | KD Weight: 0.500
+2026-06-14 15:02:06,583 INFO Epoch[8/120] Iter[100/2020] | Total Loss: 2.303 | Structure Loss: 1.433 | Edge Loss: 0.860 | KD Loss: 0.019 | KD Weight: 0.500
+2026-06-14 15:02:23,112 INFO Epoch[8/120] Iter[150/2020] | Total Loss: 2.312 | Structure Loss: 1.524 | Edge Loss: 0.775 | KD Loss: 0.024 | KD Weight: 0.500
+2026-06-14 15:02:39,380 INFO Epoch[8/120] Iter[200/2020] | Total Loss: 1.834 | Structure Loss: 1.056 | Edge Loss: 0.769 | KD Loss: 0.016 | KD Weight: 0.500
+2026-06-14 15:02:56,394 INFO Epoch[8/120] Iter[250/2020] | Total Loss: 3.195 | Structure Loss: 2.301 | Edge Loss: 0.883 | KD Loss: 0.022 | KD Weight: 0.500
+2026-06-14 15:03:13,705 INFO Epoch[8/120] Iter[300/2020] | Total Loss: 2.098 | Structure Loss: 1.315 | Edge Loss: 0.776 | KD Loss: 0.013 | KD Weight: 0.500
+2026-06-14 15:03:29,924 INFO Epoch[8/120] Iter[350/2020] | Total Loss: 2.110 | Structure Loss: 1.251 | Edge Loss: 0.848 | KD Loss: 0.021 | KD Weight: 0.500
+2026-06-14 15:03:46,461 INFO Epoch[8/120] Iter[400/2020] | Total Loss: 2.950 | Structure Loss: 2.083 | Edge Loss: 0.852 | KD Loss: 0.031 | KD Weight: 0.500
+2026-06-14 15:04:03,274 INFO Epoch[8/120] Iter[450/2020] | Total Loss: 3.069 | Structure Loss: 2.257 | Edge Loss: 0.803 | KD Loss: 0.019 | KD Weight: 0.500
+2026-06-14 15:04:19,609 INFO Epoch[8/120] Iter[500/2020] | Total Loss: 2.957 | Structure Loss: 2.104 | Edge Loss: 0.844 | KD Loss: 0.017 | KD Weight: 0.500
+2026-06-14 15:04:36,543 INFO Epoch[8/120] Iter[550/2020] | Total Loss: 2.407 | Structure Loss: 1.634 | Edge Loss: 0.764 | KD Loss: 0.016 | KD Weight: 0.500
+2026-06-14 15:04:52,935 INFO Epoch[8/120] Iter[600/2020] | Total Loss: 2.399 | Structure Loss: 1.560 | Edge Loss: 0.828 | KD Loss: 0.023 | KD Weight: 0.500
+2026-06-14 15:05:09,771 INFO Epoch[8/120] Iter[650/2020] | Total Loss: 2.927 | Structure Loss: 2.050 | Edge Loss: 0.851 | KD Loss: 0.051 | KD Weight: 0.500
+2026-06-14 15:05:26,081 INFO Epoch[8/120] Iter[700/2020] | Total Loss: 2.191 | Structure Loss: 1.327 | Edge Loss: 0.856 | KD Loss: 0.014 | KD Weight: 0.500
+2026-06-14 15:05:42,265 INFO Epoch[8/120] Iter[750/2020] | Total Loss: 2.495 | Structure Loss: 1.666 | Edge Loss: 0.821 | KD Loss: 0.017 | KD Weight: 0.500
+2026-06-14 15:05:59,161 INFO Epoch[8/120] Iter[800/2020] | Total Loss: 2.531 | Structure Loss: 1.699 | Edge Loss: 0.820 | KD Loss: 0.025 | KD Weight: 0.500
+2026-06-14 15:06:15,785 INFO Epoch[8/120] Iter[850/2020] | Total Loss: 1.770 | Structure Loss: 0.991 | Edge Loss: 0.770 | KD Loss: 0.017 | KD Weight: 0.500
+2026-06-14 15:06:33,924 INFO Epoch[8/120] Iter[900/2020] | Total Loss: 2.397 | Structure Loss: 1.573 | Edge Loss: 0.814 | KD Loss: 0.019 | KD Weight: 0.500
+2026-06-14 15:06:50,498 INFO Epoch[8/120] Iter[950/2020] | Total Loss: 2.357 | Structure Loss: 1.543 | Edge Loss: 0.802 | KD Loss: 0.025 | KD Weight: 0.500
+2026-06-14 15:07:07,061 INFO Epoch[8/120] Iter[1000/2020] | Total Loss: 1.803 | Structure Loss: 0.959 | Edge Loss: 0.839 | KD Loss: 0.010 | KD Weight: 0.500
+2026-06-14 15:07:23,805 INFO Epoch[8/120] Iter[1050/2020] | Total Loss: 2.959 | Structure Loss: 2.085 | Edge Loss: 0.864 | KD Loss: 0.021 | KD Weight: 0.500
+2026-06-14 15:07:40,196 INFO Epoch[8/120] Iter[1100/2020] | Total Loss: 2.104 | Structure Loss: 1.300 | Edge Loss: 0.795 | KD Loss: 0.018 | KD Weight: 0.500
+2026-06-14 15:07:56,598 INFO Epoch[8/120] Iter[1150/2020] | Total Loss: 2.986 | Structure Loss: 2.130 | Edge Loss: 0.846 | KD Loss: 0.019 | KD Weight: 0.500
+2026-06-14 15:08:12,940 INFO Epoch[8/120] Iter[1200/2020] | Total Loss: 2.469 | Structure Loss: 1.553 | Edge Loss: 0.905 | KD Loss: 0.023 | KD Weight: 0.500
+2026-06-14 15:08:29,458 INFO Epoch[8/120] Iter[1250/2020] | Total Loss: 2.140 | Structure Loss: 1.365 | Edge Loss: 0.768 | KD Loss: 0.013 | KD Weight: 0.500
+2026-06-14 15:08:45,754 INFO Epoch[8/120] Iter[1300/2020] | Total Loss: 3.008 | Structure Loss: 2.119 | Edge Loss: 0.878 | KD Loss: 0.022 | KD Weight: 0.500
+2026-06-14 15:09:02,162 INFO Epoch[8/120] Iter[1350/2020] | Total Loss: 1.562 | Structure Loss: 0.747 | Edge Loss: 0.810 | KD Loss: 0.012 | KD Weight: 0.500
+2026-06-14 15:09:18,554 INFO Epoch[8/120] Iter[1400/2020] | Total Loss: 2.349 | Structure Loss: 1.615 | Edge Loss: 0.726 | KD Loss: 0.017 | KD Weight: 0.500
+2026-06-14 15:09:35,216 INFO Epoch[8/120] Iter[1450/2020] | Total Loss: 2.135 | Structure Loss: 1.312 | Edge Loss: 0.810 | KD Loss: 0.028 | KD Weight: 0.500
+2026-06-14 15:09:51,792 INFO Epoch[8/120] Iter[1500/2020] | Total Loss: 1.773 | Structure Loss: 0.917 | Edge Loss: 0.849 | KD Loss: 0.016 | KD Weight: 0.500
+2026-06-14 15:10:08,617 INFO Epoch[8/120] Iter[1550/2020] | Total Loss: 1.471 | Structure Loss: 0.719 | Edge Loss: 0.747 | KD Loss: 0.011 | KD Weight: 0.500
+2026-06-14 15:10:24,924 INFO Epoch[8/120] Iter[1600/2020] | Total Loss: 2.643 | Structure Loss: 1.753 | Edge Loss: 0.882 | KD Loss: 0.016 | KD Weight: 0.500
+2026-06-14 15:10:41,360 INFO Epoch[8/120] Iter[1650/2020] | Total Loss: 2.156 | Structure Loss: 1.332 | Edge Loss: 0.818 | KD Loss: 0.011 | KD Weight: 0.500
+2026-06-14 15:10:57,761 INFO Epoch[8/120] Iter[1700/2020] | Total Loss: 2.227 | Structure Loss: 1.365 | Edge Loss: 0.851 | KD Loss: 0.021 | KD Weight: 0.500
+2026-06-14 15:11:14,130 INFO Epoch[8/120] Iter[1750/2020] | Total Loss: 2.348 | Structure Loss: 1.518 | Edge Loss: 0.819 | KD Loss: 0.022 | KD Weight: 0.500
+2026-06-14 15:11:30,163 INFO Epoch[8/120] Iter[1800/2020] | Total Loss: 2.757 | Structure Loss: 1.913 | Edge Loss: 0.835 | KD Loss: 0.017 | KD Weight: 0.500
+2026-06-14 15:11:46,776 INFO Epoch[8/120] Iter[1850/2020] | Total Loss: 2.292 | Structure Loss: 1.471 | Edge Loss: 0.813 | KD Loss: 0.016 | KD Weight: 0.500
+2026-06-14 15:12:02,960 INFO Epoch[8/120] Iter[1900/2020] | Total Loss: 2.537 | Structure Loss: 1.710 | Edge Loss: 0.817 | KD Loss: 0.020 | KD Weight: 0.500
+2026-06-14 15:12:19,325 INFO Epoch[8/120] Iter[1950/2020] | Total Loss: 2.201 | Structure Loss: 1.370 | Edge Loss: 0.825 | KD Loss: 0.013 | KD Weight: 0.500

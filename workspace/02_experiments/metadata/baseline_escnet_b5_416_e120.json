@@ -1,0 +1,49 @@
+{
+  "exp_id": "baseline_escnet_b5_416_e120",
+  "owner": "main-orchestrator",
+  "created_at": "2026-06-13T00:00:00Z",
+  "repo_path": "/root/ESCNet",
+  "dataset_root": "/root/data-tmp/COD",
+  "model": "ESCNet",
+  "backbone": "pvt_v2_b5",
+  "inter_channel": 128,
+  "img_size": 416,
+  "epochs": 120,
+  "seed": 42,
+  "checkpoint": "/root/data-tmp/epoch_120.pth",
+  "train_log": "/root/ESCNet/checkpoints/escnet/log.txt",
+  "prediction_dirs": {
+    "CAMO": "/root/ESCNet/preds_epoch120_camo/epoch_120",
+    "COD10K": "/root/ESCNet/preds_epoch120_cod10k/epoch_120",
+    "NC4K": "/root/ESCNet/preds_epoch120_nc4k/epoch_120"
+  },
+  "metrics": {
+    "COD10K": {
+      "Smeasure": 0.873,
+      "wFmeasure": 0.808,
+      "meanFm": 0.827,
+      "meanEm": 0.942,
+      "MAE": 0.020
+    },
+    "CAMO": {
+      "Smeasure": 0.875,
+      "wFmeasure": 0.849,
+      "meanFm": 0.867,
+      "meanEm": 0.937,
+      "MAE": 0.041
+    },
+    "NC4K": {
+      "Smeasure": 0.893,
+      "wFmeasure": 0.864,
+      "meanFm": 0.881,
+      "meanEm": 0.945,
+      "MAE": 0.028
+    }
+  },
+  "profile_partial": {
+    "params": 99903234,
+    "state_dict_fp32_mb": 381.17
+  },
+  "status": "baseline_imported_teacher_checkpoint_corrected",
+  "notes": "Historical ESCNet epoch 120 baseline. Teacher checkpoint corrected to /root/data-tmp/epoch_120.pth because /root/ESCNet/checkpoints/escnet/epoch_120.pth was overwritten by a later 2026-06-13 retraining run and does not reproduce historical CAMO metrics."
+}

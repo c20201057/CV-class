@@ -1,0 +1,185 @@
+{
+  "updated_utc": "2026-06-15T09:33:50Z",
+  "workspace": "/root/data-tmp/workspace",
+  "metrics_csv": "/root/data-tmp/workspace/02_experiments/tables/metrics_all.csv",
+  "profiles_csv": "/root/data-tmp/workspace/02_experiments/tables/profiles.csv",
+  "gates": {
+    "Light main result": {
+      "status": "pass",
+      "action": "Use Light B2-C64 as current accepted student result."
+    },
+    "Gate 1 clean baseline": {
+      "status": "pass",
+      "action": "Upgrade Light-vs-ESCNet deltas to clean probability baseline."
+    },
+    "Gate 2 KD": {
+      "status": "pass",
+      "action": "Patch KD result into paper according to measured improvement/failure."
+    },
+    "Gate 3 speed": {
+      "status": "pass",
+      "action": "Patch controlled latency/FPS according to same-command idle profiles."
+    },
+    "Gate 4A B0": {
+      "status": "observation_only",
+      "action": "Keep B0 out of main table, abstract and conclusion."
+    },
+    "Gate 4B MobileMamba": {
+      "status": "observation_only",
+      "action": "Keep MobileMamba-T2 out of main table, abstract and conclusion."
+    }
+  },
+  "release_audit": {
+    "status": "pass",
+    "started_utc": "2026-06-15T01:09:02Z",
+    "finished_utc": "2026-06-15T01:09:06Z"
+  },
+  "b0": {
+    "updated_utc": "2026-06-15T09:33:49Z",
+    "status": "not_observed_running",
+    "boundary": "external_dirty_tree_observation_only",
+    "checkpoint_status": "present",
+    "latest_iter": "epoch 10/120, iter 250/252, log time `2026-06-14 13:59:16,338`",
+    "latest_eval": "epoch 10, log time `2026-06-14 13:59:17,446`, predictions `/root/data-tmp/preds_train/pvt_v2_b0/epoch_10`, status `metrics_appended`",
+    "latest_result": "epoch 120: S=0.8004, wF=0.6862, meanF=0.7203, meanE=0.8878, MAE=0.0350"
+  },
+  "mobilemamba": {
+    "updated_utc": "2026-06-15T09:33:49Z",
+    "status": "not_observed_running",
+    "boundary": "external_dirty_tree_observation_only",
+    "checkpoint_status": "absent",
+    "latest_iter": "epoch 59/120, iter 200/252, log time `2026-06-14 13:15:35,193`",
+    "latest_eval": "epoch 50, log time `2026-06-14 12:18:36,313`, predictions `/root/data-tmp/preds_train/mobilemamba_t2/epoch_50`, status `metrics_appended`",
+    "latest_result": "epoch 50: S=0.7487, wF=0.6019, meanF=0.6482, meanE=0.8477, MAE=0.0465"
+  },
+  "kd_recovery_status": {
+    "updated_utc": "2026-06-15T09:33:50Z",
+    "status": "not_observed_running",
+    "boundary": "pending_gate_no_kd_claims",
+    "config": "/root/data-tmp/workspace/02_experiments/runs/kd_light_b2_c64_e120_s42/config_continue_epoch20_b6_w8_4gpu.yaml",
+    "log": "/dev/shm/escnet_fast_kd/logs/train_continue_epoch20_b6_w8_4gpu_20260614T100610Z.log",
+    "run_dir": "/dev/shm/escnet_fast_kd/runs/kd_light_b2_c64_e120_s42_continue_epoch20_b6_w8_4gpu",
+    "latest_checkpoint": "epoch_120.pth",
+    "final_checkpoint_status": "present",
+    "latest_iter": "epoch 120/120, iter 150/168, log time `2026-06-14 22:30:31,624`, total loss 1.592, KD loss 0.005",
+    "latest_completed_epoch": "120/120 with avg loss 1.485, log time `2026-06-14 22:30:46,549`"
+  },
+  "kd_status_path": "/root/data-tmp/workspace/02_experiments/runs/kd_recovery_status_latest.md",
+  "watchers": {
+    "Gate 1 baseline watcher": {
+      "status": "missing",
+      "process": ""
+    },
+    "Gate 1 resume watcher": {
+      "status": "missing",
+      "process": ""
+    },
+    "Gate 2 KD watcher": {
+      "status": "missing",
+      "process": ""
+    },
+    "B0 read-only watcher": {
+      "status": "missing",
+      "process": ""
+    },
+    "MobileMamba read-only watcher": {
+      "status": "running",
+      "process": "530956       1 Ss    1-09:57:39 bash /root/data-tmp/workspace/02_experiments/scripts/watch_external_mobilemamba_progress.sh --poll_seconds 300"
+    }
+  },
+  "training": {
+    "active_train_processes": 37,
+    "active_gpu_like_processes": 37,
+    "b0_processes": 0,
+    "b0_running": false,
+    "mobilemamba_t2_processes": 0,
+    "mobilemamba_t2_running": false,
+    "kd_recovery": {
+      "running": false,
+      "processes": 0,
+      "process": "",
+      "pid": "",
+      "config": "",
+      "log": ""
+    },
+    "sample_processes": [
+      "1256510       1 Ssl     04:48:06 /root/miniconda3/envs/escnet/bin/python3.10 /root/miniconda3/envs/escnet/bin/torchrun --nproc_per_node=4 --master_port=29511 train.py --config /root/data-tmp/workspace/02_experiments/runs/light_b2_c64_no_edge_supervision_e120_s42/config_no_edge_supervision_b6_w8_4gpu.yaml",
+      "1256572 1256510 Ssl     04:48:03 /root/miniconda3/envs/escnet/bin/python3.10 -u train.py --config /root/data-tmp/workspace/02_experiments/runs/light_b2_c64_no_edge_supervision_e120_s42/config_no_edge_supervision_b6_w8_4gpu.yaml",
+      "1256573 1256510 Rsl     04:48:03 /root/miniconda3/envs/escnet/bin/python3.10 -u train.py --config /root/data-tmp/workspace/02_experiments/runs/light_b2_c64_no_edge_supervision_e120_s42/config_no_edge_supervision_b6_w8_4gpu.yaml",
+      "1256574 1256510 Ssl     04:48:03 /root/miniconda3/envs/escnet/bin/python3.10 -u train.py --config /root/data-tmp/workspace/02_experiments/runs/light_b2_c64_no_edge_supervision_e120_s42/config_no_edge_supervision_b6_w8_4gpu.yaml",
+      "1256575 1256510 Ssl     04:48:03 /root/miniconda3/envs/escnet/bin/python3.10 -u train.py --config /root/data-tmp/workspace/02_experiments/runs/light_b2_c64_no_edge_supervision_e120_s42/config_no_edge_supervision_b6_w8_4gpu.yaml",
+      "1256938 1256575 Sl      04:47:25 /root/miniconda3/envs/escnet/bin/python3.10 -u train.py --config /root/data-tmp/workspace/02_experiments/runs/light_b2_c64_no_edge_supervision_e120_s42/config_no_edge_supervision_b6_w8_4gpu.yaml",
+      "1256939 1256573 Sl      04:47:25 /root/miniconda3/envs/escnet/bin/python3.10 -u train.py --config /root/data-tmp/workspace/02_experiments/runs/light_b2_c64_no_edge_supervision_e120_s42/config_no_edge_supervision_b6_w8_4gpu.yaml",
+      "1257034 1256572 Sl      04:47:25 /root/miniconda3/envs/escnet/bin/python3.10 -u train.py --config /root/data-tmp/workspace/02_experiments/runs/light_b2_c64_no_edge_supervision_e120_s42/config_no_edge_supervision_b6_w8_4gpu.yaml"
+    ]
+  },
+  "baseline_progress": {
+    "state": "complete",
+    "run_dir": "/root/data-tmp/workspace/02_experiments/runs/baseline_escnet_b5_clean_prob_e120",
+    "completed_results": [
+      "CAMO",
+      "COD10K",
+      "NC4K"
+    ],
+    "active_processes": [],
+    "stopped_processes": [],
+    "datasets": [
+      {
+        "dataset": "CAMO",
+        "gt_count": 250,
+        "pred_count": 250,
+        "result_exists": true,
+        "metrics_status": "clean_prob_re_eval_complete",
+        "partial_metrics": {
+          "Smeasure": "0.881",
+          "wFmeasure": "0.842",
+          "meanFm": "0.864",
+          "meanEm": "0.933",
+          "MAE": "0.043"
+        }
+      },
+      {
+        "dataset": "COD10K",
+        "gt_count": 2026,
+        "pred_count": 2026,
+        "result_exists": true,
+        "metrics_status": "clean_prob_re_eval_complete",
+        "partial_metrics": {
+          "Smeasure": "0.877",
+          "wFmeasure": "0.802",
+          "meanFm": "0.824",
+          "meanEm": "0.938",
+          "MAE": "0.021"
+        }
+      },
+      {
+        "dataset": "NC4K",
+        "gt_count": 4121,
+        "pred_count": 4121,
+        "result_exists": true,
+        "metrics_status": "clean_prob_re_eval_complete",
+        "partial_metrics": {
+          "Smeasure": "0.897",
+          "wFmeasure": "0.857",
+          "meanFm": "0.878",
+          "meanEm": "0.942",
+          "MAE": "0.029"
+        }
+      }
+    ]
+  },
+  "gpu_snapshot": [
+    "0, Tesla V100-SXM2-16GB, 9897, 16384, 65",
+    "1, Tesla V100-SXM2-16GB, 10041, 16384, 77",
+    "2, Tesla V100-SXM2-16GB, 9921, 16384, 76",
+    "3, Tesla V100-SXM2-16GB, 9895, 16384, 74"
+  ],
+  "profile_summary": {
+    "baseline_params_m": "99.90",
+    "baseline_gmacs": "129.02",
+    "light_params_m": "29.81",
+    "light_gmacs": "36.39",
+    "light_peak_mem_mb": "237.44"
+  },
+  "delta_summary": "/root/data-tmp/workspace/04_paper/drafts/current_delta_summary.md"
+}

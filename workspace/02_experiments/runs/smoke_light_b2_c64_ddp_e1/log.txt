@@ -1,0 +1,61 @@
+2026-06-13 19:28:25,576 INFO Trainer initialized on rank 0 with device 0.
+2026-06-13 19:28:25,576 INFO Full config:
+{
+  "batch_size": 4,
+  "batch_size_valid": 8,
+  "epochs": 1,
+  "lr": 0.000075,
+  "weight_decay": 0.00015,
+  "rand_seed": 42,
+  "precisionHigh": true,
+  "train_dir": "/root/data-tmp/COD/Train",
+  "test_dir": "/root/data-tmp/COD/Test/COD10K",
+  "load_all": false,
+  "backbone": "pvt_v2_b2",
+  "img_size": 416,
+  "lateral_channels": [
+    512,
+    320,
+    128,
+    64
+  ],
+  "inter_channel": 64,
+  "bb_pretrained": true,
+  "resume": "",
+  "compile": false,
+  "device_ids": [
+    0,
+    1,
+    2,
+    3
+  ],
+  "multi_GPU": true,
+  "save_model_dir": "/root/data-tmp/workspace/02_experiments/runs",
+  "name": "smoke_light_b2_c64_ddp_e1",
+  "save_last": 1,
+  "save_step": 1,
+  "preproc_methods": [
+    "flip",
+    "rotate",
+    "pepper",
+    "crop"
+  ],
+  "weights": {
+    "pvt_v2_b2": "/root/data-tmp/weights/pvt_v2_b2.pth",
+    "pvt_v2_b4": null,
+    "pvt_v2_b5": "/root/data-tmp/weights/pvt_v2_b5_22k.pth"
+  },
+  "num_workers": 4
+}
+2026-06-13 19:28:27,038 INFO 252 batches of train dataloader created.
+2026-06-13 19:28:59,890 INFO Model, optimizer, and scheduler have been initialized.
+2026-06-13 19:28:59,890 INFO Starting training process...
+2026-06-13 19:29:02,156 INFO Epoch[1/1] Iter[0/252] | Total Loss: 6.156 | Structure Loss: 5.160 | Edge Loss: 0.996
+2026-06-13 19:29:20,286 INFO Epoch[1/1] Iter[50/252] | Total Loss: 4.164 | Structure Loss: 3.193 | Edge Loss: 0.971
+2026-06-13 19:29:38,650 INFO Epoch[1/1] Iter[100/252] | Total Loss: 3.709 | Structure Loss: 2.769 | Edge Loss: 0.940
+2026-06-13 19:29:56,902 INFO Epoch[1/1] Iter[150/252] | Total Loss: 4.385 | Structure Loss: 3.441 | Edge Loss: 0.944
+2026-06-13 19:30:14,931 INFO Epoch[1/1] Iter[200/252] | Total Loss: 3.262 | Structure Loss: 2.366 | Edge Loss: 0.896
+2026-06-13 19:30:32,897 INFO Epoch[1/1] Iter[250/252] | Total Loss: 3.188 | Structure Loss: 2.287 | Edge Loss: 0.901
+2026-06-13 19:30:33,340 INFO @==Final== Epoch[1/1] Avg Training Loss: 4.159
+2026-06-13 19:30:33,756 INFO Checkpoint saved to /root/data-tmp/workspace/02_experiments/runs/smoke_light_b2_c64_ddp_e1/epoch_1.pth
+2026-06-13 19:30:33,758 INFO Training finished.

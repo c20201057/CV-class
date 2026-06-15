@@ -1,0 +1,17 @@
+before_df_avail_use=3.7G 100%
+before_targets:
+31M	/root/.cache/pip
+41M	/root/.cache/jedi
+243M	/root/.vscode-server/data/CachedExtensionVSIXs
+485M	/root/.vscode-server/cli/servers/Stable-1b50d58d73426c9171299ec4037d01365d995b78
+481M	/root/.vscode-server/cli/servers/Stable-6a44c352bd24569c417e530095901b649960f9f8
+
+after_targets:
+4.0K	/root/.cache/pip
+4.0K	/root/.cache/jedi
+4.0K	/root/.vscode-server/data/CachedExtensionVSIXs
+after_df:
+Filesystem                                                                       Type     Size  Used Avail Use% Mounted on
+overlay                                                                          overlay  879G  829G  4.9G 100% /
+192.168.33.41:/nfs/users/privatecloud/data/container-295a49aaa9-630fea26-storage nfs4     8.8T  7.7T  1.2T  88% /root/data-tmp
+shm                                                                              tmpfs    124G  2.1G  122G   2% /dev/shm

@@ -1,0 +1,6 @@
+{
+  "exp_id": "smoke_light_b2_c64_ddp_e1",
+  "purpose": "DDP smoke for Light-ESCNet B2-C64, 1 epoch",
+  "created_at": "2026-06-13T11:28:12.055529Z",
+  "config": "/root/data-tmp/workspace/02_experiments/runs/smoke_light_b2_c64_ddp_e1/config.yaml"
+}

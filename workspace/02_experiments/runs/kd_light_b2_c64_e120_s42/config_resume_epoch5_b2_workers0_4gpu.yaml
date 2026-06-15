@@ -1,0 +1,53 @@
+# KD recovery continuation from kd_light_b2_c64_e120_s42/epoch_5.pth.
+# Four-GPU fallback: reduce per-GPU batch from 4 to 2 and disable workers.
+
+batch_size: 2
+batch_size_valid: 8
+epochs: 120
+lr: 0.0000375
+weight_decay: 0.00015
+rand_seed: 42
+precisionHigh: true
+
+train_dir: /root/data-tmp/COD/Train
+test_dir: /root/data-tmp/COD/Test/COD10K
+load_all: false
+
+backbone: pvt_v2_b2
+img_size: 416
+lateral_channels: [512, 320, 128, 64]
+inter_channel: 64
+bb_pretrained: true
+resume: /root/data-tmp/workspace/02_experiments/runs/kd_light_b2_c64_e120_s42/epoch_5.pth
+compile: false
+
+device_ids: [0, 1, 2, 3]
+multi_GPU: true
+
+save_model_dir: /root/data-tmp/workspace/02_experiments/runs
+name: kd_light_b2_c64_e120_s42_recover_b2w0_4gpu
+save_last: 120
+save_step: 1
+
+preproc_methods:
+  - flip
+  - rotate
+  - pepper
+  - crop
+
+weights:
+  pvt_v2_b2: /root/data-tmp/weights/pvt_v2_b2.pth
+  pvt_v2_b4:
+  pvt_v2_b5: /root/data-tmp/weights/pvt_v2_b5_22k.pth
+
+kd_enabled: true
+kd_mode: online
+kd_teacher_config: /root/data-tmp/workspace/02_experiments/code/kd_light_escnet_b2_c64/configs/teacher_b5.yaml
+kd_teacher_ckpt: /root/data-tmp/epoch_120.pth
+kd_loss: mse
+kd_weight: 0.5
+kd_temperature: 2.0
+kd_warmup_epochs: 5
+kd_cache_dir:
+
+num_workers: 0

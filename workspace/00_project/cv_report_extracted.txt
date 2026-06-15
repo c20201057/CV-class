@@ -1,0 +1,203 @@
+===== Page 1 =====
+面向伪装目标分割的轻量化模型研究
+计算机视觉高阶课程大作业开题报告
+1
+研究背景与意义
+伪装目标分割（Camouflaged Object Segmentation, COS）或伪装目标检测（Camouflaged Object Detection,
+COD）旨在从自然图像中分割出与背景在颜色、纹理、边缘或形状上高度相似的目标区域。与普通语义分割和
+显著性目标检测相比，伪装目标往往边界对比度弱、前景背景纹理接近、目标尺度变化大，并可能伴随遮挡、小
+目标、多目标和背景干扰。因此，模型既需要全局上下文定位能力，也需要较强的边界和局部细节保留能力。
+Le 等提出的CAMO 数据集和ANet 推动了伪装目标分割任务成形；Fan 等在COD10K 和SINet 中系统
+建立了COD 基准；PFNet、SegMaR、FDCOD 等方法进一步通过干扰挖掘、多阶段放大和频域线索增强提升
+精度。但这些模型通常依赖较重的主干网络、多阶段推理或复杂解码器，参数量、FLOPs、显存占用和部署延
+迟较高。实际应用中，如野外监测、安防巡检、灾害搜救和医学图像辅助分析，更关注实时性、模型大小和边缘
+端部署成本。
+本课题不追求单纯堆叠复杂模块，而是在可复现实验基础上研究轻量化COD/COS 模型：以经典模型为
+教师或重模型基线，通过轻量主干、轻量解码器、边界辅助监督、知识蒸馏和量化等方法，在精度下降可控的
+前提下降低模型复杂度。参考文献中，CAMO、COD10K、NC4K 等高使用率基准作为主要实验依据，R2C7K、
+CamoVid60K 等2025–2026 年较新的数据集作为扩展方向；主要方法依据优先采用CSFIN、LiteCOD、FMLNet
+和FDESNet 等前沿工作。这些工作显示，近期COD 研究正在从单纯RGB 特征融合转向跨阶段交互、局部–全
+局联合建模、频域–空间域协同和边界感知增强。
+2
+问题定义与研究目标
+给定一张RGB 图像
+I ∈RH×W ×3,
+模型预测伪装目标概率掩码
+P = fθ(I),
+P ∈[0, 1]H×W ,
+其中Pij 表示像素(i, j) 属于伪装目标的概率，训练时使用人工标注掩码G 监督。
+本课题的核心问题是：在COD10K、NC4K、CAMO 等高使用率公开基准上，如何设计一个比经典重模型
+更轻、更快，同时保持较好分割精度的伪装目标分割模型；若时间允许，可进一步在R2C7K 或视频伪装数据集
+上验证扩展能力。具体目标如下：
+1. 降低模型复杂度：减少参数量、FLOPs、模型大小和单张图像推理延迟。
+2. 保持分割性能：在Sα、Eϕ、F w
+β 、MAE 等指标上尽量接近教师模型或经典基线。
+3. 展示轻量化收益：同时报告精度和效率指标，绘制精度–效率折中图，并给出典型样本可视化结果。
+1
+
+===== Page 2 =====
+3
+拟采用方法
+2
+3
+拟采用方法
+本课题拟构建一个课程规模适中的轻量伪装目标分割模型，暂命名为Light-COS。总体路线为“经典重模
+型复现+ 结构轻量化+ 细节补偿+ 部署压缩验证”。
+轻量编码器。以MobileNetV3、GhostNet 或ShuffleNetV2 替代ResNet 类重主干，提取1/4、1/8、1/16、
+1/32 多尺度特征。该设计参考了近期轻量COD 模型对实时推理的需求，也便于使用ImageNet 预训练权重快
+速收敛。
+轻量多尺度融合。针对伪装目标尺度变化大、边界模糊的问题，在高层特征上使用深度可分离卷积、轻量
+ASPP 或频域注入模块进行上下文增强，并只保留必要的三层融合：
+Ffuse = Conv1×1
+(
+[F1/8, Up(F1/16), Up(F1/32)]
+)
+.
+普通卷积尽量替换为depthwise separable convolution 或Ghost module，以降低计算量。结合2025–2026 年工
+作，可进一步尝试频域–RGB 双分支的极简版本：用离散小波变换或高频边缘响应提取低成本频域线索，再通
+过1 × 1 卷积或注意力门控与RGB 特征交互，避免引入过重的Transformer 解码器。
+边界辅助分支。轻量模型容易出现目标边缘变粗、细节缺失等问题，因此从浅层特征F1/4 预测边界图B，
+并将其作为注意力权重回注入解码器：
+F ′ = Ffuse · (1 + σ(B)).
+边界标签可由真值掩码经Sobel 或形态学梯度生成，额外开销控制在少量卷积层内。
+知识蒸馏与量化。使用SINet/PFNet 或较新的高精度模型作为教师模型，Light-COS 作为学生模型；若资
+源允许，可选2026 年的边界/频域增强模型作为教师，以让学生模型学习更清晰的轮廓和困难区域响应。训练
+损失设为
+L = Lseg(P, G) + λ1Lkd(Ps, Pt) + λ2Ledge(B, BG),
+其中Lseg 采用BCE + Dice Loss，Lkd 采用MSE 或KL 散度，Ledge 约束边界预测。训练完成后进一步尝试
+INT8 量化或结构化通道剪枝，验证部署收益。
+4
+实验设计
+类别
+设置
+说明
+核心数据集
+COD10K、NC4K、CAMO
+2025–2026 年COD 论文仍高频使用；COD10K 用于训
+练/测试，NC4K 作为大规模泛化测试集，CAMO 用于
+保持与经典方法可比
+可选新数据集
+R2C7K、CamoVid60K、MoCA-Mask
+R2C7K 面向2025 年Ref-COD 任务；CamoVid60K 和
+MoCA-Mask 面向视频伪装分割，可作为拓展实验或未
+来工作
+精度指标
+Sα、Eϕ、F w
+β 、MAE
+前三者越高越好，MAE 越低越好
+效率指标
+Params、FLOPs、FPS、Latency、
+Model Size
+衡量模型轻量化和部署价值
+对比模型
+SINet/PFNet、MobileNetV3-UNet、
+CSFIN/LiteCOD/FMLNet、Light-
+COS
+覆盖重模型、简单轻量基线和2025–2026 轻量COD 方
+法
+训练集采用近期论文最常用的设置：COD10K-Train 与CAMO-Train 合计约4040 张图像。测试集以COD10K-
+Test、NC4K 和CAMO-Test 为主，其中NC4K 规模大、类别和场景更复杂，适合作为泛化能力的重点测试
+集；CHAMELEON 仅作为小规模补充。若课程时间允许，增加R2C7K 的少样本/参考目标扩展测试，或在
+CamoVid60K/MoCA-Mask 上抽帧验证轻量模型对视频场景的迁移能力。主要对比实验包括：原始重模型、简
+
+===== Page 3 =====
+5
+进度安排与分工
+3
+单轻量主干替换、Light-COS without KD、Light-COS with KD、Light-COS with KD + Quantization。消融
+实验关注四个问题：不同轻量主干的精度–速度折中，多尺度融合模块是否有效，边界辅助监督是否改善MAE
+和边缘质量，知识蒸馏是否能弥补轻量化带来的精度损失。
+最终结果计划展示三类内容：第一，定量结果表，比较各模型在多个测试集上的精度；第二，效率结果表，
+比较参数量、FLOPs、FPS 和模型大小；第三，可视化对比图，展示原图、真值掩码、重模型预测、轻量基线
+预测和Light-COS 预测，并补充精度–效率折中曲线。
+5
+进度安排与分工
+阶段
+主要任务
+产出
+第1 阶段
+文献调研、数据集整理、确定基线和轻量化方案
+开题报告、论文清单、实验计划
+第2 阶段
+配置环境、整理数据、复现SINet/PFNet 或公开
+基线
+可运行训练/测试流程、baseline 结果
+第3 阶段
+实现Light-COS、蒸馏训练、量化或剪枝验证
+模型代码、消融实验、效率测试
+第4 阶段
+结果分析、可视化、报告和答辩材料整理
+最终报告、PPT、实验图表
+若按三人小组分工，组员A 侧重文献综述、环境配置和结果文字分析；组员B 侧重数据集整理、评估脚本
+和可视化图表；组员C 侧重模型实现、蒸馏/量化模块和答辩方法图。三人共同参与方案讨论、实验结果复核和
+最终报告修改。
+6
+预期成果
+预期完成一个可复现的轻量化伪装目标分割实验流程，得到Light-COS 与若干基线模型在精度和效率上的
+对比结果。理想情况下，Light-COS 相比经典重模型显著降低参数量和FLOPs，在Sα、Eϕ、F w
+β 、MAE 上保
+持可接受差距；相比简单轻量基线，通过多尺度融合、边界监督和知识蒸馏取得更稳定的分割效果。
+参考文献
+[1] T.-N. Le, T. V. Nguyen, Z. Nie, M.-T. Tran, and
+A. Sugimoto. Anabranch network for camouflaged ob-
+ject segmentation. Computer Vision and Image Un-
+derstanding, 184:45–56, 2019.
+[2] D.-P. Fan, G.-P. Ji, G. Sun, M.-M. Cheng, J. Shen,
+and L. Shao. Camouflaged Object Detection. CVPR,
+2020.
+[3] Y. Lv, J. Zhang, Y. Dai, A. Li, B. Liu, N. Barnes,
+and D.-P. Fan. Simultaneously Localize, Segment and
+Rank the Camouflaged Objects. CVPR, 2021.
+[4] X. Zhang, B. Yin, Z. Lin, Q. Hou, D.-P. Fan, and M.-
+M. Cheng. Referring Camouflaged Object Detection.
+IEEE TPAMI, 47(5):3597–3610, 2025.
+[5] T.-A. Vu, Z. Zheng, C. Song, Q. Guo, I. W. Tsang,
+and S.-K. Yeung. CamoVid60K: A Large-Scale Video
+Dataset for Moving Camouflaged Animals Under-
+standing. International Journal of Computer Vision,
+134:176, 2026.
+[6] M. Li, Y. Zhao, F. Zhang, G. Gui, B. Luo, C. Yang,
+W. Gui, and K. Chang. CSFIN: A lightweight net-
+work for camouflaged object detection via cross-stage
+feature interaction. Expert Systems with Applications,
+269:126451, 2025.
+[7] A.
+Khan,
+H.
+Ullah,
+and
+A.
+Munir.
+LiteCOD:
+Lightweight Camouflaged Object Detection via Holis-
+tic Understanding of Local-Global Features and Multi-
+Scale Fusion. AI, 6(9):197, 2025.
+[8] J. Hu, D. Liu, H. Deng, J. Chen, and T. Liu. An eﬀi-
+cient camouflaged image segmentation with modified
+UNet structure. Scientific Reports, 15:3265, 2025.
+[9] H. Xiao, L. Deng, X. Chen, and H. Zou. FMLNet: A
+lightweight camouflage object detection network based
+on RGB-frequency domain mutual learning. Applied
+Soft Computing, 2026.
+[10] B. Ge, X. Peng, C. Xia, and H. Chen. Frequency
+domain-based edge sensing for camouflaged object de-
+tection. Computer Vision and Image Understanding,
+265:104705, 2026.
+
+===== Page 4 =====
+参考文献
+4
+[11] Y. Ge, Y. Zhong, J. Ren, M. He, H. Bi, and Q. Zhang.
+Camouflaged Object Detection based on Edge Screen-
+ing and Cross-layer Fusion. Pattern Recognition, arti-
+cle 113604, 2026.
+[12] X. Song, H. Yuan, X. Lu, and R. Liu. Multi-Clue Slid-
+ing Window Attention for Camouflaged Object Detec-
+tion. IEEE Transactions on Multimedia, 2026.
+[13] W. Zhuang et al. Camouflaged object detection based
+on context texture hierarchical interaction. Scientific
+Reports, 2026.
+[14] Y. Liu et al. Open-Vocabulary Camouflaged Object
+Detection based on Linguistic and Visual Concepts
+Modeling. International Journal of Computer Vision,
+2026.

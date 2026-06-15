@@ -1,0 +1,67 @@
+launch_time_utc=20260614T095446Z
+config=/root/data-tmp/workspace/02_experiments/runs/kd_light_b2_c64_e120_s42/config_probe_epoch20_b6_w6_i120_4gpu.yaml
+log=/dev/shm/escnet_fast_kd/logs/train_probe_epoch20_b6_w6_i120_4gpu_20260614T095446Z.log
+resume=/root/data-tmp/workspace/02_experiments/runs/kd_light_b2_c64_e120_s42_recover_epoch10_fast_shm_4gpu/latest_train_state.pth
+mode=probe
+Filesystem                                                                        Size  Used Avail Use% Mounted on
+overlay                                                                           879G  830G  3.9G 100% /
+shm                                                                               124G  2.9G  122G   3% /dev/shm
+192.168.33.41:/nfs/users/privatecloud/data/container-295a49aaa9-630fea26-storage  8.8T  7.7T  1.2T  88% /root/data-tmp
+index, name, memory.used [MiB], utilization.gpu [%]
+0, Tesla V100-SXM2-16GB, 0 MiB, 0 %
+1, Tesla V100-SXM2-16GB, 0 MiB, 0 %
+2, Tesla V100-SXM2-16GB, 0 MiB, 0 %
+3, Tesla V100-SXM2-16GB, 0 MiB, 0 %
+batch_size: 6
+batch_size_valid: 8
+epochs: 21
+lr: 7.5e-05
+weight_decay: 0.00015
+rand_seed: 42
+precisionHigh: true
+train_dir: /dev/shm/escnet_fast_kd/data/Train
+test_dir: /root/data-tmp/COD/Test/COD10K
+load_all: false
+backbone: pvt_v2_b2
+img_size: 416
+lateral_channels:
+- 512
+- 320
+- 128
+- 64
+inter_channel: 64
+bb_pretrained: true
+resume: /root/data-tmp/workspace/02_experiments/runs/kd_light_b2_c64_e120_s42_recover_epoch10_fast_shm_4gpu/latest_train_state.pth
+compile: false
+device_ids:
+- 0
+- 1
+- 2
+- 3
+multi_GPU: true
+save_model_dir: /dev/shm/escnet_fast_kd/runs
+name: kd_light_b2_c64_e120_s42_probe_epoch20_b6_w6_i120_4gpu
+save_last: 0
+save_step: 20
+preproc_methods:
+- flip
+- rotate
+- pepper
+- crop
+weights:
+  pvt_v2_b2: /dev/shm/escnet_fast_kd/weights/pvt_v2_b2.pth
+  pvt_v2_b4: null
+  pvt_v2_b5: /dev/shm/escnet_fast_kd/weights/pvt_v2_b5_22k.pth
+kd_enabled: true
+kd_mode: online
+kd_teacher_config: /root/data-tmp/workspace/02_experiments/code/kd_light_escnet_b2_c64/configs/teacher_b5.yaml
+kd_teacher_ckpt: /dev/shm/escnet_fast_kd/weights/teacher_epoch_120.pth
+kd_loss: mse
+kd_weight: 0.5
+kd_temperature: 2.0
+kd_warmup_epochs: 5
+kd_cache_dir: null
+num_workers: 6
+persistent_workers: true
+prefetch_factor: 4
+max_train_iters_per_epoch: 120

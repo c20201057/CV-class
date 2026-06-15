@@ -1,0 +1,136 @@
+2026-06-14 15:30:48,569 INFO Trainer initialized on rank 0 with device cuda:0.
+2026-06-14 15:30:48,570 INFO Full config:
+{
+  "batch_size": 2,
+  "batch_size_valid": 8,
+  "epochs": 120,
+  "lr": 0.0000375,
+  "weight_decay": 0.00015,
+  "rand_seed": 42,
+  "precisionHigh": true,
+  "train_dir": "/root/data-tmp/COD/Train",
+  "test_dir": "/root/data-tmp/COD/Test/COD10K",
+  "load_all": false,
+  "backbone": "pvt_v2_b2",
+  "img_size": 416,
+  "lateral_channels": [
+    512,
+    320,
+    128,
+    64
+  ],
+  "inter_channel": 64,
+  "bb_pretrained": true,
+  "resume": "/root/data-tmp/workspace/02_experiments/runs/kd_light_b2_c64_e120_s42/epoch_5.pth",
+  "compile": false,
+  "device_ids": [
+    0,
+    1,
+    2,
+    3
+  ],
+  "multi_GPU": true,
+  "save_model_dir": "/root/data-tmp/workspace/02_experiments/runs",
+  "name": "kd_light_b2_c64_e120_s42_recover_b2w0_4gpu",
+  "save_last": 120,
+  "save_step": 1,
+  "preproc_methods": [
+    "flip",
+    "rotate",
+    "pepper",
+    "crop"
+  ],
+  "weights": {
+    "pvt_v2_b2": "/root/data-tmp/weights/pvt_v2_b2.pth",
+    "pvt_v2_b4": null,
+    "pvt_v2_b5": "/root/data-tmp/weights/pvt_v2_b5_22k.pth"
+  },
+  "kd_enabled": true,
+  "kd_mode": "online",
+  "kd_teacher_config": "/root/data-tmp/workspace/02_experiments/code/kd_light_escnet_b2_c64/configs/teacher_b5.yaml",
+  "kd_teacher_ckpt": "/root/data-tmp/epoch_120.pth",
+  "kd_loss": "mse",
+  "kd_weight": 0.5,
+  "kd_temperature": 2.0,
+  "kd_warmup_epochs": 5,
+  "kd_cache_dir": null,
+  "num_workers": 0
+}
+2026-06-14 15:31:31,657 INFO 505 batches of train dataloader created.
+2026-06-14 15:32:04,749 INFO Model, optimizer, and scheduler have been initialized.
+2026-06-14 15:32:05,038 INFO Resumed training from /root/data-tmp/workspace/02_experiments/runs/kd_light_b2_c64_e120_s42/epoch_5.pth; loaded_epoch=5, start_epoch=6.
+2026-06-14 15:34:01,457 INFO Online KD teacher loaded from /root/data-tmp/epoch_120.pth
+2026-06-14 15:34:01,458 INFO Starting training process...
+2026-06-14 15:34:03,897 INFO Epoch[6/120] Iter[0/505] | Total Loss: 3.431 | Structure Loss: 2.506 | Edge Loss: 0.903 | KD Loss: 0.043 | KD Weight: 0.500
+2026-06-14 15:35:28,312 INFO Epoch[6/120] Iter[50/505] | Total Loss: 2.328 | Structure Loss: 1.454 | Edge Loss: 0.859 | KD Loss: 0.030 | KD Weight: 0.500
+2026-06-14 15:36:54,231 INFO Epoch[6/120] Iter[100/505] | Total Loss: 2.523 | Structure Loss: 1.699 | Edge Loss: 0.812 | KD Loss: 0.024 | KD Weight: 0.500
+2026-06-14 15:38:19,474 INFO Epoch[6/120] Iter[150/505] | Total Loss: 2.766 | Structure Loss: 1.914 | Edge Loss: 0.834 | KD Loss: 0.036 | KD Weight: 0.500
+2026-06-14 15:39:45,133 INFO Epoch[6/120] Iter[200/505] | Total Loss: 2.825 | Structure Loss: 1.924 | Edge Loss: 0.885 | KD Loss: 0.032 | KD Weight: 0.500
+2026-06-14 15:41:09,158 INFO Epoch[6/120] Iter[250/505] | Total Loss: 2.921 | Structure Loss: 2.030 | Edge Loss: 0.875 | KD Loss: 0.032 | KD Weight: 0.500
+2026-06-14 15:42:29,019 INFO Epoch[6/120] Iter[300/505] | Total Loss: 3.164 | Structure Loss: 2.326 | Edge Loss: 0.824 | KD Loss: 0.028 | KD Weight: 0.500
+2026-06-14 15:43:50,383 INFO Epoch[6/120] Iter[350/505] | Total Loss: 2.699 | Structure Loss: 1.825 | Edge Loss: 0.852 | KD Loss: 0.043 | KD Weight: 0.500
+2026-06-14 15:45:07,323 INFO Epoch[6/120] Iter[400/505] | Total Loss: 2.092 | Structure Loss: 1.202 | Edge Loss: 0.875 | KD Loss: 0.030 | KD Weight: 0.500
+2026-06-14 15:46:26,367 INFO Epoch[6/120] Iter[450/505] | Total Loss: 2.696 | Structure Loss: 1.851 | Edge Loss: 0.832 | KD Loss: 0.026 | KD Weight: 0.500
+2026-06-14 15:47:43,716 INFO Epoch[6/120] Iter[500/505] | Total Loss: 3.403 | Structure Loss: 2.540 | Edge Loss: 0.839 | KD Loss: 0.049 | KD Weight: 0.500
+2026-06-14 15:47:49,789 INFO @==Final== Epoch[6/120] Avg Training Loss: 2.676
+2026-06-14 15:47:50,262 INFO Checkpoint saved to /root/data-tmp/workspace/02_experiments/runs/kd_light_b2_c64_e120_s42_recover_b2w0_4gpu/epoch_6.pth
+2026-06-14 15:47:51,369 INFO Training state saved to /root/data-tmp/workspace/02_experiments/runs/kd_light_b2_c64_e120_s42_recover_b2w0_4gpu/latest_train_state.pth
+2026-06-14 15:47:52,311 INFO Epoch[7/120] Iter[0/505] | Total Loss: 2.295 | Structure Loss: 1.428 | Edge Loss: 0.857 | KD Loss: 0.019 | KD Weight: 0.500
+2026-06-14 15:49:17,821 INFO Epoch[7/120] Iter[50/505] | Total Loss: 2.505 | Structure Loss: 1.656 | Edge Loss: 0.831 | KD Loss: 0.035 | KD Weight: 0.500
+2026-06-14 15:50:46,176 INFO Epoch[7/120] Iter[100/505] | Total Loss: 1.933 | Structure Loss: 1.076 | Edge Loss: 0.843 | KD Loss: 0.030 | KD Weight: 0.500
+2026-06-14 15:52:04,144 INFO Epoch[7/120] Iter[150/505] | Total Loss: 2.148 | Structure Loss: 1.333 | Edge Loss: 0.806 | KD Loss: 0.020 | KD Weight: 0.500
+2026-06-14 15:53:25,610 INFO Epoch[7/120] Iter[200/505] | Total Loss: 2.536 | Structure Loss: 1.615 | Edge Loss: 0.912 | KD Loss: 0.019 | KD Weight: 0.500
+2026-06-14 15:54:46,006 INFO Epoch[7/120] Iter[250/505] | Total Loss: 3.118 | Structure Loss: 2.236 | Edge Loss: 0.859 | KD Loss: 0.045 | KD Weight: 0.500
+2026-06-14 15:56:05,502 INFO Epoch[7/120] Iter[300/505] | Total Loss: 2.532 | Structure Loss: 1.716 | Edge Loss: 0.808 | KD Loss: 0.018 | KD Weight: 0.500
+2026-06-14 15:57:27,065 INFO Epoch[7/120] Iter[350/505] | Total Loss: 2.038 | Structure Loss: 1.299 | Edge Loss: 0.730 | KD Loss: 0.019 | KD Weight: 0.500
+2026-06-14 15:58:52,402 INFO Epoch[7/120] Iter[400/505] | Total Loss: 2.648 | Structure Loss: 1.779 | Edge Loss: 0.859 | KD Loss: 0.020 | KD Weight: 0.500
+2026-06-14 16:00:18,143 INFO Epoch[7/120] Iter[450/505] | Total Loss: 2.095 | Structure Loss: 1.249 | Edge Loss: 0.840 | KD Loss: 0.013 | KD Weight: 0.500
+2026-06-14 16:01:40,952 INFO Epoch[7/120] Iter[500/505] | Total Loss: 1.834 | Structure Loss: 1.071 | Edge Loss: 0.757 | KD Loss: 0.012 | KD Weight: 0.500
+2026-06-14 16:01:47,979 INFO @==Final== Epoch[7/120] Avg Training Loss: 2.542
+2026-06-14 16:01:48,792 INFO Checkpoint saved to /root/data-tmp/workspace/02_experiments/runs/kd_light_b2_c64_e120_s42_recover_b2w0_4gpu/epoch_7.pth
+2026-06-14 16:01:50,074 INFO Training state saved to /root/data-tmp/workspace/02_experiments/runs/kd_light_b2_c64_e120_s42_recover_b2w0_4gpu/latest_train_state.pth
+2026-06-14 16:01:51,045 INFO Epoch[8/120] Iter[0/505] | Total Loss: 1.752 | Structure Loss: 0.989 | Edge Loss: 0.756 | KD Loss: 0.013 | KD Weight: 0.500
+2026-06-14 16:03:14,891 INFO Epoch[8/120] Iter[50/505] | Total Loss: 2.709 | Structure Loss: 1.878 | Edge Loss: 0.822 | KD Loss: 0.019 | KD Weight: 0.500
+2026-06-14 16:04:43,067 INFO Epoch[8/120] Iter[100/505] | Total Loss: 2.207 | Structure Loss: 1.348 | Edge Loss: 0.849 | KD Loss: 0.018 | KD Weight: 0.500
+2026-06-14 16:06:06,741 INFO Epoch[8/120] Iter[150/505] | Total Loss: 2.840 | Structure Loss: 1.972 | Edge Loss: 0.860 | KD Loss: 0.015 | KD Weight: 0.500
+2026-06-14 16:07:28,946 INFO Epoch[8/120] Iter[200/505] | Total Loss: 1.920 | Structure Loss: 1.064 | Edge Loss: 0.845 | KD Loss: 0.020 | KD Weight: 0.500
+2026-06-14 16:08:54,117 INFO Epoch[8/120] Iter[250/505] | Total Loss: 2.487 | Structure Loss: 1.694 | Edge Loss: 0.778 | KD Loss: 0.032 | KD Weight: 0.500
+2026-06-14 16:10:17,999 INFO Epoch[8/120] Iter[300/505] | Total Loss: 2.757 | Structure Loss: 1.952 | Edge Loss: 0.798 | KD Loss: 0.015 | KD Weight: 0.500
+2026-06-14 16:11:39,439 INFO Epoch[8/120] Iter[350/505] | Total Loss: 2.141 | Structure Loss: 1.262 | Edge Loss: 0.870 | KD Loss: 0.017 | KD Weight: 0.500
+2026-06-14 16:13:06,830 INFO Epoch[8/120] Iter[400/505] | Total Loss: 1.930 | Structure Loss: 1.104 | Edge Loss: 0.822 | KD Loss: 0.008 | KD Weight: 0.500
+2026-06-14 16:14:32,014 INFO Epoch[8/120] Iter[450/505] | Total Loss: 2.456 | Structure Loss: 1.639 | Edge Loss: 0.810 | KD Loss: 0.012 | KD Weight: 0.500
+2026-06-14 16:15:49,562 INFO Epoch[8/120] Iter[500/505] | Total Loss: 2.069 | Structure Loss: 1.316 | Edge Loss: 0.745 | KD Loss: 0.017 | KD Weight: 0.500
+2026-06-14 16:15:56,684 INFO @==Final== Epoch[8/120] Avg Training Loss: 2.464
+2026-06-14 16:15:57,252 INFO Checkpoint saved to /root/data-tmp/workspace/02_experiments/runs/kd_light_b2_c64_e120_s42_recover_b2w0_4gpu/epoch_8.pth
+2026-06-14 16:15:58,636 INFO Training state saved to /root/data-tmp/workspace/02_experiments/runs/kd_light_b2_c64_e120_s42_recover_b2w0_4gpu/latest_train_state.pth
+2026-06-14 16:15:59,592 INFO Epoch[9/120] Iter[0/505] | Total Loss: 1.992 | Structure Loss: 1.189 | Edge Loss: 0.795 | KD Loss: 0.018 | KD Weight: 0.500
+2026-06-14 16:17:20,268 INFO Epoch[9/120] Iter[50/505] | Total Loss: 2.713 | Structure Loss: 1.848 | Edge Loss: 0.855 | KD Loss: 0.021 | KD Weight: 0.500
+2026-06-14 16:18:36,929 INFO Epoch[9/120] Iter[100/505] | Total Loss: 1.691 | Structure Loss: 0.858 | Edge Loss: 0.829 | KD Loss: 0.009 | KD Weight: 0.500
+2026-06-14 16:19:52,229 INFO Epoch[9/120] Iter[150/505] | Total Loss: 2.499 | Structure Loss: 1.619 | Edge Loss: 0.872 | KD Loss: 0.016 | KD Weight: 0.500
+2026-06-14 16:21:05,666 INFO Epoch[9/120] Iter[200/505] | Total Loss: 2.266 | Structure Loss: 1.396 | Edge Loss: 0.863 | KD Loss: 0.014 | KD Weight: 0.500
+2026-06-14 16:22:23,046 INFO Epoch[9/120] Iter[250/505] | Total Loss: 1.568 | Structure Loss: 0.774 | Edge Loss: 0.789 | KD Loss: 0.010 | KD Weight: 0.500
+2026-06-14 16:23:40,991 INFO Epoch[9/120] Iter[300/505] | Total Loss: 2.501 | Structure Loss: 1.635 | Edge Loss: 0.859 | KD Loss: 0.015 | KD Weight: 0.500
+2026-06-14 16:24:59,003 INFO Epoch[9/120] Iter[350/505] | Total Loss: 2.713 | Structure Loss: 1.874 | Edge Loss: 0.831 | KD Loss: 0.018 | KD Weight: 0.500
+2026-06-14 16:26:10,894 INFO Epoch[9/120] Iter[400/505] | Total Loss: 2.072 | Structure Loss: 1.265 | Edge Loss: 0.797 | KD Loss: 0.020 | KD Weight: 0.500
+2026-06-14 16:27:36,723 INFO Epoch[9/120] Iter[450/505] | Total Loss: 1.941 | Structure Loss: 1.176 | Edge Loss: 0.763 | KD Loss: 0.005 | KD Weight: 0.500
+2026-06-14 16:29:00,002 INFO Epoch[9/120] Iter[500/505] | Total Loss: 2.652 | Structure Loss: 1.825 | Edge Loss: 0.819 | KD Loss: 0.017 | KD Weight: 0.500
+2026-06-14 16:29:06,428 INFO @==Final== Epoch[9/120] Avg Training Loss: 2.322
+2026-06-14 16:29:07,049 INFO Checkpoint saved to /root/data-tmp/workspace/02_experiments/runs/kd_light_b2_c64_e120_s42_recover_b2w0_4gpu/epoch_9.pth
+2026-06-14 16:29:08,294 INFO Training state saved to /root/data-tmp/workspace/02_experiments/runs/kd_light_b2_c64_e120_s42_recover_b2w0_4gpu/latest_train_state.pth
+2026-06-14 16:29:09,232 INFO Epoch[10/120] Iter[0/505] | Total Loss: 2.487 | Structure Loss: 1.659 | Edge Loss: 0.821 | KD Loss: 0.015 | KD Weight: 0.500
+2026-06-14 16:30:37,552 INFO Epoch[10/120] Iter[50/505] | Total Loss: 3.168 | Structure Loss: 2.288 | Edge Loss: 0.860 | KD Loss: 0.042 | KD Weight: 0.500
+2026-06-14 16:32:04,566 INFO Epoch[10/120] Iter[100/505] | Total Loss: 2.079 | Structure Loss: 1.199 | Edge Loss: 0.866 | KD Loss: 0.028 | KD Weight: 0.500
+2026-06-14 16:33:36,935 INFO Epoch[10/120] Iter[150/505] | Total Loss: 2.537 | Structure Loss: 1.722 | Edge Loss: 0.808 | KD Loss: 0.017 | KD Weight: 0.500
+2026-06-14 16:35:13,114 INFO Epoch[10/120] Iter[200/505] | Total Loss: 1.943 | Structure Loss: 1.162 | Edge Loss: 0.777 | KD Loss: 0.009 | KD Weight: 0.500
+2026-06-14 16:36:37,680 INFO Epoch[10/120] Iter[250/505] | Total Loss: 1.527 | Structure Loss: 0.682 | Edge Loss: 0.842 | KD Loss: 0.008 | KD Weight: 0.500
+2026-06-14 16:38:02,347 INFO Epoch[10/120] Iter[300/505] | Total Loss: 2.506 | Structure Loss: 1.645 | Edge Loss: 0.848 | KD Loss: 0.026 | KD Weight: 0.500
+2026-06-14 16:39:28,563 INFO Epoch[10/120] Iter[350/505] | Total Loss: 2.530 | Structure Loss: 1.712 | Edge Loss: 0.806 | KD Loss: 0.025 | KD Weight: 0.500
+2026-06-14 16:40:49,145 INFO Epoch[10/120] Iter[400/505] | Total Loss: 2.367 | Structure Loss: 1.605 | Edge Loss: 0.758 | KD Loss: 0.009 | KD Weight: 0.500
+2026-06-14 16:42:15,699 INFO Epoch[10/120] Iter[450/505] | Total Loss: 1.910 | Structure Loss: 1.092 | Edge Loss: 0.811 | KD Loss: 0.015 | KD Weight: 0.500
+2026-06-14 16:43:37,866 INFO Epoch[10/120] Iter[500/505] | Total Loss: 2.985 | Structure Loss: 2.053 | Edge Loss: 0.913 | KD Loss: 0.038 | KD Weight: 0.500
+2026-06-14 16:43:43,984 INFO @==Final== Epoch[10/120] Avg Training Loss: 2.210
+2026-06-14 16:43:45,019 INFO Checkpoint saved to /root/data-tmp/workspace/02_experiments/runs/kd_light_b2_c64_e120_s42_recover_b2w0_4gpu/epoch_10.pth
+2026-06-14 16:43:46,460 INFO Training state saved to /root/data-tmp/workspace/02_experiments/runs/kd_light_b2_c64_e120_s42_recover_b2w0_4gpu/latest_train_state.pth
+2026-06-14 16:43:47,479 INFO Epoch[11/120] Iter[0/505] | Total Loss: 2.913 | Structure Loss: 2.052 | Edge Loss: 0.852 | KD Loss: 0.020 | KD Weight: 0.500
+2026-06-14 16:45:10,667 INFO Epoch[11/120] Iter[50/505] | Total Loss: 1.770 | Structure Loss: 0.923 | Edge Loss: 0.839 | KD Loss: 0.016 | KD Weight: 0.500
+2026-06-14 16:46:34,968 INFO Epoch[11/120] Iter[100/505] | Total Loss: 2.827 | Structure Loss: 1.950 | Edge Loss: 0.872 | KD Loss: 0.012 | KD Weight: 0.500

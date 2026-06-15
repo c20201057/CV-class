@@ -1,0 +1,105 @@
+{
+  "backbone": "pvt_v2_b5",
+  "batch_size": 1,
+  "checkpoint": {
+    "path": "",
+    "reason": "No checkpoint path was provided; profiled randomly initialized weights.",
+    "status": "random_init"
+  },
+  "command": "python /root/data-tmp/workspace/02_experiments/scripts/profile_model.py --repo /root/ESCNet --config /root/ESCNet/config.yaml --out /root/data-tmp/workspace/02_experiments/runs/profile_escnet_b5_416/random_init_smoke_cpu.json --device cpu --warmup 0 --repeat 1 --exp-id smoke_random_init_cpu --profiles-csv /root/data-tmp/workspace/02_experiments/runs/profile_escnet_b5_416/random_init_smoke_profiles.csv",
+  "config": "/root/ESCNet/config.yaml",
+  "cuda_version": "12.1",
+  "cudnn_version": 90100,
+  "device": "cpu",
+  "device_name": null,
+  "device_warning": null,
+  "exp_id": "smoke_random_init_cpu",
+  "flops": 258043600386,
+  "flops_g": 258.043600386,
+  "flops_method": "torch.profiler.profile(with_flops=True)",
+  "flops_note": "PyTorch profiler estimates FLOPs for supported ops such as conv/matmul; unsupported ops are not included.",
+  "flops_packages": {
+    "fvcore": false,
+    "ptflops": false,
+    "thop": false
+  },
+  "flops_status": "estimated",
+  "forward_error": null,
+  "forward_status": "ok",
+  "fps": 0.4374,
+  "gmacs": 129.021800193,
+  "img_size": 416,
+  "input_shape": [
+    1,
+    3,
+    416,
+    416
+  ],
+  "inter_channel": 128,
+  "latency_ms": 2286.1978,
+  "model": "ESCNet",
+  "model_size_mb": 381.169,
+  "output_summary": [
+    {
+      "dtype": "torch.float32",
+      "shape": [
+        1,
+        1,
+        416,
+        416
+      ],
+      "type": "Tensor"
+    },
+    [
+      {
+        "dtype": "torch.float32",
+        "shape": [
+          1,
+          1,
+          13,
+          13
+        ],
+        "type": "Tensor"
+      },
+      {
+        "dtype": "torch.float32",
+        "shape": [
+          1,
+          1,
+          26,
+          26
+        ],
+        "type": "Tensor"
+      },
+      {
+        "dtype": "torch.float32",
+        "shape": [
+          1,
+          1,
+          52,
+          52
+        ],
+        "type": "Tensor"
+      },
+      {
+        "dtype": "torch.float32",
+        "shape": [
+          1,
+          1,
+          416,
+          416
+        ],
+        "type": "Tensor"
+      }
+    ]
+  ],
+  "params": 99903234,
+  "peak_mem_mb": null,
+  "python_version": "3.10.8",
+  "repeat": 1,
+  "repo": "/root/ESCNet",
+  "requested_device": "cpu",
+  "torch_version": "2.5.1+cu121",
+  "trainable_params": 99903234,
+  "warmup": 0
+}

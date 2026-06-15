@@ -1,0 +1,13 @@
+{
+  "exp_id": "baseline_escnet_b5_clean_prob_e120",
+  "repo": "/root/data-tmp/workspace/02_experiments/code/baseline_escnet_clean",
+  "checkpoint": "/root/data-tmp/epoch_120.pth",
+  "device": "cuda:0",
+  "method": "epoch_120",
+  "datasets": [
+    "CAMO",
+    "COD10K",
+    "NC4K"
+  ],
+  "prediction_protocol": "sigmoid_probability_png_align_corners_false"
+}
