@@ -3,7 +3,7 @@ import argparse
 from glob import glob
 import pdb
 from tqdm import tqdm
-from models.ESCNet import ESCNet
+from models.build_model import build_model
 import cv2
 import torch
 import multiprocessing as mp
@@ -69,7 +69,7 @@ def load_and_infer_on_gpu(model, weights, data_loader_test, pred_root, testset, 
 def run_inference_on_gpu(config, device_id, weights_lst, data_loader_test, pred_root, testset):
     # Assign the current GPU
     current_device = f"cuda:{device_id}"
-    model = ESCNet(config ,pretrained=False).to(current_device)
+    model = build_model(config, pretrained=False).to(current_device)
 
     # Load and infer each model assigned to this GPU
     for weights in weights_lst:

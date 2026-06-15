@@ -28,6 +28,7 @@ class DistillationConfig(BaseModel):
     """Teacher-Student distillation settings."""
 
     enabled: bool = False
+    teacher_architecture: Literal["escnet", "escnet_slim", "lite_escnet"] = "escnet"
     teacher_checkpoint: Optional[str] = None
     teacher_backbone: Optional[str] = None
     teacher_lateral_channels: Optional[List[int]] = None
@@ -35,6 +36,9 @@ class DistillationConfig(BaseModel):
     hard_loss_weight: float = Field(1.0, ge=0)
     mask_loss_weight: float = Field(1.0, ge=0)
     edge_loss_weight: float = Field(0.2, ge=0)
+    teacher_structure_loss_weight: float = Field(0.0, ge=0)
+    teacher_structure_loss_levels: Literal["final", "all"] = "final"
+    teacher_structure_temperature: float = Field(1.0, gt=0)
     feature_loss_weight: float = Field(0.0, ge=0)
     feature_loss_warmup_epochs: int = Field(0, ge=0)
     feature_mse_weight: float = Field(1.0, ge=0)
@@ -76,8 +80,11 @@ class Config(BaseModel):
     epochs: int = Field(..., gt=0, description="Total number of training epochs.")
     lr: float = Field(..., gt=0, description="Learning rate.")
     weight_decay: float = Field(..., ge=0, description="Weight decay for the optimizer.")
+    structure_loss_type: Literal["plain", "weighted"] = "plain"
     structure_loss_weight: float = Field(1.0, ge=0)
     edge_supervision_weight: float = Field(1.0, ge=0)
+    mask_level_weights: Optional[List[float]] = None
+    mask_edge_consistency_weight: float = Field(0.0, ge=0)
     rand_seed: int = 42
     precisionHigh: bool = True
 
@@ -87,14 +94,18 @@ class Config(BaseModel):
     load_all: bool = False
 
     # --- Model Configuration ---
+    architecture: Literal["escnet", "escnet_slim", "lite_escnet"] = "escnet"
     backbone: str
     img_size: int = Field(..., gt=0)
     lateral_channels: List[int]
+    escnet_width: int = Field(128, gt=0)
+    lite_head_channels: int = Field(64, gt=0)
     resume: Optional[str] = None # Allows the field to be missing or empty ""
     resume_optimizer: bool = True
     resume_lr_scheduler: bool = True
     resume_scaler: bool = True
     resume_epoch: bool = True
+    resume_strict: bool = True
     compile: bool = True
     distillation: DistillationConfig = Field(default_factory=DistillationConfig)
     eval_during_training: EvalDuringTrainingConfig = Field(default_factory=EvalDuringTrainingConfig)

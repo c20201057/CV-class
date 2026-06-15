@@ -123,6 +123,16 @@ feature_mask_edge_weight: 3.0
 feature_stage_weights: null
 ```
 
+Teacher-structure distillation fields were also added:
+
+```yaml
+teacher_structure_loss_weight: 0.0
+teacher_structure_loss_levels: final
+teacher_structure_temperature: 1.0
+```
+
+This loss supervises Student masks with the Teacher's soft mask using the same boundary-aware structure loss. It is disabled by default.
+
 `feature_loss_weight: 0.0` disables feature distillation and preserves old behavior.
 
 Enabled in:
@@ -140,9 +150,10 @@ resume_optimizer: true
 resume_lr_scheduler: true
 resume_scaler: true
 resume_epoch: true
+resume_strict: true
 ```
 
-The defaults preserve the previous full-resume behavior. For finetuning, a config can now load model weights while resetting optimizer, scheduler, AMP scaler, and epoch counter.
+The defaults preserve the previous full-resume behavior. For finetuning, a config can now load model weights while resetting optimizer, scheduler, AMP scaler, and epoch counter. `resume_strict: false` is useful when a new training-only module, such as feature adapters, has been added after an older checkpoint was trained.
 
 ### Strong PoolFormer Mask-KD Finetune Config
 
@@ -160,6 +171,142 @@ Run:
 ```bash
 cd /root/CV-class
 bash run.sh -c configs/poolformer_s12_maskkd_finetune.yaml
+```
+
+### PVT-v2-B0 Mask-KD Finetune Config
+
+Added `configs/pvt_v2_b0_maskkd_finetune.yaml` after comparing the current logs/results. `pvt_v2_b0_lowerlr` reaches `S=0.8097`, `wF=0.7052`, and `MAE=0.0317` at epoch 120, and its curve is still improving late in training. This suggests PVT-v2-B0 has more headroom than PoolFormer-S12 in the current framework.
+
+This config:
+
+- starts from `/root/data-tmp/ESCNet/checkpoints/pvt_v2_b0_lowerlr/epoch_120.pth`
+- resets optimizer/scheduler/scaler/epoch for clean low-lr finetuning
+- uses `resume_strict: false` so newly added feature adapters can initialize cleanly
+- keeps feature KD more conservative than the PoolFormer mask-KD run
+- slightly strengthens mask/edge KD and supervised edge loss
+- emphasizes deeper feature stages with `feature_stage_weights: [0.4, 0.8, 1.2, 1.4]`
+
+Run:
+
+```bash
+cd /root/CV-class
+bash run.sh -c configs/pvt_v2_b0_maskkd_finetune.yaml
+```
+
+### PVT-v2-B0 512 Structure-KD Config
+
+Added `configs/pvt_v2_b0_512_structkd.yaml` as a more aggressive experiment after the PVT-v2-B0 mask-KD finetune only gave small gains. The new direction avoids pushing the already weak feature KD signal and instead attacks mask quality directly:
+
+- trains/evaluates at `512x512` for more boundary and small-object detail
+- trains ESCNet from epoch 0 without resuming any ESCNet checkpoint
+- uses `120` epochs with `lr: 5e-5`, a conservative full-training LR for the smaller 512-resolution batch
+- uses weighted structure loss for GT masks
+- adds teacher-structure KD from the teacher's final soft mask
+- adds a small mask-edge consistency loss
+- disables feature KD so the optimization is not dominated by weak adapter alignment
+- adds color enhancement augmentation
+
+This is intentionally higher-risk and may need more memory, so the config uses `batch_size: 2` and `batch_size_valid: 4`. The PVT-v2-B0 backbone still uses its configured ImageNet pretrained weights; only ESCNet training checkpoint resume is disabled.
+
+Run:
+
+```bash
+cd /root/CV-class
+bash run.sh -c configs/pvt_v2_b0_512_structkd.yaml
+```
+
+### PVT-v2-B0 512 No-TS Config
+
+Added `configs/pvt_v2_b0_512_no_ts.yaml` as the direct no-Teacher-Student control for the aggressive 512 experiment.
+
+It keeps the non-distillation changes from `pvt_v2_b0_512_structkd.yaml`:
+
+- `512x512` training/evaluation
+- weighted GT structure loss
+- stronger supervised edge loss
+- final-mask edge consistency loss
+- color enhancement augmentation
+- no ESCNet training checkpoint resume
+- `120` epochs with `lr: 5e-5`
+
+It disables the whole `distillation` block with `enabled: false`, so no teacher model is built and no TS/KD loss is used. This makes it a clean ablation for checking whether the gain comes from higher-resolution structure training or from Teacher-Student supervision.
+
+Run:
+
+```bash
+cd /root/CV-class
+bash run.sh -c configs/pvt_v2_b0_512_no_ts.yaml
+```
+
+## Lightweight Decoder/Head Update
+
+Added a separate lightweight model architecture, `lite_escnet`, without changing the original `escnet` model.
+
+Files:
+
+- `models/LiteESCNet.py`
+- `models/build_model.py`
+- config field: `architecture`, defaulting to `escnet`
+- config field: `lite_head_channels`, defaulting to `64`
+- training config: `configs/pvt_v2_b0_litehead_512_no_ts.yaml`
+
+The lightweight model keeps the selected backbone but replaces the heavy ESCNet head with a compact depthwise-separable FPN:
+
+- 1x1 projections map backbone features into a shared light channel width
+- top-down fusion uses depthwise-separable convolution and a lightweight channel gate
+- edge prediction uses shallow fused high-resolution features
+- four mask logits are still returned, preserving the existing multi-level structure loss interface
+
+With PVT-v2-B0 and `lite_head_channels: 64`, the student model has about `3.50M` parameters:
+
+- total: about `3.50M`
+- backbone: about `3.41M`
+- lightweight decoder/head: about `0.09M`
+
+This is a much more direct lightweight baseline than only changing the backbone, because the original PVT-v2-B0 ESCNet model has about `21.80M` parameters and most of them are in the decoder/head.
+
+Run:
+
+```bash
+cd /root/CV-class
+bash run.sh -c configs/pvt_v2_b0_litehead_512_no_ts.yaml
+```
+
+## Structure-Preserving ESCNet Slim Update
+
+Added `escnet_slim` for a more method-faithful lightweight variant. Unlike `lite_escnet`, this keeps the original ESCNet decoder/head design:
+
+- AETP edge prediction
+- FEM blocks
+- MTA blocks
+- deformable convolutions
+- image patch injection
+- edge-guided semantic decoding
+- four mask outputs and one edge output
+
+The only architectural reduction is the internal ESCNet width:
+
+```yaml
+architecture: escnet_slim
+escnet_width: 64
+```
+
+The original `escnet` keeps `escnet_width: 128`, so existing configs preserve the original model. The PVT-v2-B0 slim config is `configs/pvt_v2_b0_escnet_slim_512_no_ts.yaml`.
+
+With PVT-v2-B0, `escnet_width: 64` has about `8.34M` parameters:
+
+- backbone: about `3.41M`
+- original-method slim decoder/head: about `4.93M`
+
+For comparison, the original-width PVT-v2-B0 ESCNet has about `21.80M` parameters.
+
+This variant is less aggressive than `lite_escnet`, but it is better suited for experiments that need to claim the original ESCNet method is mostly preserved.
+
+Run:
+
+```bash
+cd /root/CV-class
+bash run.sh -c configs/pvt_v2_b0_escnet_slim_512_no_ts.yaml
 ```
 
 ## Additional Alignment Loss Ideas

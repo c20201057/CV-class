@@ -17,9 +17,10 @@ import cv2
 
 from config import Config, load_config
 from dataset import MyData
-from loss import BackboneFeatureDistillationLoss, EdgeDiceLoss, StructureLoss
+from loss import BackboneFeatureDistillationLoss, EdgeDiceLoss, StructureLoss, StructureLossWithWeight
 from metrics import evaluator
 from models.ESCNet import ESCNet
+from models.build_model import build_model
 from utils import Logger, AverageMeter, check_state_dict, save_tensor_img, set_seed
 
 
@@ -68,6 +69,7 @@ class Trainer:
         )
         self.scaler = GradScaler()
         self.structure_loss = StructureLoss().to(self.device)
+        self.weighted_structure_loss = StructureLossWithWeight().to(self.device)
         self.dice_loss = EdgeDiceLoss().to(self.device)
         self.loss_log = AverageMeter()
         self._load_resume_checkpoint()
@@ -128,7 +130,7 @@ class Trainer:
         return loader
 
     def _prepare_model_and_optimizer(self):
-        model = ESCNet(self.config, pretrained=True).to(self.device)
+        model = build_model(self.config, pretrained=True).to(self.device)
         if self.config.is_ddp:
             model = nn.SyncBatchNorm.convert_sync_batchnorm(model)
             model = DDP(model, device_ids=[self.device_id])
@@ -208,6 +210,7 @@ class Trainer:
     def _prepare_teacher_model(self):
         distill_config = self.config.distillation
         teacher_config = self.config.model_copy(deep=True)
+        teacher_config.architecture = distill_config.teacher_architecture
 
         if distill_config.teacher_backbone:
             teacher_config.backbone = distill_config.teacher_backbone
@@ -233,7 +236,8 @@ class Trainer:
         self.log(
             "Teacher model loaded from "
             f"{distill_config.teacher_checkpoint} "
-            f"with backbone={teacher_config.backbone}."
+            f"with architecture={teacher_config.architecture}, "
+            f"backbone={teacher_config.backbone}."
         )
         return teacher
 
@@ -321,7 +325,16 @@ class Trainer:
             map_location=self.device,
             weights_only=False,
         )
-        self._unwrap_model().load_state_dict(self._extract_state_dict(checkpoint))
+        missing_keys, unexpected_keys = self._unwrap_model().load_state_dict(
+            self._extract_state_dict(checkpoint),
+            strict=self.config.resume_strict,
+        )
+        if not self.config.resume_strict:
+            self.log(
+                "Resume model state loaded with strict=false: "
+                f"missing_keys={list(missing_keys)}, "
+                f"unexpected_keys={list(unexpected_keys)}."
+            )
 
         if self.config.resume_optimizer and isinstance(checkpoint, dict) and "optimizer" in checkpoint:
             try:
@@ -358,7 +371,12 @@ class Trainer:
 
         loss_structure = out_edge.new_tensor(0.0)
         gts = torch.clamp(gts, 0, 1)
-        factors = [0.5, 0.7, 0.9, 1.1]
+        factors = self.config.mask_level_weights or [0.5, 0.7, 0.9, 1.1]
+        structure_loss_fn = (
+            self.weighted_structure_loss
+            if self.config.structure_loss_type == "weighted"
+            else self.structure_loss
+        )
 
         for i, pred_lvl in enumerate(out_pred_masks):
             pred_lvl_resized = F.interpolate(
@@ -368,13 +386,33 @@ class Trainer:
                 align_corners=False,
             )
             factor = factors[i] if i < len(factors) else 1.0
-            loss_structure += self.structure_loss(pred_lvl_resized, gts) * factor
+            loss_structure += structure_loss_fn(pred_lvl_resized, gts) * factor
+
+        mask_edge_consistency_loss = out_edge.new_tensor(0.0)
+        if self.config.mask_edge_consistency_weight > 0 and out_pred_masks:
+            final_mask = F.interpolate(
+                out_pred_masks[-1].sigmoid(),
+                size=edges.shape[2:],
+                mode="bilinear",
+                align_corners=False,
+            )
+            mask_dx = torch.abs(final_mask[:, :, :, 1:] - final_mask[:, :, :, :-1])
+            mask_dx = F.pad(mask_dx, (0, 1, 0, 0))
+            mask_dy = torch.abs(final_mask[:, :, 1:, :] - final_mask[:, :, :-1, :])
+            mask_dy = F.pad(mask_dy, (0, 0, 0, 1))
+            mask_boundary = (mask_dx + mask_dy).clamp(1e-4, 1 - 1e-4)
+            with autocast(device_type=mask_boundary.device.type, enabled=False):
+                mask_edge_consistency_loss = F.binary_cross_entropy(
+                    mask_boundary.float(),
+                    edges.clamp(0, 1).float(),
+                )
 
         total_loss = (
             self.config.structure_loss_weight * loss_structure
             + self.config.edge_supervision_weight * loss_dice
+            + self.config.mask_edge_consistency_weight * mask_edge_consistency_loss
         )
-        return total_loss, loss_structure, loss_dice
+        return total_loss, loss_structure, loss_dice, mask_edge_consistency_loss
 
     @staticmethod
     def _soft_logit_loss(student_logits, teacher_logits, temperature):
@@ -417,7 +455,43 @@ class Trainer:
             distill_config.mask_loss_weight * mask_loss
             + distill_config.edge_loss_weight * edge_loss
         )
-        return total_loss, mask_loss, edge_loss
+        teacher_structure_loss = self._compute_teacher_structure_loss(
+            student_masks,
+            teacher_masks,
+            distill_config.teacher_structure_temperature,
+        )
+        total_loss = total_loss + (
+            distill_config.teacher_structure_loss_weight * teacher_structure_loss
+        )
+        return total_loss, mask_loss, edge_loss, teacher_structure_loss
+
+    def _compute_teacher_structure_loss(self, student_masks, teacher_masks, temperature):
+        distill_config = self.config.distillation
+        if distill_config.teacher_structure_loss_weight <= 0:
+            return student_masks[-1].new_tensor(0.0)
+
+        if distill_config.teacher_structure_loss_levels == "all":
+            pairs = zip(student_masks, teacher_masks)
+        else:
+            pairs = [(student_masks[-1], teacher_masks[-1])]
+
+        loss = student_masks[-1].new_tensor(0.0)
+        num_levels = 0
+        for student_mask, teacher_mask in pairs:
+            if teacher_mask.shape[2:] != student_mask.shape[2:]:
+                teacher_mask = F.interpolate(
+                    teacher_mask,
+                    size=student_mask.shape[2:],
+                    mode="bilinear",
+                    align_corners=False,
+                )
+            teacher_prob = torch.sigmoid(teacher_mask.detach() / temperature)
+            loss = loss + self.weighted_structure_loss(student_mask / temperature, teacher_prob)
+            num_levels += 1
+
+        if num_levels > 0:
+            loss = loss / num_levels
+        return loss * temperature * temperature
 
     def _feature_distillation_weight(self, epoch: int):
         distill_config = self.config.distillation
@@ -622,13 +696,19 @@ class Trainer:
                     out_edge, out_pred_masks = student_outputs
                     student_features = None
 
-                hard_loss, loss_structure, loss_dice = self._compute_supervised_loss(
+                (
+                    hard_loss,
+                    loss_structure,
+                    loss_dice,
+                    mask_edge_consistency_loss,
+                ) = self._compute_supervised_loss(
                     out_edge, out_pred_masks, gts, edges
                 )
 
                 distill_loss = out_edge.new_tensor(0.0)
                 distill_mask_loss = out_edge.new_tensor(0.0)
                 distill_edge_loss = out_edge.new_tensor(0.0)
+                teacher_structure_loss = out_edge.new_tensor(0.0)
                 feature_distill_loss = out_edge.new_tensor(0.0)
                 feature_mse_loss = out_edge.new_tensor(0.0)
                 feature_attention_loss = out_edge.new_tensor(0.0)
@@ -647,7 +727,12 @@ class Trainer:
                     else:
                         teacher_outputs = teacher_forward
                         teacher_features = None
-                    distill_loss, distill_mask_loss, distill_edge_loss = (
+                    (
+                        distill_loss,
+                        distill_mask_loss,
+                        distill_edge_loss,
+                        teacher_structure_loss,
+                    ) = (
                         self._compute_distillation_loss(student_outputs, teacher_outputs)
                     )
                     if return_features:
@@ -685,12 +770,16 @@ class Trainer:
                     f"Structure Loss: {loss_structure.item():.3f} | "
                     f"Edge Loss: {loss_dice.item():.3f}"
                 )
+                if self.config.mask_edge_consistency_weight > 0:
+                    log_msg += f" | Mask Edge Cons: {mask_edge_consistency_loss.item():.3f}"
                 if self.teacher_model is not None:
                     log_msg += (
                         f" | KD Loss: {distill_loss.item():.3f}"
                         f" | KD Mask: {distill_mask_loss.item():.3f}"
                         f" | KD Edge: {distill_edge_loss.item():.3f}"
                     )
+                    if self.config.distillation.teacher_structure_loss_weight > 0:
+                        log_msg += f" | KD Struct: {teacher_structure_loss.item():.3f}"
                     if self.feature_distill_loss is not None:
                         log_msg += (
                             f" | KD Feature: {feature_distill_loss.item():.3f}"

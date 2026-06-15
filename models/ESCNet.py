@@ -9,7 +9,7 @@ class ESCNet(nn.Module):
     def __init__(self, config, pretrained=True):
         super(ESCNet, self).__init__()
         self.channels = config.lateral_channels
-        inter_channel = 128
+        inter_channel = config.escnet_width
 
         self.encoder = Encoder(config, pretrained)
         self.decoder = Decoder(config,inter_channel)

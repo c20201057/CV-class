@@ -123,6 +123,16 @@ feature_mask_edge_weight: 3.0
 feature_stage_weights: null
 ```
 
+同时新增 teacher-structure distillation 配置：
+
+```yaml
+teacher_structure_loss_weight: 0.0
+teacher_structure_loss_levels: final
+teacher_structure_temperature: 1.0
+```
+
+该 loss 使用同样的边界感知 structure loss，让 Student mask 学习 Teacher 的 soft mask。默认关闭。
+
 `feature_loss_weight: 0.0` 会关闭 feature distillation，并保持旧行为不变。
 
 已在以下配置中启用：
@@ -140,9 +150,10 @@ resume_optimizer: true
 resume_lr_scheduler: true
 resume_scaler: true
 resume_epoch: true
+resume_strict: true
 ```
 
-默认值保持此前的完整 resume 行为。用于 finetune 时，现在可以只加载模型权重，同时重置 optimizer、scheduler、AMP scaler 和 epoch 计数。
+默认值保持此前的完整 resume 行为。用于 finetune 时，现在可以只加载模型权重，同时重置 optimizer、scheduler、AMP scaler 和 epoch 计数。`resume_strict: false` 适用于旧 checkpoint 训练完成后又新增了 feature adapter 这类训练模块的情况。
 
 ### 强化版 PoolFormer Mask-KD Finetune 配置
 
@@ -160,6 +171,142 @@ resume_epoch: true
 ```bash
 cd /root/CV-class
 bash run.sh -c configs/poolformer_s12_maskkd_finetune.yaml
+```
+
+### PVT-v2-B0 Mask-KD Finetune 配置
+
+对比当前 log 和 result 后，新增 `configs/pvt_v2_b0_maskkd_finetune.yaml`。`pvt_v2_b0_lowerlr` 在 epoch 120 达到 `S=0.8097`、`wF=0.7052`、`MAE=0.0317`，且后期曲线仍有提升，说明在当前框架里 PVT-v2-B0 比 PoolFormer-S12 更有继续优化的空间。
+
+该配置：
+
+- 从 `/root/data-tmp/ESCNet/checkpoints/pvt_v2_b0_lowerlr/epoch_120.pth` 初始化
+- 重置 optimizer/scheduler/scaler/epoch，进行干净的低学习率 finetune
+- 使用 `resume_strict: false`，让新增的 feature adapter 可以正常初始化
+- 相比 PoolFormer mask-KD 方案，更保守地使用 feature KD
+- 略微加强 mask/edge KD 和 supervised edge loss
+- 通过 `feature_stage_weights: [0.4, 0.8, 1.2, 1.4]` 更强调深层语义特征
+
+运行：
+
+```bash
+cd /root/CV-class
+bash run.sh -c configs/pvt_v2_b0_maskkd_finetune.yaml
+```
+
+### PVT-v2-B0 512 Structure-KD 配置
+
+在 PVT-v2-B0 mask-KD finetune 只有小幅提升后，新增更激进的 `configs/pvt_v2_b0_512_structkd.yaml`。这个方向不再继续强化已经较弱的 feature KD，而是直接优化 mask 质量：
+
+- 使用 `512x512` 训练和评估，保留更多边界与小目标细节
+- 从 epoch 0 训练 ESCNet，不 resume 任何 ESCNet checkpoint
+- 使用 `120` epochs 和 `lr: 5e-5`，这是针对 512 分辨率小 batch 更保守的完整训练学习率
+- 对 GT mask 使用 weighted structure loss
+- 使用 teacher final soft mask 加入 teacher-structure KD
+- 加入较小权重的 mask-edge consistency loss
+- 关闭 feature KD，避免优化被较弱的 adapter 对齐信号牵制
+- 增加 color enhancement 数据增强
+
+这是一个风险更高但更可能突破现有平台期的实验。为控制显存，配置中使用 `batch_size: 2` 和 `batch_size_valid: 4`。PVT-v2-B0 backbone 仍使用配置中的 ImageNet 预训练权重；这里只关闭 ESCNet 训练 checkpoint resume。
+
+运行：
+
+```bash
+cd /root/CV-class
+bash run.sh -c configs/pvt_v2_b0_512_structkd.yaml
+```
+
+### PVT-v2-B0 512 No-TS 配置
+
+新增 `configs/pvt_v2_b0_512_no_ts.yaml`，作为激进 512 实验的无 Teacher-Student 直接对照组。
+
+它保留 `pvt_v2_b0_512_structkd.yaml` 中不依赖蒸馏的改动：
+
+- `512x512` 训练和评估
+- weighted GT structure loss
+- 更强的 supervised edge loss
+- final mask 的 edge consistency loss
+- color enhancement 数据增强
+- 不 resume 任何 ESCNet 训练 checkpoint
+- `120` epochs 和 `lr: 5e-5`
+
+它通过 `enabled: false` 关闭整个 `distillation` 模块，因此不会构建 teacher model，也不会使用任何 TS/KD loss。这个配置可以作为干净消融，用来判断收益主要来自高分辨率结构训练，还是来自 Teacher-Student 监督。
+
+运行：
+
+```bash
+cd /root/CV-class
+bash run.sh -c configs/pvt_v2_b0_512_no_ts.yaml
+```
+
+## Decoder/Head 轻量化更新
+
+新增独立轻量模型架构 `lite_escnet`，不改变原始 `escnet` 模型。
+
+相关文件：
+
+- `models/LiteESCNet.py`
+- `models/build_model.py`
+- 配置字段：`architecture`，默认值为 `escnet`
+- 配置字段：`lite_head_channels`，默认值为 `64`
+- 训练配置：`configs/pvt_v2_b0_litehead_512_no_ts.yaml`
+
+轻量模型保留所选 backbone，但将原 ESCNet 的重型 head 替换为紧凑的 depthwise-separable FPN：
+
+- 使用 1x1 projection 将 backbone 多层特征映射到统一轻量通道数
+- top-down 融合使用 depthwise-separable convolution 和轻量 channel gate
+- edge prediction 使用浅层高分辨率融合特征
+- 仍返回 4 个 mask logits，保持现有 multi-level structure loss 接口不变
+
+在 PVT-v2-B0 和 `lite_head_channels: 64` 下，学生模型约 `3.50M` 参数：
+
+- 总参数：约 `3.50M`
+- backbone：约 `3.41M`
+- lightweight decoder/head：约 `0.09M`
+
+这比单纯更换 backbone 更直接地实现轻量化，因为原 PVT-v2-B0 ESCNet 模型约 `21.80M` 参数，其中大部分参数集中在 decoder/head。
+
+运行：
+
+```bash
+cd /root/CV-class
+bash run.sh -c configs/pvt_v2_b0_litehead_512_no_ts.yaml
+```
+
+## 保持 ESCNet 方法结构的 Slim 更新
+
+新增 `escnet_slim`，作为更忠实于原 ESCNet 方法的轻量版本。不同于 `lite_escnet`，该版本保留原 ESCNet decoder/head 的核心设计：
+
+- AETP edge prediction
+- FEM blocks
+- MTA blocks
+- deformable convolutions
+- image patch injection
+- edge-guided semantic decoding
+- 4 个 mask 输出和 1 个 edge 输出
+
+唯一的结构性缩减是降低 ESCNet 内部统一通道宽度：
+
+```yaml
+architecture: escnet_slim
+escnet_width: 64
+```
+
+原始 `escnet` 仍保持 `escnet_width: 128`，因此已有配置维持原模型不变。PVT-v2-B0 slim 配置为 `configs/pvt_v2_b0_escnet_slim_512_no_ts.yaml`。
+
+在 PVT-v2-B0 下，`escnet_width: 64` 约 `8.34M` 参数：
+
+- backbone：约 `3.41M`
+- 保持原方法结构的 slim decoder/head：约 `4.93M`
+
+作为对比，原始宽度的 PVT-v2-B0 ESCNet 约 `21.80M` 参数。
+
+这个版本不如 `lite_escnet` 激进，但更适合需要声明“基本保持原 ESCNet 方法，只做轻量化宽度缩放”的实验。
+
+运行：
+
+```bash
+cd /root/CV-class
+bash run.sh -c configs/pvt_v2_b0_escnet_slim_512_no_ts.yaml
 ```
 
 ## 其它可选高级对齐 Loss
