@@ -120,24 +120,71 @@ class BackboneFeatureDistillationLoss(nn.Module):
         self,
         feature_weight=1.0,
         attention_weight=0.5,
+        mask_guided_weight=0.0,
+        mask_foreground_weight=2.0,
+        mask_edge_weight=3.0,
+        stage_weights=None,
     ):
         super().__init__()
         self.feature_weight = feature_weight
         self.attention_weight = attention_weight
+        self.mask_guided_weight = mask_guided_weight
+        self.mask_foreground_weight = mask_foreground_weight
+        self.mask_edge_weight = mask_edge_weight
+        self.stage_weights = stage_weights
 
     @staticmethod
     def _attention_map(feature):
         attention = feature.pow(2).mean(dim=1, keepdim=True)
         return F.normalize(attention.flatten(1), p=2, dim=1)
 
-    def forward(self, student_features, teacher_features):
+    def _stage_weight(self, idx):
+        if self.stage_weights is None or idx >= len(self.stage_weights):
+            return 1.0
+        return self.stage_weights[idx]
+
+    def _mask_guided_feature_loss(self, student_feature, teacher_feature, mask, edge):
+        if self.mask_guided_weight <= 0 or mask is None:
+            return student_feature.new_tensor(0.0)
+
+        target_size = student_feature.shape[2:]
+        with torch.no_grad():
+            resized_mask = F.interpolate(
+                mask.detach(),
+                size=target_size,
+                mode="bilinear",
+                align_corners=False,
+            ).clamp(0, 1)
+            weight = 1.0 + self.mask_foreground_weight * resized_mask
+
+            if edge is not None and self.mask_edge_weight > 0:
+                resized_edge = F.interpolate(
+                    edge.detach(),
+                    size=target_size,
+                    mode="bilinear",
+                    align_corners=False,
+                ).clamp(0, 1)
+                weight = weight + self.mask_edge_weight * resized_edge
+
+            weight = weight / weight.mean(dim=(2, 3), keepdim=True).clamp_min(1e-6)
+
+        student_norm = F.normalize(student_feature, p=2, dim=1)
+        teacher_norm = F.normalize(teacher_feature, p=2, dim=1)
+        pixel_loss = (student_norm - teacher_norm).pow(2).mean(dim=1, keepdim=True)
+        return (pixel_loss * weight).mean()
+
+    def forward(self, student_features, teacher_features, mask=None, edge=None):
         feature_loss = student_features[0].new_tensor(0.0)
         attention_loss = student_features[0].new_tensor(0.0)
+        mask_guided_loss = student_features[0].new_tensor(0.0)
         num_levels = min(len(student_features), len(teacher_features))
+        weight_sum = 0.0
 
         for idx in range(num_levels):
             student_feature = student_features[idx]
             teacher_feature = teacher_features[idx].detach()
+            stage_weight = self._stage_weight(idx)
+            weight_sum += stage_weight
 
             if student_feature.shape[2:] != teacher_feature.shape[2:]:
                 teacher_feature = F.interpolate(
@@ -147,21 +194,29 @@ class BackboneFeatureDistillationLoss(nn.Module):
                     align_corners=False,
                 )
 
-            feature_loss = feature_loss + F.mse_loss(
+            feature_loss = feature_loss + stage_weight * F.mse_loss(
                 F.normalize(student_feature, p=2, dim=1),
                 F.normalize(teacher_feature, p=2, dim=1),
             )
-            attention_loss = attention_loss + F.mse_loss(
+            attention_loss = attention_loss + stage_weight * F.mse_loss(
                 self._attention_map(student_feature),
                 self._attention_map(teacher_feature),
             )
+            mask_guided_loss = mask_guided_loss + stage_weight * self._mask_guided_feature_loss(
+                student_feature,
+                teacher_feature,
+                mask,
+                edge,
+            )
 
-        if num_levels > 0:
-            feature_loss = feature_loss / num_levels
-            attention_loss = attention_loss / num_levels
+        if weight_sum > 0:
+            feature_loss = feature_loss / weight_sum
+            attention_loss = attention_loss / weight_sum
+            mask_guided_loss = mask_guided_loss / weight_sum
 
         total_loss = (
             self.feature_weight * feature_loss
             + self.attention_weight * attention_loss
+            + self.mask_guided_weight * mask_guided_loss
         )
-        return total_loss, feature_loss, attention_loss
+        return total_loss, feature_loss, attention_loss, mask_guided_loss

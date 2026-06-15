@@ -256,14 +256,23 @@ class Trainer:
         feature_loss = BackboneFeatureDistillationLoss(
             feature_weight=distill_config.feature_mse_weight,
             attention_weight=distill_config.feature_attention_weight,
+            mask_guided_weight=distill_config.feature_mask_guided_weight,
+            mask_foreground_weight=distill_config.feature_mask_foreground_weight,
+            mask_edge_weight=distill_config.feature_mask_edge_weight,
+            stage_weights=distill_config.feature_stage_weights,
         ).to(self.device)
         self.log(
             "Backbone feature distillation enabled: "
             f"student_channels={student_channels}, "
             f"teacher_channels={teacher_channels}, "
             f"feature_loss_weight={distill_config.feature_loss_weight}, "
+            f"feature_loss_warmup_epochs={distill_config.feature_loss_warmup_epochs}, "
             f"feature_mse_weight={distill_config.feature_mse_weight}, "
-            f"feature_attention_weight={distill_config.feature_attention_weight}."
+            f"feature_attention_weight={distill_config.feature_attention_weight}, "
+            f"feature_mask_guided_weight={distill_config.feature_mask_guided_weight}, "
+            f"feature_mask_foreground_weight={distill_config.feature_mask_foreground_weight}, "
+            f"feature_mask_edge_weight={distill_config.feature_mask_edge_weight}, "
+            f"feature_stage_weights={distill_config.feature_stage_weights}."
         )
         return feature_loss
 
@@ -314,26 +323,34 @@ class Trainer:
         )
         self._unwrap_model().load_state_dict(self._extract_state_dict(checkpoint))
 
-        if isinstance(checkpoint, dict) and "optimizer" in checkpoint:
+        if self.config.resume_optimizer and isinstance(checkpoint, dict) and "optimizer" in checkpoint:
             try:
                 self.optimizer.load_state_dict(checkpoint["optimizer"])
             except ValueError as exc:
                 self.log(f"Optimizer state skipped while resuming: {exc}")
+        elif not self.config.resume_optimizer:
+            self.log("Optimizer state skipped because resume_optimizer=false.")
 
-        if isinstance(checkpoint, dict) and "lr_scheduler" in checkpoint:
+        if self.config.resume_lr_scheduler and isinstance(checkpoint, dict) and "lr_scheduler" in checkpoint:
             try:
                 self.lr_scheduler.load_state_dict(checkpoint["lr_scheduler"])
             except ValueError as exc:
                 self.log(f"LR scheduler state skipped while resuming: {exc}")
+        elif not self.config.resume_lr_scheduler:
+            self.log("LR scheduler state skipped because resume_lr_scheduler=false.")
 
-        if isinstance(checkpoint, dict) and "scaler" in checkpoint:
+        if self.config.resume_scaler and isinstance(checkpoint, dict) and "scaler" in checkpoint:
             try:
                 self.scaler.load_state_dict(checkpoint["scaler"])
             except ValueError as exc:
                 self.log(f"GradScaler state skipped while resuming: {exc}")
+        elif not self.config.resume_scaler:
+            self.log("GradScaler state skipped because resume_scaler=false.")
 
-        if isinstance(checkpoint, dict) and "epoch" in checkpoint:
+        if self.config.resume_epoch and isinstance(checkpoint, dict) and "epoch" in checkpoint:
             self.start_epoch = int(checkpoint["epoch"]) + 1
+        elif not self.config.resume_epoch:
+            self.log("Epoch counter skipped because resume_epoch=false.")
         self.log(f"Resume loaded. Training will start at epoch {self.start_epoch}.")
 
     def _compute_supervised_loss(self, out_edge, out_pred_masks, gts, edges):
@@ -353,7 +370,11 @@ class Trainer:
             factor = factors[i] if i < len(factors) else 1.0
             loss_structure += self.structure_loss(pred_lvl_resized, gts) * factor
 
-        return loss_structure + loss_dice, loss_structure, loss_dice
+        total_loss = (
+            self.config.structure_loss_weight * loss_structure
+            + self.config.edge_supervision_weight * loss_dice
+        )
+        return total_loss, loss_structure, loss_dice
 
     @staticmethod
     def _soft_logit_loss(student_logits, teacher_logits, temperature):
@@ -398,17 +419,34 @@ class Trainer:
         )
         return total_loss, mask_loss, edge_loss
 
-    def _compute_feature_distillation_loss(self, student_features, teacher_features):
+    def _feature_distillation_weight(self, epoch: int):
+        distill_config = self.config.distillation
+        if distill_config.feature_loss_weight <= 0:
+            return 0.0
+        warmup_epochs = distill_config.feature_loss_warmup_epochs
+        if warmup_epochs <= 0:
+            return distill_config.feature_loss_weight
+        progress = min(max(epoch, 1) / warmup_epochs, 1.0)
+        return distill_config.feature_loss_weight * progress
+
+    def _compute_feature_distillation_loss(self, student_features, teacher_features, gts, edges, epoch):
         if self.feature_distill_loss is None:
             loss = student_features[0].new_tensor(0.0)
-            return loss, loss, loss
+            return loss, loss, loss, loss
 
-        feature_loss, feature_mse_loss, feature_attention_loss = self.feature_distill_loss(
+        (
+            feature_loss,
+            feature_mse_loss,
+            feature_attention_loss,
+            feature_mask_guided_loss,
+        ) = self.feature_distill_loss(
             student_features,
             teacher_features,
+            mask=gts,
+            edge=edges,
         )
-        total_loss = self.config.distillation.feature_loss_weight * feature_loss
-        return total_loss, feature_mse_loss, feature_attention_loss
+        total_loss = self._feature_distillation_weight(epoch) * feature_loss
+        return total_loss, feature_mse_loss, feature_attention_loss, feature_mask_guided_loss
 
     def _save_checkpoint(self, epoch: int):
         if self.rank != 0:
@@ -594,6 +632,7 @@ class Trainer:
                 feature_distill_loss = out_edge.new_tensor(0.0)
                 feature_mse_loss = out_edge.new_tensor(0.0)
                 feature_attention_loss = out_edge.new_tensor(0.0)
+                feature_mask_guided_loss = out_edge.new_tensor(0.0)
                 hard_loss_weight = 1.0
 
                 if self.teacher_model is not None:
@@ -616,9 +655,13 @@ class Trainer:
                             feature_distill_loss,
                             feature_mse_loss,
                             feature_attention_loss,
+                            feature_mask_guided_loss,
                         ) = self._compute_feature_distillation_loss(
                             student_features,
                             teacher_features,
+                            gts,
+                            edges,
+                            epoch,
                         )
                         distill_loss = distill_loss + feature_distill_loss
                     hard_loss_weight = self.config.distillation.hard_loss_weight
@@ -653,6 +696,7 @@ class Trainer:
                             f" | KD Feature: {feature_distill_loss.item():.3f}"
                             f" | Feat MSE: {feature_mse_loss.item():.3f}"
                             f" | Feat AT: {feature_attention_loss.item():.3f}"
+                            f" | Feat Mask: {feature_mask_guided_loss.item():.3f}"
                         )
                 self.log(log_msg)
 

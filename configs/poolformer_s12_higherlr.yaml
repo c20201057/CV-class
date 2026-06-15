@@ -4,7 +4,7 @@
 batch_size: 4
 batch_size_valid: 8
 epochs: 120
-lr: 0.00003
+lr: 0.00008
 weight_decay: 0.0001
 rand_seed: 42
 precisionHigh: true
@@ -18,7 +18,7 @@ load_all: false
 backbone: poolformer_s12
 img_size: 416
 lateral_channels: [512, 320, 128, 64]
-resume: ""
+resume: "/root/data-tmp/ESCNet/checkpoints/poolformer_s12_higherlr/latest.ckpt"
 compile: false
 
 # Learning-rate schedule
@@ -26,8 +26,8 @@ lr_scheduler:
   type: cosine
   step_unit: iter
   warmup_epochs: 5
-  warmup_start_factor: 0.1
-  min_lr_factor: 0.1
+  warmup_start_factor: 0.3
+  min_lr_factor: 0.5
   power: 0.9
 
 # Teacher-Student Distillation
@@ -59,7 +59,7 @@ multi_GPU: true
 
 # Save Settings
 save_model_dir: /root/data-tmp/ESCNet/checkpoints
-name: poolformer_s12
+name: null
 save_last: 80
 save_step: 10
 

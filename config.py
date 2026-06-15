@@ -36,8 +36,13 @@ class DistillationConfig(BaseModel):
     mask_loss_weight: float = Field(1.0, ge=0)
     edge_loss_weight: float = Field(0.2, ge=0)
     feature_loss_weight: float = Field(0.0, ge=0)
+    feature_loss_warmup_epochs: int = Field(0, ge=0)
     feature_mse_weight: float = Field(1.0, ge=0)
     feature_attention_weight: float = Field(0.5, ge=0)
+    feature_mask_guided_weight: float = Field(0.0, ge=0)
+    feature_mask_foreground_weight: float = Field(2.0, ge=0)
+    feature_mask_edge_weight: float = Field(3.0, ge=0)
+    feature_stage_weights: Optional[List[float]] = None
 
 
 class EvalDuringTrainingConfig(BaseModel):
@@ -71,6 +76,8 @@ class Config(BaseModel):
     epochs: int = Field(..., gt=0, description="Total number of training epochs.")
     lr: float = Field(..., gt=0, description="Learning rate.")
     weight_decay: float = Field(..., ge=0, description="Weight decay for the optimizer.")
+    structure_loss_weight: float = Field(1.0, ge=0)
+    edge_supervision_weight: float = Field(1.0, ge=0)
     rand_seed: int = 42
     precisionHigh: bool = True
 
@@ -84,6 +91,10 @@ class Config(BaseModel):
     img_size: int = Field(..., gt=0)
     lateral_channels: List[int]
     resume: Optional[str] = None # Allows the field to be missing or empty ""
+    resume_optimizer: bool = True
+    resume_lr_scheduler: bool = True
+    resume_scaler: bool = True
+    resume_epoch: bool = True
     compile: bool = True
     distillation: DistillationConfig = Field(default_factory=DistillationConfig)
     eval_during_training: EvalDuringTrainingConfig = Field(default_factory=EvalDuringTrainingConfig)

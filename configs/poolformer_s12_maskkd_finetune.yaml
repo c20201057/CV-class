@@ -3,9 +3,11 @@
 # Training Parameters
 batch_size: 4
 batch_size_valid: 8
-epochs: 120
-lr: 0.00003
+epochs: 80
+lr: 0.00008
 weight_decay: 0.0001
+structure_loss_weight: 1.0
+edge_supervision_weight: 1.2
 rand_seed: 42
 precisionHigh: true
 
@@ -18,15 +20,19 @@ load_all: false
 backbone: poolformer_s12
 img_size: 416
 lateral_channels: [512, 320, 128, 64]
-resume: ""
+resume: /root/data-tmp/ESCNet/checkpoints/poolformer_s12_higherlr/latest.ckpt
+resume_optimizer: false
+resume_lr_scheduler: false
+resume_scaler: false
+resume_epoch: false
 compile: false
 
 # Learning-rate schedule
 lr_scheduler:
   type: cosine
   step_unit: iter
-  warmup_epochs: 5
-  warmup_start_factor: 0.1
+  warmup_epochs: 3
+  warmup_start_factor: 0.2
   min_lr_factor: 0.1
   power: 0.9
 
@@ -38,11 +44,16 @@ distillation:
   teacher_lateral_channels: [512, 320, 128, 64]
   temperature: 2.0
   hard_loss_weight: 1.0
-  mask_loss_weight: 0.3
-  edge_loss_weight: 0.1
-  feature_loss_weight: 0.05
+  mask_loss_weight: 0.5
+  edge_loss_weight: 0.2
+  feature_loss_weight: 0.2
+  feature_loss_warmup_epochs: 5
   feature_mse_weight: 1.0
-  feature_attention_weight: 0.5
+  feature_attention_weight: 1.0
+  feature_mask_guided_weight: 1.0
+  feature_mask_foreground_weight: 2.0
+  feature_mask_edge_weight: 4.0
+  feature_stage_weights: [0.5, 0.75, 1.0, 1.25]
 
 # Periodic evaluation during training
 eval_during_training:
@@ -50,7 +61,7 @@ eval_during_training:
   interval: 10
   pred_root: /root/data-tmp/preds_train
   save_dir: /root/data-tmp/results_train
-  keep_predictions: true
+  keep_predictions: false
   run_at_end: true
 
 # Multi-GPU Settings
@@ -59,7 +70,7 @@ multi_GPU: true
 
 # Save Settings
 save_model_dir: /root/data-tmp/ESCNet/checkpoints
-name: poolformer_s12
+name: poolformer_s12_maskkd_finetune
 save_last: 80
 save_step: 10
 

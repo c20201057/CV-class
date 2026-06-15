@@ -70,6 +70,31 @@ L_feature = feature_mse_weight * L_mse + feature_attention_weight * L_at
 L_total_kd = L_logit_kd + feature_loss_weight * L_feature
 ```
 
+### Mask-Guided Feature Distillation
+
+Added optional mask-guided feature alignment for COD-focused training. It reuses the GT mask and edge map at training time, downsamples them to each backbone stage, and gives higher loss weight to object and boundary pixels:
+
+```text
+W = Normalize(1 + feature_mask_foreground_weight * GT + feature_mask_edge_weight * Edge)
+L_mask_feature = mean(W * ||Normalize(F_student) - Normalize(F_teacher)||^2)
+```
+
+The full feature loss is now:
+
+```text
+L_feature =
+  feature_mse_weight * L_mse
+  + feature_attention_weight * L_at
+  + feature_mask_guided_weight * L_mask_feature
+```
+
+This is training-only and does not add inference cost. It is disabled by default through `feature_mask_guided_weight: 0.0`.
+
+Stage weights and feature-loss warmup are also supported:
+
+- `feature_stage_weights`: optional per-stage weighting, useful for emphasizing deeper semantic features
+- `feature_loss_warmup_epochs`: linearly ramps `feature_loss_weight` during early epochs
+
 ### Channel Adapters
 
 Teacher and Student backbones may have different channel widths. `ESCNet` now creates optional `feature_adapters` when feature distillation is enabled:
@@ -89,8 +114,13 @@ Added to `distillation` config:
 
 ```yaml
 feature_loss_weight: 0.05
+feature_loss_warmup_epochs: 0
 feature_mse_weight: 1.0
 feature_attention_weight: 0.5
+feature_mask_guided_weight: 0.0
+feature_mask_foreground_weight: 2.0
+feature_mask_edge_weight: 3.0
+feature_stage_weights: null
 ```
 
 `feature_loss_weight: 0.0` disables feature distillation and preserves old behavior.
@@ -100,6 +130,37 @@ Enabled in:
 - `configs/poolformer_s12.yaml`
 - `configs/pvt_v2_b0_lowerlr.yaml`
 - `configs/pvt_v2_b0.yaml`
+
+### Resume Control for Finetuning
+
+Added optional resume controls:
+
+```yaml
+resume_optimizer: true
+resume_lr_scheduler: true
+resume_scaler: true
+resume_epoch: true
+```
+
+The defaults preserve the previous full-resume behavior. For finetuning, a config can now load model weights while resetting optimizer, scheduler, AMP scaler, and epoch counter.
+
+### Strong PoolFormer Mask-KD Finetune Config
+
+Added `configs/poolformer_s12_maskkd_finetune.yaml`. It combines the currently most promising lightweight improvements:
+
+- starts from `/root/data-tmp/ESCNet/checkpoints/poolformer_s12_higherlr/latest.ckpt`
+- resets optimizer/scheduler/scaler/epoch for clean finetuning
+- uses stronger mask and edge logit KD
+- increases feature KD weight with warmup
+- enables mask-guided feature KD with stronger boundary weighting
+- slightly increases supervised edge loss weight
+
+Run:
+
+```bash
+cd /root/CV-class
+bash run.sh -c configs/poolformer_s12_maskkd_finetune.yaml
+```
 
 ## Additional Alignment Loss Ideas
 
