@@ -216,6 +216,10 @@ class Trainer:
             teacher_config.backbone = distill_config.teacher_backbone
         if distill_config.teacher_lateral_channels:
             teacher_config.lateral_channels = distill_config.teacher_lateral_channels
+        if distill_config.teacher_escnet_width:
+            teacher_config.escnet_width = distill_config.teacher_escnet_width
+        if distill_config.teacher_lite_head_channels:
+            teacher_config.lite_head_channels = distill_config.teacher_lite_head_channels
         teacher_config.distillation.feature_loss_weight = 0.0
 
         self.log(
@@ -237,7 +241,8 @@ class Trainer:
             "Teacher model loaded from "
             f"{distill_config.teacher_checkpoint} "
             f"with architecture={teacher_config.architecture}, "
-            f"backbone={teacher_config.backbone}."
+            f"backbone={teacher_config.backbone}, "
+            f"escnet_width={teacher_config.escnet_width}."
         )
         return teacher
 

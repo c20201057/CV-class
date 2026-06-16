@@ -309,6 +309,64 @@ cd /root/CV-class
 bash run.sh -c configs/pvt_v2_b0_escnet_slim_512_no_ts.yaml
 ```
 
+## ESCNet 轻量模块版更新
+
+新增 `escnet_lite_modules`，这是一个保持 ESCNet 大流程不变、但对 Decoder、AETP 和 MFMM/MTA 内部进行轻量化的新模型。
+
+它保留 ESCNet 的整体流程：
+
+- backbone encoder
+- 1x1 ASA channel alignment
+- AETP 风格 edge prediction
+- edge-guided decoder
+- image patch injection
+- mask/edge/laplacian 多线索融合
+- 4 个 mask 输出和 1 个 edge 输出
+
+轻量化替换如下：
+
+- `LiteAETP`：用 depthwise-separable convolution 和 dilated context convolution 替换较重的 deformable/SA edge refinement
+- `LiteDecoder`：保留 patch injection 和 edge-guided decoding，但将 FEM 中的 deformable multi-kernel blocks 替换为 edge-gated dilated depthwise-separable blocks
+- `LiteMTA`：保留 mask/edge/laplacian 三分支引导，但用轻量 gated branches 和 compact channel-spatial attention 替换三个完整 SA blocks
+
+相关文件：
+
+- `models/ESCNetLiteModules.py`
+- `models/modules/AETP_Lite.py`
+- `models/modules/Decoder_Lite.py`
+- `models/modules/MFMM_Lite.py`
+- `models/modules/LiteBlocks.py`
+- 训练配置：`configs/pvt_v2_b0_escnet_litemod_512_no_ts.yaml`
+
+在 PVT-v2-B0 和 `escnet_width: 96` 下，模型约 `4.27M` 参数：
+
+- backbone：约 `3.41M`
+- lightweight ESCNet modules/head：约 `0.86M`
+
+这个版本的参数量接近 FINet 量级，同时相比 `lite_escnet` 更保留 ESCNet 原始设计逻辑。
+
+运行：
+
+```bash
+cd /root/CV-class
+bash run.sh -c configs/pvt_v2_b0_escnet_litemod_512_no_ts.yaml
+```
+
+同时新增同一 lightweight-modules 学生模型的 TS/structure-KD 版本：
+
+- 配置：`configs/pvt_v2_b0_escnet_litemod_512_structkd.yaml`
+- Student：`architecture: escnet_lite_modules`，PVT-v2-B0，`escnet_width: 96`
+- Teacher：原始 `escnet`，PVT-v2-B5，`teacher_escnet_width: 128`，`/root/data-tmp/epoch_120.pth`
+- 蒸馏：output mask KD、edge KD 和 teacher-structure KD
+- feature KD 继续关闭，避免强制轻量模块内部去拟合大 teacher 的 backbone feature
+
+运行：
+
+```bash
+cd /root/CV-class
+bash run.sh -c configs/pvt_v2_b0_escnet_litemod_512_structkd.yaml
+```
+
 ## 其它可选高级对齐 Loss
 
 当前实现使用 feature MSE 加 attention transfer，因为它稳定、开销低，并且适用于 Teacher/Student 架构不同的情况。对于 COD，还可以考虑以下高级对齐 loss：

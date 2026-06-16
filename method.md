@@ -309,6 +309,64 @@ cd /root/CV-class
 bash run.sh -c configs/pvt_v2_b0_escnet_slim_512_no_ts.yaml
 ```
 
+## ESCNet Lightweight-Modules Update
+
+Added `escnet_lite_modules` as a new model that keeps the ESCNet macro pipeline but lightens Decoder, AETP, and MFMM/MTA internally.
+
+It preserves the large ESCNet flow:
+
+- backbone encoder
+- 1x1 ASA channel alignment
+- AETP-style edge prediction
+- edge-guided decoder
+- image patch injection
+- mask/edge/laplacian multi-clue fusion
+- four mask outputs plus one edge output
+
+The lightweight replacements are:
+
+- `LiteAETP`: replaces deformable/SA-heavy edge refinement with depthwise-separable and dilated context convolutions
+- `LiteDecoder`: keeps patch injection and edge-guided decoding, but replaces FEM deformable multi-kernel blocks with edge-gated dilated depthwise-separable blocks
+- `LiteMTA`: keeps mask/edge/laplacian three-branch guidance, but replaces three full SA blocks with lightweight gated branches and compact channel-spatial attention
+
+Files:
+
+- `models/ESCNetLiteModules.py`
+- `models/modules/AETP_Lite.py`
+- `models/modules/Decoder_Lite.py`
+- `models/modules/MFMM_Lite.py`
+- `models/modules/LiteBlocks.py`
+- training config: `configs/pvt_v2_b0_escnet_litemod_512_no_ts.yaml`
+
+With PVT-v2-B0 and `escnet_width: 96`, the model has about `4.27M` parameters:
+
+- backbone: about `3.41M`
+- lightweight ESCNet modules/head: about `0.86M`
+
+This is close to FINet-scale parameter count while preserving more of ESCNet's original design logic than `lite_escnet`.
+
+Run:
+
+```bash
+cd /root/CV-class
+bash run.sh -c configs/pvt_v2_b0_escnet_litemod_512_no_ts.yaml
+```
+
+Added a TS/structure-KD variant for the same lightweight-modules student:
+
+- config: `configs/pvt_v2_b0_escnet_litemod_512_structkd.yaml`
+- student: `architecture: escnet_lite_modules`, PVT-v2-B0, `escnet_width: 96`
+- teacher: original `escnet`, PVT-v2-B5, `teacher_escnet_width: 128`, `/root/data-tmp/epoch_120.pth`
+- distillation: output mask KD, edge KD, and teacher-structure KD
+- feature KD remains disabled to avoid forcing the lightweight module internals to mimic the larger teacher's backbone features
+
+Run:
+
+```bash
+cd /root/CV-class
+bash run.sh -c configs/pvt_v2_b0_escnet_litemod_512_structkd.yaml
+```
+
 ## Additional Alignment Loss Ideas
 
 The current implementation uses feature MSE plus attention transfer because it is stable, cheap, and works when teacher/student architectures differ. Other useful advanced alignment losses for COD are:

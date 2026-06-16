@@ -28,10 +28,17 @@ class DistillationConfig(BaseModel):
     """Teacher-Student distillation settings."""
 
     enabled: bool = False
-    teacher_architecture: Literal["escnet", "escnet_slim", "lite_escnet"] = "escnet"
+    teacher_architecture: Literal[
+        "escnet",
+        "escnet_slim",
+        "escnet_lite_modules",
+        "lite_escnet",
+    ] = "escnet"
     teacher_checkpoint: Optional[str] = None
     teacher_backbone: Optional[str] = None
     teacher_lateral_channels: Optional[List[int]] = None
+    teacher_escnet_width: Optional[int] = Field(None, gt=0)
+    teacher_lite_head_channels: Optional[int] = Field(None, gt=0)
     temperature: float = Field(1.0, gt=0)
     hard_loss_weight: float = Field(1.0, ge=0)
     mask_loss_weight: float = Field(1.0, ge=0)
@@ -94,7 +101,12 @@ class Config(BaseModel):
     load_all: bool = False
 
     # --- Model Configuration ---
-    architecture: Literal["escnet", "escnet_slim", "lite_escnet"] = "escnet"
+    architecture: Literal[
+        "escnet",
+        "escnet_slim",
+        "escnet_lite_modules",
+        "lite_escnet",
+    ] = "escnet"
     backbone: str
     img_size: int = Field(..., gt=0)
     lateral_channels: List[int]

@@ -20,10 +20,12 @@ test_dir: /root/data-tmp/COD/Test/COD10K
 load_all: false
 
 # Model Configuration
+architecture: escnet_lite_modules
 backbone: pvt_v2_b0
 img_size: 512
 lateral_channels: [256, 160, 64, 32]
-resume: "/root/data-tmp/ESCNet/checkpoints/pvt_v2_b0_512_structkd/latest.ckpt"
+escnet_width: 96
+resume: null
 resume_optimizer: true
 resume_lr_scheduler: true
 resume_scaler: true
@@ -42,25 +44,7 @@ lr_scheduler:
 
 # Teacher-Student Distillation
 distillation:
-  enabled: true
-  teacher_checkpoint: /root/data-tmp/epoch_120.pth
-  teacher_backbone: pvt_v2_b5
-  teacher_lateral_channels: [512, 320, 128, 64]
-  temperature: 2.0
-  hard_loss_weight: 1.0
-  mask_loss_weight: 0.35
-  edge_loss_weight: 0.2
-  teacher_structure_loss_weight: 0.35
-  teacher_structure_loss_levels: final
-  teacher_structure_temperature: 1.0
-  feature_loss_weight: 0.0
-  feature_loss_warmup_epochs: 0
-  feature_mse_weight: 1.0
-  feature_attention_weight: 0.5
-  feature_mask_guided_weight: 0.0
-  feature_mask_foreground_weight: 2.0
-  feature_mask_edge_weight: 3.0
-  feature_stage_weights: null
+  enabled: false
 
 # Periodic evaluation during training
 eval_during_training:
@@ -77,7 +61,7 @@ multi_GPU: true
 
 # Save Settings
 save_model_dir: /root/data-tmp/ESCNet/checkpoints
-name: pvt_v2_b0_512_structkd
+name: pvt_v2_b0_escnet_litemod_512_no_ts
 save_last: 60
 save_step: 10
 
@@ -92,7 +76,6 @@ preproc_methods:
 # Path Settings
 weights:
   pvt_v2_b0: /root/data-tmp/weights/pvt_v2_b0.pth
-  pvt_v2_b5: /root/data-tmp/weights/pvt_v2_b5_22k.pth
 
 # System
 num_workers: 4
