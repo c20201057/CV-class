@@ -115,6 +115,10 @@ class Config(BaseModel):
     lateral_channels: List[int]
     escnet_width: int = Field(128, gt=0)
     lite_head_channels: int = Field(64, gt=0)
+    lite_use_aetp: bool = True
+    lite_use_patch_guidance: bool = True
+    lite_use_decoder_edge: bool = True
+    lite_use_mta_laplace: bool = True
     resume: Optional[str] = None # Allows the field to be missing or empty ""
     resume_optimizer: bool = True
     resume_lr_scheduler: bool = True

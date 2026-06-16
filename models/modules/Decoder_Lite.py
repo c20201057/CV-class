@@ -51,19 +51,24 @@ class LiteFEM(nn.Module):
 class LiteDecoder(nn.Module):
     def __init__(self, config, in_channel):
         super().__init__()
+        self.use_patch_guidance = getattr(config, "lite_use_patch_guidance", True)
         patch_channels = in_channel // 4
-        self.ipt_blk5 = LitePatchBlock(2**10 * 3, patch_channels)
-        self.ipt_blk4 = LitePatchBlock(2**8 * 3, patch_channels)
-        self.ipt_blk3 = LitePatchBlock(2**6 * 3, patch_channels)
-        self.ipt_blk2 = LitePatchBlock(2**4 * 3, patch_channels)
+        if self.use_patch_guidance:
+            self.ipt_blk5 = LitePatchBlock(2**10 * 3, patch_channels)
+            self.ipt_blk4 = LitePatchBlock(2**8 * 3, patch_channels)
+            self.ipt_blk3 = LitePatchBlock(2**6 * 3, patch_channels)
+            self.ipt_blk2 = LitePatchBlock(2**4 * 3, patch_channels)
+        else:
+            patch_channels = 0
 
         self.decoder_block4 = nn.Sequential(
             ConvBNAct(in_channel, in_channel, kernel_size=1),
             DepthwiseSeparableConv(in_channel, in_channel, dilation=2),
         )
-        self.decoder_block3 = LiteMTA(in_channel, in_channel)
-        self.decoder_block2 = LiteMTA(in_channel, in_channel)
-        self.decoder_block1 = LiteMTA(in_channel, in_channel)
+        use_laplace = getattr(config, "lite_use_mta_laplace", True)
+        self.decoder_block3 = LiteMTA(in_channel, in_channel, use_laplace=use_laplace)
+        self.decoder_block2 = LiteMTA(in_channel, in_channel, use_laplace=use_laplace)
+        self.decoder_block1 = LiteMTA(in_channel, in_channel, use_laplace=use_laplace)
 
         self.conv_mask_4 = nn.Conv2d(in_channel, 1, kernel_size=1)
         self.conv_mask_3 = nn.Conv2d(in_channel, 1, kernel_size=1)
@@ -80,10 +85,11 @@ class LiteDecoder(nn.Module):
         )
 
         fused_channels = in_channel + patch_channels
-        self.De_conv4 = LiteFEM(fused_channels, in_channel, edge=True)
-        self.De_conv3 = LiteFEM(fused_channels, in_channel, edge=True)
-        self.De_conv2 = LiteFEM(fused_channels, in_channel, edge=True)
-        self.De_conv1 = LiteFEM(fused_channels, in_channel, edge=True)
+        use_decoder_edge = getattr(config, "lite_use_decoder_edge", True)
+        self.De_conv4 = LiteFEM(fused_channels, in_channel, edge=use_decoder_edge)
+        self.De_conv3 = LiteFEM(fused_channels, in_channel, edge=use_decoder_edge)
+        self.De_conv2 = LiteFEM(fused_channels, in_channel, edge=use_decoder_edge)
+        self.De_conv1 = LiteFEM(fused_channels, in_channel, edge=use_decoder_edge)
 
     def _add_patch_feature(self, image, feature, patch_block):
         patches = image2patches(
@@ -104,25 +110,29 @@ class LiteDecoder(nn.Module):
     def forward(self, features, edge):
         x, x1, x2, x3, x4 = features
 
-        x4 = self._add_patch_feature(x, x4, self.ipt_blk5)
+        if self.use_patch_guidance:
+            x4 = self._add_patch_feature(x, x4, self.ipt_blk5)
         x4 = self.De_conv4(
             x4,
             edge=F.interpolate(edge, size=x4.shape[2:], mode="bilinear", align_corners=False),
         )
 
-        x3 = self._add_patch_feature(x, x3, self.ipt_blk4)
+        if self.use_patch_guidance:
+            x3 = self._add_patch_feature(x, x3, self.ipt_blk4)
         x3 = self.De_conv3(
             x3,
             edge=F.interpolate(edge, size=x3.shape[2:], mode="bilinear", align_corners=False),
         )
 
-        x2 = self._add_patch_feature(x, x2, self.ipt_blk3)
+        if self.use_patch_guidance:
+            x2 = self._add_patch_feature(x, x2, self.ipt_blk3)
         x2 = self.De_conv2(
             x2,
             edge=F.interpolate(edge, size=x2.shape[2:], mode="bilinear", align_corners=False),
         )
 
-        x1 = self._add_patch_feature(x, x1, self.ipt_blk2)
+        if self.use_patch_guidance:
+            x1 = self._add_patch_feature(x, x1, self.ipt_blk2)
         x1 = self.De_conv1(
             x1,
             edge=F.interpolate(edge, size=x1.shape[2:], mode="bilinear", align_corners=False),

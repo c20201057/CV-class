@@ -5,6 +5,27 @@ from models.modules.Decoder_Lite import LiteDecoder
 from models.modules.Encoder import Encoder
 
 
+class LiteEdgeHead(nn.Module):
+    def __init__(self, in_channel):
+        super().__init__()
+        self.head = nn.Sequential(
+            nn.Conv2d(in_channel, in_channel, kernel_size=3, padding=1, groups=in_channel, bias=False),
+            nn.BatchNorm2d(in_channel),
+            nn.ReLU(inplace=True),
+            nn.Conv2d(in_channel, 1, kernel_size=1),
+        )
+
+    def forward(self, features):
+        x, x1, x2, x3, x4 = features
+        edge = self.head(x1)
+        return nn.functional.interpolate(
+            edge,
+            size=x.shape[2:],
+            mode="bilinear",
+            align_corners=False,
+        )
+
+
 class ESCNetLiteModules(nn.Module):
     def __init__(self, config, pretrained=True):
         super().__init__()
@@ -13,7 +34,11 @@ class ESCNetLiteModules(nn.Module):
 
         self.encoder = Encoder(config, pretrained)
         self.decoder = LiteDecoder(config, inter_channel)
-        self.enhanced = LiteAETP(inter_channel)
+        self.enhanced = (
+            LiteAETP(inter_channel)
+            if getattr(config, "lite_use_aetp", True)
+            else LiteEdgeHead(inter_channel)
+        )
 
         self.asa4 = nn.Sequential(
             nn.Conv2d(self.channels[0], inter_channel, 1, 1, 0),
