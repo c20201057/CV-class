@@ -367,6 +367,55 @@ cd /root/CV-class
 bash run.sh -c configs/pvt_v2_b0_escnet_litemod_512_structkd.yaml
 ```
 
+新增 lightweight-modules 的 384 分辨率版本：
+
+- `configs/pvt_v2_b0_escnet_litemod_384_no_ts.yaml`
+- `configs/pvt_v2_b0_escnet_litemod_384_structkd.yaml`
+
+它们保持同样的 `escnet_lite_modules` 架构和 `escnet_width: 96`，但使用 `img_size: 384`、`batch_size: 8`、`batch_size_valid: 16` 和 `lr: 8e-5`，利用 384 分辨率更低显存开销带来的吞吐提升。
+
+新增分阶段 TS 配置：前 40 个 epoch 只使用 supervised losses，第 41 个 epoch 开始启用 TS/structure-KD：
+
+- `configs/pvt_v2_b0_escnet_litemod_384_ts40_structkd.yaml`
+- `configs/pvt_v2_b0_escnet_litemod_512_ts40_structkd.yaml`
+
+通过以下字段控制：
+
+```yaml
+distillation:
+  enabled: true
+  start_epoch: 41
+```
+
+## 384 分辨率 LiteFast 模块版本
+
+新增一个独立的低 FLOPs 384 分辨率模型块：
+
+- 架构：`escnet_lite_fast_modules`
+- 模型：`models/ESCNetLiteFastModules.py`
+- 解码器：`models/modules/Decoder_LiteFast.py`
+- MTA 模块：`models/modules/MFMM_LiteFast.py`
+- 配置：
+  - `configs/pvt_v2_b0_escnet_litefast_384_no_ts.yaml`
+  - `configs/pvt_v2_b0_escnet_litefast_384_structkd.yaml`
+
+该版本保持 PVT-v2-B0 backbone、LiteAETP、多层 mask 输出、edge guidance 和 ESCNet 风格的自顶向下 decoder 流程不变。轻量化修改只集中在：
+
+- 将 decoder 的 image-patch guidance 通道从 `C/4` 降到 `C/8`
+- 仅把最高分辨率 MTA stage 替换为 mask+edge 双分支 MTA
+
+使用 `profile_model.py` 在 `384x384` 下测得：
+
+- `escnet_lite_modules`：`10.773G` FLOPs，`4.272M` 参数
+- `escnet_lite_fast_modules`：`10.317G` FLOPs，`4.212M` 参数
+
+运行：
+
+```bash
+cd /root/CV-class
+bash run.sh -c configs/pvt_v2_b0_escnet_litefast_384_no_ts.yaml
+```
+
 ## 其它可选高级对齐 Loss
 
 当前实现使用 feature MSE 加 attention transfer，因为它稳定、开销低，并且适用于 Teacher/Student 架构不同的情况。对于 COD，还可以考虑以下高级对齐 loss：

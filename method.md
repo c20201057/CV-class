@@ -367,6 +367,55 @@ cd /root/CV-class
 bash run.sh -c configs/pvt_v2_b0_escnet_litemod_512_structkd.yaml
 ```
 
+Added 384-resolution variants of the lightweight-modules configs:
+
+- `configs/pvt_v2_b0_escnet_litemod_384_no_ts.yaml`
+- `configs/pvt_v2_b0_escnet_litemod_384_structkd.yaml`
+
+They keep the same `escnet_lite_modules` architecture and `escnet_width: 96`, but use `img_size: 384`, `batch_size: 8`, `batch_size_valid: 16`, and `lr: 8e-5` to use the lower memory cost of 384-resolution training.
+
+Added staged TS configs where the first 40 epochs use only supervised losses and TS/structure-KD starts at epoch 41:
+
+- `configs/pvt_v2_b0_escnet_litemod_384_ts40_structkd.yaml`
+- `configs/pvt_v2_b0_escnet_litemod_512_ts40_structkd.yaml`
+
+This is controlled by:
+
+```yaml
+distillation:
+  enabled: true
+  start_epoch: 41
+```
+
+## 384-Resolution LiteFast Module Variant
+
+Added a new independent model block for a lower-FLOPs 384-resolution setting:
+
+- architecture: `escnet_lite_fast_modules`
+- model: `models/ESCNetLiteFastModules.py`
+- decoder: `models/modules/Decoder_LiteFast.py`
+- MTA block: `models/modules/MFMM_LiteFast.py`
+- configs:
+  - `configs/pvt_v2_b0_escnet_litefast_384_no_ts.yaml`
+  - `configs/pvt_v2_b0_escnet_litefast_384_structkd.yaml`
+
+This variant keeps the PVT-v2-B0 backbone, LiteAETP, multi-level mask outputs, edge guidance, and the original ESCNet-style top-down decoder flow. The lightweight changes are limited to:
+
+- reducing decoder image-patch guidance channels from `C/4` to `C/8`
+- replacing only the highest-resolution MTA stage with a two-branch mask+edge MTA
+
+Measured with `profile_model.py` at `384x384`:
+
+- `escnet_lite_modules`: `10.773G` FLOPs, `4.272M` params
+- `escnet_lite_fast_modules`: `10.317G` FLOPs, `4.212M` params
+
+Run:
+
+```bash
+cd /root/CV-class
+bash run.sh -c configs/pvt_v2_b0_escnet_litefast_384_no_ts.yaml
+```
+
 ## Additional Alignment Loss Ideas
 
 The current implementation uses feature MSE plus attention transfer because it is stable, cheap, and works when teacher/student architectures differ. Other useful advanced alignment losses for COD are:

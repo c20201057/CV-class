@@ -1,0 +1,103 @@
+# config.yaml
+
+# Training Parameters
+batch_size: 4
+batch_size_valid: 8
+epochs: 60
+lr: 0.00003
+weight_decay: 0.0001
+structure_loss_type: weighted
+structure_loss_weight: 1.0
+edge_supervision_weight: 1.2
+mask_level_weights: [0.4, 0.7, 1.0, 1.5]
+mask_edge_consistency_weight: 0.05
+rand_seed: 42
+precisionHigh: true
+
+# Dataset Configuration
+train_dir: /root/data-tmp/COD/Train
+test_dir: /root/data-tmp/COD/Test/COD10K
+load_all: false
+
+# Model Configuration
+architecture: escnet
+backbone: pvt_v2_b0
+img_size: 512
+lateral_channels: [256, 160, 64, 32]
+escnet_width: 128
+resume: /root/data-tmp/ESCNet/checkpoints/pvt_v2_b0_512_no_ts/epoch_60.pth
+resume_optimizer: false
+resume_lr_scheduler: false
+resume_scaler: false
+resume_epoch: false
+resume_strict: true
+compile: false
+
+# Learning-rate schedule
+lr_scheduler:
+  type: cosine
+  step_unit: iter
+  warmup_epochs: 1
+  warmup_start_factor: 0.5
+  min_lr_factor: 0.1
+  power: 0.9
+
+# Teacher-Student Distillation
+distillation:
+  enabled: true
+  start_epoch: 1
+  teacher_architecture: escnet
+  teacher_checkpoint: /root/data-tmp/epoch_120.pth
+  teacher_backbone: pvt_v2_b5
+  teacher_lateral_channels: [512, 320, 128, 64]
+  teacher_escnet_width: 128
+  temperature: 2.0
+  hard_loss_weight: 1.0
+  mask_loss_weight: 0.35
+  edge_loss_weight: 0.2
+  teacher_structure_loss_weight: 0.35
+  teacher_structure_loss_levels: final
+  teacher_structure_temperature: 1.0
+  feature_loss_weight: 0.0
+  feature_loss_warmup_epochs: 0
+  feature_mse_weight: 1.0
+  feature_attention_weight: 0.5
+  feature_mask_guided_weight: 0.0
+  feature_mask_foreground_weight: 2.0
+  feature_mask_edge_weight: 3.0
+  feature_stage_weights: null
+
+# Periodic evaluation during training
+eval_during_training:
+  enabled: true
+  interval: 10
+  pred_root: /root/data-tmp/preds_train
+  save_dir: /root/data-tmp/results_train
+  keep_predictions: false
+  run_at_end: true
+
+# Multi-GPU Settings
+device_ids: [0, 1, 2, 3]
+multi_GPU: true
+
+# Save Settings
+save_model_dir: /root/data-tmp/ESCNet/checkpoints
+name: pvt_v2_b0_512_no_ts60_then_ts60
+save_last: 60
+save_step: 10
+
+# Data Augmentation
+preproc_methods:
+  - flip
+  - rotate
+  - pepper
+  - crop
+  - enhance
+
+# Path Settings
+weights:
+  pvt_v2_b0: /root/data-tmp/weights/pvt_v2_b0.pth
+  pvt_v2_b5: /root/data-tmp/weights/pvt_v2_b5_22k.pth
+
+# System
+num_workers: 4

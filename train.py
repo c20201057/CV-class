@@ -19,7 +19,6 @@ from config import Config, load_config
 from dataset import MyData
 from loss import BackboneFeatureDistillationLoss, EdgeDiceLoss, StructureLoss, StructureLossWithWeight
 from metrics import evaluator
-from models.ESCNet import ESCNet
 from models.build_model import build_model
 from utils import Logger, AverageMeter, check_state_dict, save_tensor_img, set_seed
 
@@ -226,7 +225,7 @@ class Trainer:
             "Loading teacher checkpoint from "
             f"{distill_config.teacher_checkpoint} ..."
         )
-        teacher = ESCNet(teacher_config, pretrained=False)
+        teacher = build_model(teacher_config, pretrained=False)
         checkpoint = torch.load(
             distill_config.teacher_checkpoint,
             map_location="cpu",
@@ -500,7 +499,7 @@ class Trainer:
 
     def _feature_distillation_weight(self, epoch: int):
         distill_config = self.config.distillation
-        if distill_config.feature_loss_weight <= 0:
+        if epoch < distill_config.start_epoch or distill_config.feature_loss_weight <= 0:
             return 0.0
         warmup_epochs = distill_config.feature_loss_warmup_epochs
         if warmup_epochs <= 0:
@@ -526,6 +525,12 @@ class Trainer:
         )
         total_loss = self._feature_distillation_weight(epoch) * feature_loss
         return total_loss, feature_mse_loss, feature_attention_loss, feature_mask_guided_loss
+
+    def _distillation_active(self, epoch: int):
+        return (
+            self.teacher_model is not None
+            and epoch >= self.config.distillation.start_epoch
+        )
 
     def _save_checkpoint(self, epoch: int):
         if self.rank != 0:
@@ -678,6 +683,7 @@ class Trainer:
         self.model.train()
         if self.teacher_model is not None:
             self.teacher_model.eval()
+        distillation_active = self._distillation_active(epoch)
         self.loss_log.reset()
 
         if self.config.is_ddp:
@@ -720,7 +726,7 @@ class Trainer:
                 feature_mask_guided_loss = out_edge.new_tensor(0.0)
                 hard_loss_weight = 1.0
 
-                if self.teacher_model is not None:
+                if distillation_active:
                     with torch.no_grad():
                         teacher_forward = self.teacher_model(
                             inputs,
@@ -777,7 +783,7 @@ class Trainer:
                 )
                 if self.config.mask_edge_consistency_weight > 0:
                     log_msg += f" | Mask Edge Cons: {mask_edge_consistency_loss.item():.3f}"
-                if self.teacher_model is not None:
+                if distillation_active:
                     log_msg += (
                         f" | KD Loss: {distill_loss.item():.3f}"
                         f" | KD Mask: {distill_mask_loss.item():.3f}"
@@ -792,6 +798,11 @@ class Trainer:
                             f" | Feat AT: {feature_attention_loss.item():.3f}"
                             f" | Feat Mask: {feature_mask_guided_loss.item():.3f}"
                         )
+                elif self.teacher_model is not None:
+                    log_msg += (
+                        " | KD inactive until "
+                        f"epoch {self.config.distillation.start_epoch}"
+                    )
                 self.log(log_msg)
 
         self.log(

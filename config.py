@@ -28,10 +28,12 @@ class DistillationConfig(BaseModel):
     """Teacher-Student distillation settings."""
 
     enabled: bool = False
+    start_epoch: int = Field(1, ge=1)
     teacher_architecture: Literal[
         "escnet",
         "escnet_slim",
         "escnet_lite_modules",
+        "escnet_lite_fast_modules",
         "lite_escnet",
     ] = "escnet"
     teacher_checkpoint: Optional[str] = None
@@ -105,6 +107,7 @@ class Config(BaseModel):
         "escnet",
         "escnet_slim",
         "escnet_lite_modules",
+        "escnet_lite_fast_modules",
         "lite_escnet",
     ] = "escnet"
     backbone: str
