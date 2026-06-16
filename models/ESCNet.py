@@ -1,6 +1,7 @@
 from models.modules.Decoder import Decoder
 from models.modules.AETP import AETP
 from models.modules.Encoder import Encoder
+from models.modules.LightDecoder import LightFPNDecoder
 import torch.nn as nn
 
 
@@ -9,11 +10,16 @@ class ESCNet(nn.Module):
     def __init__(self, config, pretrained=True):
         super(ESCNet, self).__init__()
         self.channels = config.lateral_channels
-        inter_channel = 128
+        self.decoder_type = getattr(config, "decoder_type", "escnet")
+        inter_channel = getattr(config, "escnet_width", 128)
 
         self.encoder = Encoder(config, pretrained)
-        self.decoder = Decoder(config,inter_channel)
-        self.enhanced = AETP(inter_channel)
+        if self.decoder_type == "light_fpn":
+            self.decoder = LightFPNDecoder(config, inter_channel)
+            self.enhanced = None
+        else:
+            self.decoder = Decoder(config,inter_channel)
+            self.enhanced = AETP(inter_channel)
 
         self.asa4 = nn.Sequential(
             nn.Conv2d(self.channels[0], inter_channel, 1, 1, 0),
@@ -79,9 +85,11 @@ class ESCNet(nn.Module):
         features = [x, x1, x2, x3, x4]
 
         ########## Decoder ##########
-        out_edge = self.enhanced(features)  # logits
-
-        out_mask = self.decoder(features, out_edge.sigmoid())
+        if self.decoder_type == "light_fpn":
+            out_edge, out_mask = self.decoder(features)
+        else:
+            out_edge = self.enhanced(features)  # logits
+            out_mask = self.decoder(features, out_edge.sigmoid())
         if return_features:
             return out_edge, out_mask, self._adapt_features(raw_features)
         return out_edge, out_mask

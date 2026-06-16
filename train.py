@@ -213,6 +213,10 @@ class Trainer:
             teacher_config.backbone = distill_config.teacher_backbone
         if distill_config.teacher_lateral_channels:
             teacher_config.lateral_channels = distill_config.teacher_lateral_channels
+        if distill_config.teacher_decoder_type:
+            teacher_config.decoder_type = distill_config.teacher_decoder_type
+        if distill_config.teacher_escnet_width:
+            teacher_config.escnet_width = distill_config.teacher_escnet_width
         teacher_config.distillation.feature_loss_weight = 0.0
 
         self.log(
@@ -225,7 +229,24 @@ class Trainer:
             map_location="cpu",
             weights_only=True,
         )
-        teacher.load_state_dict(self._extract_state_dict(checkpoint))
+        incompatible = teacher.load_state_dict(
+            self._extract_state_dict(checkpoint),
+            strict=False,
+        )
+        if incompatible.missing_keys:
+            self.log(
+                "Teacher checkpoint missing keys: "
+                f"{len(incompatible.missing_keys)} "
+                f"({', '.join(incompatible.missing_keys[:5])}"
+                f"{'...' if len(incompatible.missing_keys) > 5 else ''})"
+            )
+        if incompatible.unexpected_keys:
+            self.log(
+                "Teacher checkpoint unexpected keys: "
+                f"{len(incompatible.unexpected_keys)} "
+                f"({', '.join(incompatible.unexpected_keys[:5])}"
+                f"{'...' if len(incompatible.unexpected_keys) > 5 else ''})"
+            )
         teacher = teacher.to(self.device)
         teacher.eval()
         teacher.requires_grad_(False)
@@ -233,7 +254,9 @@ class Trainer:
         self.log(
             "Teacher model loaded from "
             f"{distill_config.teacher_checkpoint} "
-            f"with backbone={teacher_config.backbone}."
+            f"with backbone={teacher_config.backbone}, "
+            f"decoder_type={teacher_config.decoder_type}, "
+            f"escnet_width={teacher_config.escnet_width}."
         )
         return teacher
 

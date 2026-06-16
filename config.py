@@ -31,6 +31,8 @@ class DistillationConfig(BaseModel):
     teacher_checkpoint: Optional[str] = None
     teacher_backbone: Optional[str] = None
     teacher_lateral_channels: Optional[List[int]] = None
+    teacher_decoder_type: Optional[str] = None
+    teacher_escnet_width: Optional[int] = Field(None, gt=0)
     temperature: float = Field(1.0, gt=0)
     hard_loss_weight: float = Field(1.0, ge=0)
     mask_loss_weight: float = Field(1.0, ge=0)
@@ -90,6 +92,8 @@ class Config(BaseModel):
     backbone: str
     img_size: int = Field(..., gt=0)
     lateral_channels: List[int]
+    decoder_type: str = "escnet"
+    escnet_width: int = Field(128, gt=0)
     resume: Optional[str] = None # Allows the field to be missing or empty ""
     resume_optimizer: bool = True
     resume_lr_scheduler: bool = True

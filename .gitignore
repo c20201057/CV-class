@@ -36,3 +36,6 @@ checkpoints/
 # OS/editor noise
 .DS_Store
 Thumbs.db
+
+# Local experiment notes
+plan_*.md
